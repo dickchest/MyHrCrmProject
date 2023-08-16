@@ -1,4 +1,4 @@
-package crm.myhrcrmproject.domain;
+package crm.myhrcrmproject.domain.enums;
 
 public enum vacancyStatus {
     OPEN,

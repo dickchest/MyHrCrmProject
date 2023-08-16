@@ -2,9 +2,8 @@ package crm.myhrcrmproject.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import crm.myhrcrmproject.domain.enums.vacancyStatus;
 
 import java.time.LocalDate;
 @Entity
@@ -26,6 +25,6 @@ public class Vacancies {
     private vacancyStatus vacancyStatus;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "responsibleEmployeeID")
-    private Employee responsibleEmployeeID;
+    @JoinColumn(name = "responsible_Employee_ID")
+    private Employee employee;
 }

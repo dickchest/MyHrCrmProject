@@ -1,13 +1,12 @@
 package crm.myhrcrmproject.domain;
 
+import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,7 +39,7 @@ public class Candidates {
     private String email;
 
     @OneToOne
-    @JoinColumn(name = "positionID")
+    @JoinColumn(name = "position_ID")
     private Vacancies vacancies;
 
     private LocalDateTime interviewDate;
