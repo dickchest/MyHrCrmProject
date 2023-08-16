@@ -22,11 +22,13 @@ public class Interviews {
 
     private String comments;
 
+    @NotBlank
     @OneToOne
     @JoinColumn(name = "candidate_ID")
     private Candidates candidate;
 
+    @NotBlank
     @OneToOne
     @JoinColumn(name = "employee_ID")
-    private Employee employee;
+    private Employees employees;
 }

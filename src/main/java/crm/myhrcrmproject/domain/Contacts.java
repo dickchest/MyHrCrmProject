@@ -1,13 +1,12 @@
 package crm.myhrcrmproject.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -34,7 +33,15 @@ public class Contacts {
     @Size(min = 1, max = 255, message = "Email length must be less than 255")
     private String email;
 
+    @ManyToMany
+    @JoinTable(
+        name = "contacts_candidate",
+        joinColumns = @JoinColumn(name = "contacts_id"),
+        inverseJoinColumns = @JoinColumn(name = "candidate_id")
+    )
+    private List<Candidates> candidatesList;
 
-
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "client_id")
+    private Clients client;
 }

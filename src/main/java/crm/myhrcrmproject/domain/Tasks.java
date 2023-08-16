@@ -4,11 +4,9 @@ import crm.myhrcrmproject.domain.enums.TasksStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.groups.Default;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -33,7 +31,7 @@ public class Tasks {
 
     @OneToOne
     @JoinColumn(name = "responsible_Employee_ID")
-    private Employee employee;
+    private Employees employees;
 
     @OneToOne
     @JoinColumn(name = "candidate_id")

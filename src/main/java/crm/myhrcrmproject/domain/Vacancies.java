@@ -26,5 +26,5 @@ public class Vacancies {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "responsible_Employee_ID")
-    private Employee employee;
+    private Employees employees;
 }
