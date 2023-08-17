@@ -7,9 +7,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
-import java.util.Optional;
-
-import static org.mockito.Mockito.when;
 
 @DataJpaTest
 //@ActiveProfiles("test")
@@ -20,7 +17,7 @@ class CandidatesRepositoryTest {
     @Test
     public void testRetrieveCandidateById() {
         Candidates candidate = new Candidates();
-        candidate.setId(1);
+        candidate.setCandidateId(1);
         candidate.setFirstName("John");
         candidate.setLastName("Doe");
         candidate.setDateOfBirth(LocalDate.of(1990, 1, 1));

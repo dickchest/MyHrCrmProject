@@ -15,6 +15,6 @@ public class InterviewsRequestDTO {
     private LocalDateTime dateTime;
     private String location;
     private String comments;
-    private Integer candidate_id;
-    private Integer employee_id;
+    private Integer candidateId;
+    private Integer employeeId;
 }

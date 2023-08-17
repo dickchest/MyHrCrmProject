@@ -13,7 +13,7 @@ import java.util.List;
 public class Employees {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer employeeId;
 
     @NotBlank(message = "Name must be not blank")
     @Size(min = 3, max = 20, message = "Name length must be between 3 and 15")

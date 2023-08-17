@@ -1,6 +1,6 @@
 package crm.myhrcrmproject.domain;
 
-import crm.myhrcrmproject.domain.enums.TasksStatus;
+import crm.myhrcrmproject.domain.enums.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Tasks {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer taskId;
 
     @NotBlank(message = "Title must be not blank")
     @Size(min = 1, max = 255, message = "Title length must be between 1 and 255")
@@ -28,7 +28,7 @@ public class Tasks {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TasksStatus status; // default open
+    private TaskStatus status; // default open
 
     @OneToOne
     @JoinColumn(name = "responsible_Employee_ID")

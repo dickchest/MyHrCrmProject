@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class Vacancies {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer vacancyId;
 
     @NotBlank(message = "Job Title must be not blank")
     private String jobTitle;

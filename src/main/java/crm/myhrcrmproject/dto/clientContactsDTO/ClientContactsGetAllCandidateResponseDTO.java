@@ -12,6 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientContactsGetAllCandidateResponseDTO {
-    private Integer id;
+    private Integer ClientContactId;
     private List<CandidatesForInterviewsResponseDTO> candidatesList;
 }

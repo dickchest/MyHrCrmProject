@@ -17,6 +17,6 @@ public class ContractsRequestDTO {
     private LocalDate endDate;
     private Double salary;
     private String contractType;
-    private Integer candidate_id;
-    private Integer client_id;
+    private Integer candidateId;
+    private Integer clientId;
 }

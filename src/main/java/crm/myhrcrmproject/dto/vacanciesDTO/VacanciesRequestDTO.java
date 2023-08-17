@@ -18,5 +18,5 @@ public class VacanciesRequestDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private VacancyStatus status;
-    private EmployeesForVacanciesResponseDTO responsibleEmployee;
+    private Integer responsibleEmployeeId;
 }

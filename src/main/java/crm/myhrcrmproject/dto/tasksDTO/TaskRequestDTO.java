@@ -1,9 +1,6 @@
 package crm.myhrcrmproject.dto.tasksDTO;
 
-import crm.myhrcrmproject.domain.enums.TasksStatus;
-import crm.myhrcrmproject.dto.candidatesDTO.CandidatesForInterviewsResponseDTO;
-import crm.myhrcrmproject.dto.employeeDTO.EmployeesForVacanciesResponseDTO;
-import crm.myhrcrmproject.dto.vacanciesDTO.VacanciesForCandidatesResponseDTO;
+import crm.myhrcrmproject.domain.enums.TaskStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +15,7 @@ public class TaskRequestDTO {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
-    private TasksStatus status;
+    private TaskStatus status;
     private Integer employeeId;
     private Integer candidateId;
     private Integer vacancyId;

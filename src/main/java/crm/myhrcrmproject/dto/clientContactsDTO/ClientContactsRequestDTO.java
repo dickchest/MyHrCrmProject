@@ -14,5 +14,5 @@ public class ClientContactsRequestDTO {
     private String position;
     private String phone;
     private String email;
-    private Integer client_Id;
+    private Integer clientId;
 }

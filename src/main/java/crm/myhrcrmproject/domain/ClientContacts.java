@@ -13,7 +13,7 @@ import java.util.List;
 public class ClientContacts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer clientContactId;
 
     @NotBlank(message = "Name must be not blank")
     @Size(min = 1, max = 255, message = "Name length must be between 1 and 255")

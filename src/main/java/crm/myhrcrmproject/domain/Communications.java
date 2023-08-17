@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class Communications {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer communicationId;
 
     @NotBlank(message = "Communication Date & Time should be not blank")
     private LocalDateTime communicationDateTime;

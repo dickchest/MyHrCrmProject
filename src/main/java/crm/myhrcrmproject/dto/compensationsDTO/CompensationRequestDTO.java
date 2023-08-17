@@ -15,6 +15,6 @@ public class CompensationRequestDTO {
     private Double salary;
     private LocalDate paymentDate;
     private String comments;
-    private Integer candidate_id;
-    private Integer contract_id;
+    private Integer candidateId;
+    private Integer contractId;
 }

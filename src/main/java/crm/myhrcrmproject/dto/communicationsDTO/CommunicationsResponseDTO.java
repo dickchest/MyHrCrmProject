@@ -17,6 +17,6 @@ public class CommunicationsResponseDTO {
     private LocalDateTime communicationDateTime;
     private String communicationType;
     private Integer contact_id;
-    private Integer candidate_id;
-    private Integer vacancy_id;
+    private Integer candidateId;
+    private Integer vacancyId;
 }

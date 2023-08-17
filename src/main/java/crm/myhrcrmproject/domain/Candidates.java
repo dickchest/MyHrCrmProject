@@ -16,7 +16,7 @@ public class Candidates {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer candidateId;
 
     @NotBlank(message = "Name must be not blank")
     @Column(name = "FirstName")
