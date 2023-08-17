@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class Contacts {
+public class ClientContacts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

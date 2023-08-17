@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -28,4 +29,8 @@ public class Compensation {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contract_id")
     private Contracts contract;
+
+    private LocalDateTime createDate;
+
+    private LocalDateTime lastUpdate;
 }

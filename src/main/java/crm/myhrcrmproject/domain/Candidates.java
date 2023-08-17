@@ -39,8 +39,8 @@ public class Candidates {
     private String email;
 
     @OneToOne
-    @JoinColumn(name = "position_ID")
-    private Vacancies vacancies;
+    @JoinColumn(name = "vacancy_ID")
+    private Vacancies vacancy;
 
     private LocalDateTime interviewDate;
 

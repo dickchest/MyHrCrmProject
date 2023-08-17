@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -41,4 +42,7 @@ public class Tasks {
     @JoinColumn(name = "vacancy_id")
     private Vacancies vacancy;
 
+    private LocalDateTime createDate;
+
+    private LocalDateTime lastUpdate;
 }

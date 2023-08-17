@@ -22,12 +22,11 @@ public class Interviews {
 
     private String comments;
 
-    @NotBlank
+    @NotBlank(message = "Candidate id should not be blank")
     @OneToOne
     @JoinColumn(name = "candidate_ID")
     private Candidates candidate;
 
-    @NotBlank
     @OneToOne
     @JoinColumn(name = "employee_ID")
     private Employees employees;

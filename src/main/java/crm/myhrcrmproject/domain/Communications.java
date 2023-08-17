@@ -21,7 +21,7 @@ public class Communications {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contact_id")
-    private Contacts contact;
+    private ClientContacts contact;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "candidate_id")
@@ -34,4 +34,8 @@ public class Communications {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "responsible_employee_id")
     private Employees employees;
+
+    private LocalDateTime createDate;
+
+    private LocalDateTime lastUpdate;
 }

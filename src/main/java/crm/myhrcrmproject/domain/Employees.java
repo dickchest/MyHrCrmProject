@@ -30,6 +30,6 @@ public class Employees {
     @Email
     private String email;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "employees", cascade = CascadeType.ALL)
     private List<Vacancies> vacanciesList;
 }
