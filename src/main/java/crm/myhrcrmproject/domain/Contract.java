@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Contracts {
+public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer contractId;
@@ -28,17 +28,17 @@ public class Contracts {
     @NotBlank
     @OneToOne
     @JoinColumn(name = "candidate_id")
-    private Candidates candidate;
+    private Candidate candidate;
 
     @NotBlank
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "responsible_employee_id")
-    private Employees employees;
+    private Employee employee;
 
     @NotBlank
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
-    private Clients client;
+    private Client client;
 
     private LocalDateTime createDate;
 

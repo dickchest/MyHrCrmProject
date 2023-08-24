@@ -1,9 +1,9 @@
 package crm.myhrcrmproject.dto.communicationsDTO;
 
-import crm.myhrcrmproject.dto.candidatesDTO.CandidatesForInterviewsResponseDTO;
+import crm.myhrcrmproject.dto.candidatesDTO.CandidatesShortResponseDTO;
 import crm.myhrcrmproject.dto.clientContactsDTO.ClientContactsShortResponseDTO;
-import crm.myhrcrmproject.dto.employeeDTO.EmployeesForVacanciesResponseDTO;
-import crm.myhrcrmproject.dto.vacanciesDTO.VacanciesForCandidatesResponseDTO;
+import crm.myhrcrmproject.dto.employeeDTO.EmployeesShortResponseDTO;
+import crm.myhrcrmproject.dto.vacanciesDTO.VacanciesShortResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class CommunicationsRequestDTO {
     private LocalDateTime communicationDateTime;
     private String communicationType;
     private ClientContactsShortResponseDTO contact;
-    private CandidatesForInterviewsResponseDTO candidate;
-    private VacanciesForCandidatesResponseDTO vacancy;
-    private EmployeesForVacanciesResponseDTO employee;
+    private CandidatesShortResponseDTO candidate;
+    private VacanciesShortResponseDTO vacancy;
+    private EmployeesShortResponseDTO employee;
 }

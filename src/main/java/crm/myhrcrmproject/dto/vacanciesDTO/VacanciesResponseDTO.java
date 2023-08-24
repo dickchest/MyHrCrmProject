@@ -1,12 +1,15 @@
 package crm.myhrcrmproject.dto.vacanciesDTO;
 
+import crm.myhrcrmproject.domain.Candidate;
 import crm.myhrcrmproject.domain.enums.VacancyStatus;
-import crm.myhrcrmproject.dto.employeeDTO.EmployeesForVacanciesResponseDTO;
+import crm.myhrcrmproject.dto.candidatesDTO.CandidatesShortResponseDTO;
+import crm.myhrcrmproject.dto.employeeDTO.EmployeesShortResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,5 +22,6 @@ public class VacanciesResponseDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private VacancyStatus status;
-    private EmployeesForVacanciesResponseDTO responsibleEmployee;
+    private EmployeesShortResponseDTO responsibleEmployee;
+    private List<CandidatesShortResponseDTO> candidatesShortResponseDTOS;
 }

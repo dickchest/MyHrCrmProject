@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Interviews {
+public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer interviewId;
@@ -25,9 +25,9 @@ public class Interviews {
     @NotBlank(message = "Candidate id should not be blank")
     @OneToOne
     @JoinColumn(name = "candidate_ID")
-    private Candidates candidate;
+    private Candidate candidate;
 
     @OneToOne
     @JoinColumn(name = "employee_ID")
-    private Employees employees;
+    private Employee employee;
 }

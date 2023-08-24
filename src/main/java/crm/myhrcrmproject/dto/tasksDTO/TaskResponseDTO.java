@@ -1,9 +1,9 @@
 package crm.myhrcrmproject.dto.tasksDTO;
 
 import crm.myhrcrmproject.domain.enums.TaskStatus;
-import crm.myhrcrmproject.dto.candidatesDTO.CandidatesForInterviewsResponseDTO;
-import crm.myhrcrmproject.dto.employeeDTO.EmployeesForVacanciesResponseDTO;
-import crm.myhrcrmproject.dto.vacanciesDTO.VacanciesForCandidatesResponseDTO;
+import crm.myhrcrmproject.dto.candidatesDTO.CandidatesShortResponseDTO;
+import crm.myhrcrmproject.dto.employeeDTO.EmployeesShortResponseDTO;
+import crm.myhrcrmproject.dto.vacanciesDTO.VacanciesShortResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ public class TaskResponseDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private TaskStatus status;
-    private EmployeesForVacanciesResponseDTO employee;
-    private CandidatesForInterviewsResponseDTO candidate;
-    private VacanciesForCandidatesResponseDTO vacancy;
+    private EmployeesShortResponseDTO employee;
+    private CandidatesShortResponseDTO candidate;
+    private VacanciesShortResponseDTO vacancy;
 }

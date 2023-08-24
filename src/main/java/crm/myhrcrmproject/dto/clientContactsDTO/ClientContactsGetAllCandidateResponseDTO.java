@@ -1,7 +1,6 @@
 package crm.myhrcrmproject.dto.clientContactsDTO;
 
-import crm.myhrcrmproject.dto.candidatesDTO.CandidatesForInterviewsResponseDTO;
-import crm.myhrcrmproject.dto.clientsDTO.ClientsResponseDTO;
+import crm.myhrcrmproject.dto.candidatesDTO.CandidatesShortResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 public class ClientContactsGetAllCandidateResponseDTO {
     private Integer ClientContactId;
-    private List<CandidatesForInterviewsResponseDTO> candidatesList;
+    private List<CandidatesShortResponseDTO> candidatesList;
 }

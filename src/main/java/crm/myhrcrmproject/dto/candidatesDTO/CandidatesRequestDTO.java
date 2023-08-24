@@ -5,14 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CandidatesForInterviewsResponseDTO {
-    private Integer candidateId;
+public class CandidatesRequestDTO {
+
     private String firstName;
     private String lastName;
+    private LocalDate dateOfBirth;
     private String email;
     private String phone;
+    private String address;
+    private Integer vacancyId;
     private CandidateStatus status;
 }

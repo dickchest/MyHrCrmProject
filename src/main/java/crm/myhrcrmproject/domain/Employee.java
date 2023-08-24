@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class Employees {
+public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer employeeId;
@@ -30,6 +30,6 @@ public class Employees {
     @Email
     private String email;
 
-    @OneToMany(mappedBy = "employees", cascade = CascadeType.ALL)
-    private List<Vacancies> vacanciesList;
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<Vacancy> vacancyList;
 }

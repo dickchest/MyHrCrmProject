@@ -1,8 +1,8 @@
 package crm.myhrcrmproject.dto.contractsDTO;
 
-import crm.myhrcrmproject.dto.candidatesDTO.CandidatesForInterviewsResponseDTO;
+import crm.myhrcrmproject.dto.candidatesDTO.CandidatesShortResponseDTO;
 import crm.myhrcrmproject.dto.clientsDTO.ClientsResponseDTO;
-import crm.myhrcrmproject.dto.employeeDTO.EmployeesForVacanciesResponseDTO;
+import crm.myhrcrmproject.dto.employeeDTO.EmployeesShortResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class ContractsResponseDTO {
     private LocalDate endDate;
     private Double salary;
     private String contractType;
-    private CandidatesForInterviewsResponseDTO candidate;
-    private EmployeesForVacanciesResponseDTO employee;
+    private CandidatesShortResponseDTO candidate;
+    private EmployeesShortResponseDTO employee;
     private ClientsResponseDTO client;
 }

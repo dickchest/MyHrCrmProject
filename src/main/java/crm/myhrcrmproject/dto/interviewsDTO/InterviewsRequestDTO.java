@@ -1,7 +1,5 @@
 package crm.myhrcrmproject.dto.interviewsDTO;
 
-import crm.myhrcrmproject.dto.candidatesDTO.CandidatesForInterviewsResponseDTO;
-import crm.myhrcrmproject.dto.employeeDTO.EmployeesForVacanciesResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

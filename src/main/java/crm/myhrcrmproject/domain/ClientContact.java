@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class ClientContacts {
+public class ClientContact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer clientContactId;
@@ -39,9 +39,9 @@ public class ClientContacts {
         joinColumns = @JoinColumn(name = "contacts_id"),
         inverseJoinColumns = @JoinColumn(name = "candidate_id")
     )
-    private List<Candidates> candidatesList;
+    private List<Candidate> candidateList;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
-    private Clients client;
+    private Client client;
 }

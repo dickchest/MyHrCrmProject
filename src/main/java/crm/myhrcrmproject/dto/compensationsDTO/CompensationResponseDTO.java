@@ -1,6 +1,6 @@
 package crm.myhrcrmproject.dto.compensationsDTO;
 
-import crm.myhrcrmproject.dto.candidatesDTO.CandidatesForInterviewsResponseDTO;
+import crm.myhrcrmproject.dto.candidatesDTO.CandidatesShortResponseDTO;
 import crm.myhrcrmproject.dto.contractsDTO.ContractsShortResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +16,6 @@ public class CompensationResponseDTO {
     private Double salary;
     private LocalDate paymentDate;
     private String comments;
-    private CandidatesForInterviewsResponseDTO candidate;
+    private CandidatesShortResponseDTO candidate;
     private ContractsShortResponseDTO contract;
 }

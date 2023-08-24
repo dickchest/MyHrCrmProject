@@ -6,9 +6,11 @@ import lombok.Data;
 import crm.myhrcrmproject.domain.enums.VacancyStatus;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @Entity
 @Data
-public class Vacancies {
+public class Vacancy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer vacancyId;
@@ -26,5 +28,8 @@ public class Vacancies {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "responsible_Employee_ID")
-    private Employees employees;
+    private Employee employee;
+
+    @OneToMany(mappedBy = "vacancy", cascade = CascadeType.ALL)
+    private List<Candidate> candidates;
 }

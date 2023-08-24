@@ -24,11 +24,11 @@ public class Compensation {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "candidate_id")
-    private Candidates candidate;
+    private Candidate candidate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contract_id")
-    private Contracts contract;
+    private Contract contract;
 
     private LocalDateTime createDate;
 

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Communications {
+public class Communication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer communicationId;
@@ -21,19 +21,19 @@ public class Communications {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contact_id")
-    private ClientContacts contact;
+    private ClientContact contact;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "candidate_id")
-    private Candidates candidate;
+    private Candidate candidate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vacansy_id")
-    private Vacancies vacancy;
+    private Vacancy vacancy;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "responsible_employee_id")
-    private Employees employees;
+    private Employee employee;
 
     private LocalDateTime createDate;
 

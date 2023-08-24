@@ -6,13 +6,20 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Data
 @Entity
-public class Candidates {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Candidate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,19 +35,20 @@ public class Candidates {
     @Size(min = 1, max = 50, message = "Lastname length must be between 1 and 50")
     private String lastName;
 
-    @NotBlank(message = "Birthdate must be not blank")
     private LocalDate dateOfBirth;
 
     private String address;
 
     private String phone;
 
+    @NotBlank(message = "Email must be not blank")
     @Email
+    @Column(unique = true)
     private String email;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)  // todo сделать many to one (множество кандидатов могут аплаиться на одну вакансию)
     @JoinColumn(name = "vacancy_ID")
-    private Vacancies vacancy;
+    private Vacancy vacancy;
 
     private LocalDateTime interviewDate;
 

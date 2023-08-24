@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Tasks {
+public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer taskId;
@@ -32,15 +32,15 @@ public class Tasks {
 
     @OneToOne
     @JoinColumn(name = "responsible_Employee_ID")
-    private Employees employees;
+    private Employee employee;
 
     @OneToOne
     @JoinColumn(name = "candidate_id")
-    private Candidates candidate;
+    private Candidate candidate;
 
     @OneToOne
     @JoinColumn(name = "vacancy_id")
-    private Vacancies vacancy;
+    private Vacancy vacancy;
 
     private LocalDateTime createDate;
 
