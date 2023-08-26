@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,12 +25,10 @@ public class Candidate {
     private Integer candidateId;
 
     @NotBlank(message = "Name must be not blank")
-    @Column(name = "FirstName")
     @Size(min = 3, max = 20, message = "Name length must be between 3 and 15")
     private String firstName;
 
     @NotBlank(message = "Lastname must be not blank")
-    @Column(name = "LastName")
     @Size(min = 1, max = 50, message = "Lastname length must be between 1 and 50")
     private String lastName;
 

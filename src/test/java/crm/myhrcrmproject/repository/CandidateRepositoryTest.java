@@ -61,7 +61,6 @@ class CandidateRepositoryTest {
         // Act
         Candidate receivedCandidate = candidatesRepository.findById(id).get();
 
-
         // Assert
         assertThat(receivedCandidate).isNotNull();
         assertThat(receivedCandidate.getCandidateId()).isEqualTo(id);
@@ -71,7 +70,6 @@ class CandidateRepositoryTest {
     public void findAllTest() {
 
         List<Candidate> candidates = candidatesRepository.findAll();
-
         assertThat(candidates.size()).isEqualTo(1);
     }
 
