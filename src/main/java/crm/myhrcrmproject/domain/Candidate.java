@@ -63,4 +63,5 @@ public class Candidate {
     private LocalDateTime creatingDate;
 
     private LocalDateTime updatedDate;
+
 }

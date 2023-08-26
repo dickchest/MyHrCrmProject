@@ -2,7 +2,6 @@ package crm.myhrcrmproject.repository;
 
 import crm.myhrcrmproject.domain.Candidate;
 
-import crm.myhrcrmproject.domain.Employee;
 import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

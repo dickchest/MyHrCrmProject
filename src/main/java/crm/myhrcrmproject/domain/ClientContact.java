@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Data
 public class ClientContact {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer clientContactId;
@@ -44,4 +45,5 @@ public class ClientContact {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
+
 }

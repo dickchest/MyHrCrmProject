@@ -38,4 +38,5 @@ public class Communication {
     private LocalDateTime createDate;
 
     private LocalDateTime lastUpdate;
+
 }
