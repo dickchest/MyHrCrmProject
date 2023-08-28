@@ -24,7 +24,7 @@ public class CandidateController {
         return new ResponseEntity<>(candidateService.findAll(), HttpStatus.OK);
     }
     @GetMapping("/findAllByStatus/{status}")
-    public ResponseEntity<List<CandidatesResponseDTO>> findAllTasks (@PathVariable("status") Integer statusID){
+    public ResponseEntity<List<CandidatesResponseDTO>> findAllByStatus (@PathVariable("status") Integer statusID){
         CandidateStatus status = CandidateStatus.values()[statusID];
         return new ResponseEntity<>(candidateService.findAllByStatus(status), HttpStatus.OK);
     }
@@ -36,18 +36,18 @@ public class CandidateController {
 
     @PostMapping
     public ResponseEntity<CandidatesResponseDTO> createNewCandidate(@RequestBody CandidatesRequestDTO requestDTO) {
-        return new ResponseEntity<>(candidateService.createCandidate(requestDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(candidateService.create(requestDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CandidatesResponseDTO> updateCandidate(@PathVariable("id") Integer id, @RequestBody CandidatesRequestDTO requestDTO) {
-        return new ResponseEntity<>(candidateService.updateCandidate(id, requestDTO), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(candidateService.update(id, requestDTO), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCandidate(@PathVariable("id") Integer id){
-        candidateService.deleteCandidate(id);
+        candidateService.delete(id);
     }
 
 }

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer taskId;
+    private Integer id;
 
     @NotBlank(message = "Title must be not blank")
     @Size(min = 1, max = 255, message = "Title length must be between 1 and 255")

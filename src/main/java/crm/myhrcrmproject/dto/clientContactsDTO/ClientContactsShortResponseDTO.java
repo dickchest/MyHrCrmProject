@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientContactsShortResponseDTO {
-    private Integer clientContactId;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String position;

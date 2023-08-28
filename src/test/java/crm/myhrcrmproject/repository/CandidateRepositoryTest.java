@@ -45,7 +45,7 @@ class CandidateRepositoryTest {
 
         // Assert
         assertThat(savedCandidate).isNotNull();
-        assertThat(savedCandidate.getCandidateId()).isGreaterThan(0);
+        assertThat(savedCandidate.getId()).isGreaterThan(0);
         Assertions.assertEquals("Oleg", savedCandidate.getFirstName());
         Assertions.assertEquals("Kozlov", savedCandidate.getLastName());
         Assertions.assertEquals("test@example.com", savedCandidate.getEmail());
@@ -56,14 +56,14 @@ class CandidateRepositoryTest {
     @Test
     public void findByIdTest() {
 
-        Integer id = savedCandidate.getCandidateId();
+        Integer id = savedCandidate.getId();
 
         // Act
         Candidate receivedCandidate = candidatesRepository.findById(id).get();
 
         // Assert
         assertThat(receivedCandidate).isNotNull();
-        assertThat(receivedCandidate.getCandidateId()).isEqualTo(id);
+        assertThat(receivedCandidate.getId()).isEqualTo(id);
     }
 
     @Test

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InterviewsResponseDTO {
-    private Integer interviewId;
+    private Integer id;
     private LocalDateTime dateTime;
     private String location;
     private String comments;

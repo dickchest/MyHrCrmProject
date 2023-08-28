@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer interviewId;
+    private Integer id;
 
     @NotBlank(message = "Data & time must be not blank")
     private LocalDateTime dateTime;

@@ -14,7 +14,7 @@ public class ClientContact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer clientContactId;
+    private Integer id;
 
     @NotBlank(message = "Name must be not blank")
     @Size(min = 1, max = 255, message = "Name length must be between 1 and 255")

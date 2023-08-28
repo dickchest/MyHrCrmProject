@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ContractsShortResponseDTO {
-    private Integer contractId;
+    private Integer id;
     private LocalDate startDate;
     private LocalDate endDate;
     private Double salary;

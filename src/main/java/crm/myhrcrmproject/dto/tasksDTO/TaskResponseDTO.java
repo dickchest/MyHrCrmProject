@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TaskResponseDTO {
-    private Integer taskId;
+    private Integer id;
     private String title;
     private String description;
     private LocalDate startDate;

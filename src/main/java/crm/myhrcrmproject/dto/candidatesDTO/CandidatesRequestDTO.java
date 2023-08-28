@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CandidatesRequestDTO {
+public class CandidatesRequestDTO{
 
     private String firstName;
     private String lastName;

@@ -11,14 +11,14 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CandidatesResponseDTO {
-    private Integer candidateId;
+public class CandidatesResponseDTO{
+    private Integer id;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
     private String email;
     private String phone;
     private String address;
-    private VacanciesShortResponseDTO vacancyResponseDTO;
+    private VacanciesShortResponseDTO vacanciesShortResponseDTO;
     private CandidateStatus status;
 }

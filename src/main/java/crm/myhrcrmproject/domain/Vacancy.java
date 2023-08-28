@@ -2,18 +2,22 @@ package crm.myhrcrmproject.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.*;
 import crm.myhrcrmproject.domain.enums.VacancyStatus;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Data
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Vacancy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer vacancyId;
+    private Integer id;
 
     @NotBlank(message = "Job Title must be not blank")
     private String jobTitle;
@@ -31,5 +35,5 @@ public class Vacancy {
     private Employee employee;
 
     @OneToMany(mappedBy = "vacancy", cascade = CascadeType.ALL)
-    private List<Candidate> candidates;
+    private List<Candidate> candidate;
 }

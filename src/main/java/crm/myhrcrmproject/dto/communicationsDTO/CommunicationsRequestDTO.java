@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommunicationsRequestDTO {
-    private Integer communicationId;
+    private Integer id;
     private LocalDateTime communicationDateTime;
     private String communicationType;
     private ClientContactsShortResponseDTO contact;
