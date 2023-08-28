@@ -33,15 +33,12 @@ public class CandidateService extends GenericService<Candidate, CandidatesReques
         // set status
         candidate.setCandidateStatus(CandidateStatus.ACTIVE);
 
-        // if vacancy exists, set vacancy
-        converter.fromRequestVacancyDTO(candidate, requestDTO, vacanciesRepository);
         return candidate;
     }
 
     @Override
     protected Candidate entityAfterUpdateProcedures(Candidate entity, CandidatesRequestDTO requestDTO) {
-
-        converter.fromRequestVacancyDTO(entity, requestDTO, vacanciesRepository);
+        entity.setUpdatedDate(LocalDateTime.now());
         return entity;
     }
 

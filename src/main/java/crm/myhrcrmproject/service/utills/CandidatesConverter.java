@@ -1,66 +1,66 @@
 package crm.myhrcrmproject.service.utills;
 
 import crm.myhrcrmproject.domain.Candidate;
-import crm.myhrcrmproject.domain.Vacancy;
-import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import crm.myhrcrmproject.dto.candidatesDTO.CandidatesRequestDTO;
 import crm.myhrcrmproject.dto.candidatesDTO.CandidatesResponseDTO;
 import crm.myhrcrmproject.dto.candidatesDTO.CandidatesShortResponseDTO;
+import crm.myhrcrmproject.dto.vacanciesDTO.VacanciesShortResponseDTO;
 import crm.myhrcrmproject.repository.VacanciesRepository;
 import crm.myhrcrmproject.service.validation.NotFoundException;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
-public class CandidatesConverter implements Converter<Candidate, CandidatesRequestDTO, CandidatesResponseDTO> {
-    private VacanciesConverter vacanciesConverter;
+import java.util.Optional;
 
-    public CandidatesResponseDTO toDTO(Candidate candidate) {
+@Service
+@AllArgsConstructor
+public class CandidatesConverter implements Converter<Candidate, CandidatesRequestDTO, CandidatesResponseDTO> {
+
+    private final VacanciesRepository vacanciesRepository;
+
+    public CandidatesResponseDTO toDTO(Candidate entity) {
         CandidatesResponseDTO dto = new CandidatesResponseDTO();
 
-        dto.setId(candidate.getId());
-        dto.setFirstName(candidate.getFirstName());
-        dto.setLastName(candidate.getLastName());
-        dto.setDateOfBirth(candidate.getDateOfBirth());
-        dto.setEmail(candidate.getEmail());
-        dto.setPhone(candidate.getPhone());
-        dto.setAddress(candidate.getAddress());
-        dto.setStatus(candidate.getCandidateStatus());
-        if (candidate.getVacancy() != null) {
-            dto.setVacanciesShortResponseDTO(vacanciesConverter.toShortDTO(candidate.getVacancy()));
+        dto.setId(entity.getId());
+        dto.setFirstName(entity.getFirstName());
+        dto.setLastName(entity.getLastName());
+        dto.setDateOfBirth(entity.getDateOfBirth());
+        dto.setEmail(entity.getEmail());
+        dto.setPhone(entity.getPhone());
+        dto.setAddress(entity.getAddress());
+        dto.setStatus(entity.getCandidateStatus());
+        if (entity.getVacancy() != null) {
+            VacanciesShortResponseDTO vacanciesShortResponseDTO = new VacanciesShortResponseDTO(
+                    entity.getVacancy().getId(),
+                    entity.getVacancy().getJobTitle(),
+                    entity.getVacancy().getSalary()
+            );
+            dto.setVacancy(vacanciesShortResponseDTO);
         }
-
         return dto;
     }
 
 
-    public Candidate fromDTO(Candidate candidate, CandidatesRequestDTO request) {
-        if (request.getFirstName() != null) candidate.setFirstName(request.getFirstName());
-        if (request.getLastName() != null) candidate.setLastName(request.getLastName());
-        if (request.getDateOfBirth() != null) candidate.setDateOfBirth(request.getDateOfBirth());
-        if (request.getEmail() != null) candidate.setEmail(request.getEmail());
-        if (request.getPhone() != null) candidate.setPhone(request.getPhone());
-        if (request.getAddress() != null) candidate.setAddress(request.getAddress());
-        if (request.getStatus() != null) candidate.setCandidateStatus(request.getStatus());
+    public Candidate fromDTO(Candidate entity, CandidatesRequestDTO request) {
+        Optional.ofNullable(request.getFirstName()).ifPresent(entity::setFirstName);
+        Optional.ofNullable(request.getLastName()).ifPresent(entity::setLastName);
+        Optional.ofNullable(request.getDateOfBirth()).ifPresent(entity::setDateOfBirth);
+        Optional.ofNullable(request.getEmail()).ifPresent(entity::setEmail);
+        Optional.ofNullable(request.getPhone()).ifPresent(entity::setPhone);
+        Optional.ofNullable(request.getAddress()).ifPresent(entity::setAddress);
+        Optional.ofNullable(request.getStatus()).ifPresent(entity::setCandidateStatus);
+        Optional.ofNullable(request.getVacancyId()).ifPresent(
+                id -> entity.setVacancy(vacanciesRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException
+                                ("Vacancy with id " + request.getVacancyId() + " not found"))));
 
-        return candidate;
+        return entity;
     }
 
     @Override
     public Candidate newEntity() {
 
         return new Candidate();
-    }
-
-    public Candidate fromRequestVacancyDTO(Candidate candidate, CandidatesRequestDTO request, VacanciesRepository vacanciesRepository) {
-
-        if (request.getVacancyId() != null) {
-            Vacancy vacancy = vacanciesRepository.findById(request.getVacancyId())
-                    .orElseThrow(() -> new NotFoundException("Vacancy with id: " + request.getVacancyId() + " not found!"));
-            candidate.setVacancy(vacancy);
-            candidate.setCandidateStatus(CandidateStatus.IN_PROCESS);
-        }
-        return candidate;
     }
 
     public CandidatesShortResponseDTO toShortDTO(Candidate entity) {

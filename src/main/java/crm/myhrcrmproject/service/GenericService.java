@@ -8,11 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class GenericService<T, RequestDTO, ResponseDTO> {
-//    private final Converter<T, RequestDTO, ResponseDTO> converter;
-
 
     protected abstract JpaRepository<T, Integer> getRepository();
-//    protected abstract boolean entityCreateValidation(RequestDTO requestDTO);
     protected abstract T entityAfterCreateProcedures(T entity, RequestDTO requestDTO);
     protected abstract T entityAfterUpdateProcedures(T entity, RequestDTO requestDTO);
     protected abstract Converter<T, RequestDTO, ResponseDTO> getConverter();

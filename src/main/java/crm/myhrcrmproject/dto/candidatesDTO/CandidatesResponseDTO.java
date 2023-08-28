@@ -19,6 +19,6 @@ public class CandidatesResponseDTO{
     private String email;
     private String phone;
     private String address;
-    private VacanciesShortResponseDTO vacanciesShortResponseDTO;
+    private VacanciesShortResponseDTO vacancy;
     private CandidateStatus status;
 }

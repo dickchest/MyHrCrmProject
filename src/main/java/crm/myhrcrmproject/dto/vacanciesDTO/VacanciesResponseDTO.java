@@ -1,6 +1,5 @@
 package crm.myhrcrmproject.dto.vacanciesDTO;
 
-import crm.myhrcrmproject.domain.Candidate;
 import crm.myhrcrmproject.domain.enums.VacancyStatus;
 import crm.myhrcrmproject.dto.candidatesDTO.CandidatesShortResponseDTO;
 import crm.myhrcrmproject.dto.employeeDTO.EmployeesShortResponseDTO;
@@ -25,5 +24,5 @@ public class VacanciesResponseDTO {
     private LocalDate endDate;
     private VacancyStatus status;
     private EmployeesShortResponseDTO responsibleEmployee;
-    private List<CandidatesShortResponseDTO> candidatesShortResponseDTOList;
+    private List<CandidatesShortResponseDTO> candidatesList;
 }

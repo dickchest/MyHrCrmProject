@@ -9,7 +9,10 @@ import crm.myhrcrmproject.repository.EmployeeRepository;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class VacanciesConverter implements Converter<Vacancy, VacanciesRequestDTO, VacanciesResponseDTO> {
     private final CandidatesConverter candidatesConverter;
@@ -31,10 +34,13 @@ public class VacanciesConverter implements Converter<Vacancy, VacanciesRequestDT
                 .endDate(entity.getEndDate())
                 .status(entity.getVacancyStatus())
                 .responsibleEmployee(new EmployeesShortResponseDTO()) // todo поменять на метод
-                .candidatesShortResponseDTOList(entity.getCandidate()
-                        .stream()
-                        .map(candidatesConverter::toShortDTO)
-                        .toList()
+                .candidatesList(
+                        entity.getCandidate() != null ?
+                                entity.getCandidate()
+                                        .stream()
+                                        .map(candidatesConverter::toShortDTO)
+                                        .collect(Collectors.toList())
+                                : Collections.emptyList()
                 )
                 .build();
     }

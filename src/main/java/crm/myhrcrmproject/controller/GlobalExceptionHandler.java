@@ -3,6 +3,7 @@ package crm.myhrcrmproject.controller;
 import crm.myhrcrmproject.service.validation.AlreadyExistsException;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,6 +32,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<String> handlerAlreadyExistsException(AlreadyExistsException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handlerDataIntegrityViolationException(DataIntegrityViolationException e) {
+        return new ResponseEntity<>("Entry already exists", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotFoundException.class)
