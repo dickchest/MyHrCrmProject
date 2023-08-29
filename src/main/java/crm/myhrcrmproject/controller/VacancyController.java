@@ -1,9 +1,7 @@
 package crm.myhrcrmproject.controller;
 
 import crm.myhrcrmproject.domain.Vacancy;
-import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import crm.myhrcrmproject.domain.enums.VacancyStatus;
-import crm.myhrcrmproject.dto.candidatesDTO.CandidatesResponseDTO;
 import crm.myhrcrmproject.dto.vacanciesDTO.VacanciesRequestDTO;
 import crm.myhrcrmproject.dto.vacanciesDTO.VacanciesResponseDTO;
 import crm.myhrcrmproject.service.GenericService;
@@ -19,16 +17,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/vacancies")
-public class VacancyController extends GenericController<Vacancy, VacanciesRequestDTO, VacanciesResponseDTO>{
+public class VacancyController extends GenericController<Vacancy, VacanciesRequestDTO, VacanciesResponseDTO> {
     private final VacancyService vacancyService;
+
     protected VacancyController(GenericService<Vacancy, VacanciesRequestDTO, VacanciesResponseDTO> service, VacancyService vacancyService) {
         super(service);
         this.vacancyService = vacancyService;
     }
 
     @GetMapping("/findAllByStatus/{status}")
-    public ResponseEntity<List<VacanciesResponseDTO>> findAllByStatus (@PathVariable("status") Integer statusID){
-        VacancyStatus status = VacancyStatus.values()[statusID];
-        return new ResponseEntity<>(vacancyService.findAllByStatus(status), HttpStatus.OK);
+    public ResponseEntity<List<VacanciesResponseDTO>> findAllByStatus(@PathVariable("status") Integer statusID) {
+        return new ResponseEntity<>(vacancyService.findAllByStatus(statusID), HttpStatus.OK);
     }
 }

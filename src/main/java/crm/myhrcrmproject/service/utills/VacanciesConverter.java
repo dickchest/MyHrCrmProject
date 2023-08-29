@@ -32,7 +32,7 @@ public class VacanciesConverter implements Converter<Vacancy, VacanciesRequestDT
                 .salary(entity.getSalary())
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
-                .status(entity.getVacancyStatus())
+                .status(entity.getStatus())
                 .responsibleEmployee(new EmployeesShortResponseDTO()) // todo поменять на метод
                 .candidatesList(
                         entity.getCandidate() != null ?
@@ -52,7 +52,7 @@ public class VacanciesConverter implements Converter<Vacancy, VacanciesRequestDT
         Optional.ofNullable(request.getSalary()).ifPresent(entity::setSalary);
         Optional.ofNullable(request.getStartDate()).ifPresent(entity::setStartDate);
         Optional.ofNullable(request.getEndDate()).ifPresent(entity::setEndDate);
-        Optional.ofNullable(request.getStatus()).ifPresent(entity::setVacancyStatus);
+        Optional.ofNullable(request.getStatus()).ifPresent(entity::setStatus);
         Optional.ofNullable(request.getResponsibleEmployeeId()).ifPresent(
                 id -> entity.setEmployee(employeeRepository.findById(id)
                         .orElseThrow(() -> new NotFoundException

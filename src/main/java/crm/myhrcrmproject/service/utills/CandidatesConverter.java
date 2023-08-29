@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -28,7 +29,7 @@ public class CandidatesConverter implements Converter<Candidate, CandidatesReque
         dto.setEmail(entity.getEmail());
         dto.setPhone(entity.getPhone());
         dto.setAddress(entity.getAddress());
-        dto.setStatus(entity.getCandidateStatus());
+        dto.setStatus(entity.getStatus());
         if (entity.getVacancy() != null) {
             VacanciesShortResponseDTO vacanciesShortResponseDTO = new VacanciesShortResponseDTO(
                     entity.getVacancy().getId(),
@@ -37,6 +38,10 @@ public class CandidatesConverter implements Converter<Candidate, CandidatesReque
             );
             dto.setVacancy(vacanciesShortResponseDTO);
         }
+        Optional.ofNullable(entity.getInterviewList()).ifPresent(
+                (list) -> list.stream()
+                        .map((item) -> item) // todo добавить метод в интервью конвертере
+                        .collect(Collectors.toList()));
         return dto;
     }
 
@@ -48,7 +53,7 @@ public class CandidatesConverter implements Converter<Candidate, CandidatesReque
         Optional.ofNullable(request.getEmail()).ifPresent(entity::setEmail);
         Optional.ofNullable(request.getPhone()).ifPresent(entity::setPhone);
         Optional.ofNullable(request.getAddress()).ifPresent(entity::setAddress);
-        Optional.ofNullable(request.getStatus()).ifPresent(entity::setCandidateStatus);
+        Optional.ofNullable(request.getStatus()).ifPresent(entity::setStatus);
         Optional.ofNullable(request.getVacancyId()).ifPresent(
                 id -> entity.setVacancy(vacanciesRepository.findById(id)
                         .orElseThrow(() -> new NotFoundException
@@ -70,7 +75,7 @@ public class CandidatesConverter implements Converter<Candidate, CandidatesReque
                 .lastName(entity.getLastName())
                 .email(entity.getEmail())
                 .phone(entity.getPhone())
-                .status(entity.getCandidateStatus())
+                .status(entity.getStatus())
                 .build();
     }
 }

@@ -37,7 +37,7 @@ public abstract class GenericController<T, RequestDTO, ResponseDTO> {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCandidate(@PathVariable("id") Integer id){
+    public void deleteCandidate(@PathVariable("id") Integer id) {
         service.delete(id);
     }
 

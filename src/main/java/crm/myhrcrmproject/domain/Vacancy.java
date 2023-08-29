@@ -28,7 +28,7 @@ public class Vacancy {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private VacancyStatus vacancyStatus;
+    private VacancyStatus status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "responsible_Employee_ID")

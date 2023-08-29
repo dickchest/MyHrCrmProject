@@ -10,6 +10,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -42,19 +43,16 @@ public class Candidate {
     @Column(unique = true)
     private String email;
 
-    @ManyToOne(fetch = FetchType.EAGER)  // todo сделать many to one (множество кандидатов могут аплаиться на одну вакансию)
-    @JoinColumn(name = "vacancy_ID")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "vacancy_id")
     private Vacancy vacancy;
 
-    private LocalDateTime interviewDate;
-
-    private String interviewResult;
-
-    private String comments;
+    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
+    private List<Interview> interviewList;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private CandidateStatus candidateStatus;
+    private CandidateStatus status;
 
     private LocalDateTime creatingDate;
 

@@ -12,12 +12,10 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InterviewsResponseDTO {
+public class InterviewsShortResponseDTO {
     private Integer id;
     private LocalDateTime dateTime;
-    private String location;
-    private String comments;
     private InterviewStatus status;
-    private CandidatesShortResponseDTO candidate;
+    private String comments;
     private EmployeesShortResponseDTO employee;
 }

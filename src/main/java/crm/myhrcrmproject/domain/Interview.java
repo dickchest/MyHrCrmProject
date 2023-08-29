@@ -1,9 +1,12 @@
 package crm.myhrcrmproject.domain;
 
+import crm.myhrcrmproject.domain.enums.CandidateStatus;
+import crm.myhrcrmproject.domain.enums.InterviewStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,11 +26,15 @@ public class Interview {
     private String comments;
 
     @NotBlank(message = "Candidate id should not be blank")
-    @OneToOne
-    @JoinColumn(name = "candidate_ID")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "candidate_id")
     private Candidate candidate;
 
     @OneToOne
     @JoinColumn(name = "employee_ID")
     private Employee employee;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private InterviewStatus status;
 }

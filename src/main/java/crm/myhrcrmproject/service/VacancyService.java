@@ -12,6 +12,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -24,7 +25,7 @@ public class VacancyService extends GenericService<Vacancy, VacanciesRequestDTO,
     @Override
     protected Vacancy entityAfterCreateProcedures(Vacancy entity, VacanciesRequestDTO requestDTO) {
         if (requestDTO.getStatus() == null) {
-            entity.setVacancyStatus(VacancyStatus.OPEN);
+            entity.setStatus(VacancyStatus.OPEN);
         }
         return entity;
     }
@@ -34,8 +35,10 @@ public class VacancyService extends GenericService<Vacancy, VacanciesRequestDTO,
         return entity;
     }
 
-    public List<VacanciesResponseDTO> findAllByStatus(VacancyStatus status) {
-        List<Vacancy> vacanciesList = repository.findByVacancyStatus(status);
+    public List<VacanciesResponseDTO> findAllByStatus(Integer id) {
+        VacancyStatus status = Optional.of(VacancyStatus.values()[id])
+                .orElseThrow(() -> new NotFoundException("No status found with id: " + id));
+        List<Vacancy> vacanciesList = repository.findByStatus(status);
         if (vacanciesList.isEmpty()) {
             throw new NotFoundException("No vacancy found with status: " + status);
         }
