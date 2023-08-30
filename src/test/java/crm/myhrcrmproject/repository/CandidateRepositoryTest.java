@@ -24,7 +24,7 @@ class CandidateRepositoryTest {
     Candidate savedCandidate;
 
     @Autowired
-    private CandidatesRepository candidatesRepository;
+    private CandidateRepository candidatesRepository;
 
     @BeforeAll
     public static void setup(){
@@ -32,7 +32,7 @@ class CandidateRepositoryTest {
                 .firstName("Oleg")
                 .lastName("Kozlov")
                 .email("test@example.com")
-                .candidateStatus(CandidateStatus.ACTIVE)
+                .status(CandidateStatus.ACTIVE)
                 .build();
     }
 

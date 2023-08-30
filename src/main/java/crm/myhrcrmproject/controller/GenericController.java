@@ -1,6 +1,5 @@
 package crm.myhrcrmproject.controller;
 
-import crm.myhrcrmproject.dto.candidatesDTO.CandidatesRequestDTO;
 import crm.myhrcrmproject.service.CommonService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,8 @@
 package crm.myhrcrmproject.controller;
 
 import crm.myhrcrmproject.domain.enums.CandidateStatus;
-import crm.myhrcrmproject.dto.candidatesDTO.CandidatesRequestDTO;
-import crm.myhrcrmproject.dto.candidatesDTO.CandidatesResponseDTO;
+import crm.myhrcrmproject.dto.candidateDTO.CandidatesRequestDTO;
+import crm.myhrcrmproject.dto.candidateDTO.CandidatesResponseDTO;
 import crm.myhrcrmproject.service.CandidateService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
