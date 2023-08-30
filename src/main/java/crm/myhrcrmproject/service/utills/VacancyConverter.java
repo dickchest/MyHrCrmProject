@@ -1,7 +1,6 @@
 package crm.myhrcrmproject.service.utills;
 
 import crm.myhrcrmproject.domain.Vacancy;
-import crm.myhrcrmproject.dto.employeeDTO.EmployeeShortResponseDTO;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyRequestDTO;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyResponseDTO;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyShortResponseDTO;

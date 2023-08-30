@@ -65,19 +65,16 @@ public class CandidateService implements CommonService<Candidate, CandidateReque
     }
 
     // Extra method for create and update
-    private Candidate entityAfterCreateProcedures(Candidate candidate) {
+    private void entityAfterCreateProcedures(Candidate candidate) {
         // add date
         candidate.setCreatingDate(LocalDateTime.now());
         candidate.setUpdatedDate(LocalDateTime.now());
 
         // set status
         candidate.setStatus(CandidateStatus.ACTIVE);
-
-        return candidate;
     }
-    protected Candidate entityAfterUpdateProcedures(Candidate entity) {
+    protected void entityAfterUpdateProcedures(Candidate entity) {
         entity.setUpdatedDate(LocalDateTime.now());
-        return entity;
     }
 
     // find All by Status(status)
