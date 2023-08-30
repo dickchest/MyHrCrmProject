@@ -54,8 +54,6 @@ public class VacancyService implements CommonService<Vacancy, VacancyRequestDTO,
 
         // filled in existing fields with new dates
         converter.fromDTO(existingEntity, requestDTO);
-        // do extra procedures
-        entityAfterUpdateProcedures(existingEntity);
 
         repository.save(existingEntity);
 
@@ -71,21 +69,16 @@ public class VacancyService implements CommonService<Vacancy, VacancyRequestDTO,
 
     // Extra method for create and update
 
-    private Vacancy entityAfterCreateProcedures(Vacancy entity, VacancyRequestDTO requestDTO) {
+    private void entityAfterCreateProcedures(Vacancy entity, VacancyRequestDTO requestDTO) {
         if (requestDTO.getStatus() == null) {
             entity.setStatus(VacancyStatus.OPEN);
         }
-        return entity;
-    }
-
-    private Vacancy entityAfterUpdateProcedures(Vacancy entity) {
-        return entity;
     }
 
     public List<VacancyResponseDTO> findAllByStatusId(Integer id) {
         VacancyStatus status = Optional.of(VacancyStatus.values()[id])
                 .orElseThrow(() -> new NotFoundException("No status found with id: " + id));
-        List<Vacancy> list = repository.findByStatus(status).get();
+        List<Vacancy> list = repository.findByStatus(status).orElse(Collections.emptyList());
         return list.stream()
                 .map(converter::toDTO)
                 .toList();
@@ -93,7 +86,7 @@ public class VacancyService implements CommonService<Vacancy, VacancyRequestDTO,
 
     public List<VacancyResponseDTO> findAllByEmployeeId(Integer id) {
         Employee entity = employeeRepository.findById(id).orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-        List<Vacancy> list = repository.findByEmployee(entity).get();
+        List<Vacancy> list = repository.findByEmployee(entity).orElse(Collections.emptyList());
         return list.stream()
                 .map(converter::toDTO)
                 .toList();

@@ -7,6 +7,7 @@ import crm.myhrcrmproject.dto.vacancyDTO.VacancyResponseDTO;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyShortResponseDTO;
 import crm.myhrcrmproject.repository.EmployeeRepository;
 import crm.myhrcrmproject.service.validation.NotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -14,15 +15,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class VacancyConverter {
     private final CandidateConverter candidateConverter;
     private final EmployeeRepository employeeRepository;
-
-    public VacancyConverter(CandidateConverter candidateConverter, EmployeeRepository employeeRepository) {
-        this.candidateConverter = candidateConverter;
-        this.employeeRepository = employeeRepository;
-    }
-
+    private final EmployeeConverter employeeConverter;
 
     public VacancyResponseDTO toDTO(Vacancy entity) {
         return VacancyResponseDTO.builder()
@@ -33,7 +30,11 @@ public class VacancyConverter {
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
                 .status(entity.getStatus())
-                .responsibleEmployee(new EmployeeShortResponseDTO()) // todo поменять на метод
+                .responsibleEmployee(
+                        entity.getEmployee() != null ?
+                                employeeConverter.toShortDTO(entity.getEmployee()) :
+                                null
+                        )
                 .candidatesList(
                         entity.getCandidate() != null ?
                                 entity.getCandidate()

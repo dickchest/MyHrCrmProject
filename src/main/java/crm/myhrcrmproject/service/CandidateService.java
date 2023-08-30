@@ -84,7 +84,7 @@ public class CandidateService implements CommonService<Candidate, CandidateReque
     public List<CandidateResponseDTO> findAllByStatusId(Integer id) {
         CandidateStatus status = Optional.of(CandidateStatus.values()[id])
                 .orElseThrow(() -> new NotFoundException("No status found with id: " + id));
-        List<Candidate> list = repository.findByStatus(status).get();
+        List<Candidate> list = repository.findByStatus(status).orElse(Collections.emptyList());
         return  list.stream()
                 .map(converter::toDTO)
                 .toList();
@@ -94,7 +94,7 @@ public class CandidateService implements CommonService<Candidate, CandidateReque
     public List<CandidateResponseDTO> findAllByVacancyId(Integer id) {
         Vacancy vacancy = vacancyRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-        List<Candidate> list = repository.findByVacancy(vacancy).get();
+        List<Candidate> list = repository.findByVacancy(vacancy).orElse(Collections.emptyList());
         return  list.stream()
                 .map(converter::toDTO)
                 .toList();
