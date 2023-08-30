@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class VacanciesConverter implements Converter<Vacancy, VacanciesRequestDTO, VacanciesResponseDTO> {
+public class VacanciesConverter{
     private final CandidatesConverter candidatesConverter;
     private final EmployeeRepository employeeRepository;
 
@@ -23,7 +23,7 @@ public class VacanciesConverter implements Converter<Vacancy, VacanciesRequestDT
         this.employeeRepository = employeeRepository;
     }
 
-    @Override
+
     public VacanciesResponseDTO toDTO(Vacancy entity) {
         return VacanciesResponseDTO.builder()
                 .id(entity.getId())
@@ -45,7 +45,7 @@ public class VacanciesConverter implements Converter<Vacancy, VacanciesRequestDT
                 .build();
     }
 
-    @Override
+
     public Vacancy fromDTO(Vacancy entity, VacanciesRequestDTO request) {
         Optional.ofNullable(request.getJobTitle()).ifPresent(entity::setJobTitle);
         Optional.ofNullable(request.getDescription()).ifPresent(entity::setDescription);
@@ -60,7 +60,7 @@ public class VacanciesConverter implements Converter<Vacancy, VacanciesRequestDT
         return entity;
     }
 
-    @Override
+
     public Vacancy newEntity() {
         return new Vacancy();
     }

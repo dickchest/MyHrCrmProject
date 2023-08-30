@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class CandidatesConverter implements Converter<Candidate, CandidatesRequestDTO, CandidatesResponseDTO> {
+public class CandidatesConverter {
 
     private final VacanciesRepository vacanciesRepository;
 
@@ -62,7 +62,7 @@ public class CandidatesConverter implements Converter<Candidate, CandidatesReque
         return entity;
     }
 
-    @Override
+
     public Candidate newEntity() {
 
         return new Candidate();
