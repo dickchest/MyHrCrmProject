@@ -1,15 +1,18 @@
 package crm.myhrcrmproject.service;
 
+import crm.myhrcrmproject.domain.Employee;
 import crm.myhrcrmproject.domain.Vacancy;
 import crm.myhrcrmproject.domain.enums.VacancyStatus;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyRequestDTO;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyResponseDTO;
+import crm.myhrcrmproject.repository.EmployeeRepository;
 import crm.myhrcrmproject.repository.VacancyRepository;
 import crm.myhrcrmproject.service.utills.VacancyConverter;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,6 +23,7 @@ import java.util.stream.Collectors;
 public class VacancyService implements CommonService<Vacancy, VacancyRequestDTO, VacancyResponseDTO> {
     private final VacancyRepository repository;
     private final VacancyConverter converter;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public List<VacancyResponseDTO> findAll() {
@@ -78,14 +82,19 @@ public class VacancyService implements CommonService<Vacancy, VacancyRequestDTO,
         return entity;
     }
 
-    public List<VacancyResponseDTO> findAllByStatus(Integer id) {
+    public List<VacancyResponseDTO> findAllByStatusId(Integer id) {
         VacancyStatus status = Optional.of(VacancyStatus.values()[id])
                 .orElseThrow(() -> new NotFoundException("No status found with id: " + id));
-        List<Vacancy> vacanciesList = repository.findByStatus(status);
-        if (vacanciesList.isEmpty()) {
-            throw new NotFoundException("No vacancy found with status: " + status);
-        }
-        return vacanciesList.stream()
+        List<Vacancy> list = repository.findByStatus(status).get();
+        return list.stream()
+                .map(converter::toDTO)
+                .toList();
+    }
+
+    public List<VacancyResponseDTO> findAllByEmployeeId(Integer id) {
+        Employee entity = employeeRepository.findById(id).orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
+        List<Vacancy> list = repository.findByEmployee(entity).get();
+        return list.stream()
                 .map(converter::toDTO)
                 .toList();
     }

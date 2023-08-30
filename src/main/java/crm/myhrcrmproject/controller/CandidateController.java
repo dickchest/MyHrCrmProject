@@ -19,13 +19,13 @@ import java.util.List;
 public class CandidateController extends GenericController<Candidate, CandidateRequestDTO, CandidateResponseDTO> {
     private final CandidateService service;
 
-    @GetMapping("/findAllByStatus/{statusId}")
-    public ResponseEntity<List<CandidateResponseDTO>> findAllByStatusId(@PathVariable("statusId") Integer statusID) {
+    @GetMapping("/findAllByStatus/{id}")
+    public ResponseEntity<List<CandidateResponseDTO>> findAllByStatusId(@PathVariable("id") Integer statusID) {
         return new ResponseEntity<>(service.findAllByStatusId(statusID), HttpStatus.OK);
     }
 
-    @GetMapping("/findAllByVacancy/{vacancyId}")
-    public ResponseEntity<List<CandidateResponseDTO>> findAllByVacancyId(@PathVariable("vacancyId") Integer id) {
+    @GetMapping("/findAllByVacancy/{id}")
+    public ResponseEntity<List<CandidateResponseDTO>> findAllByVacancyId(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(service.findAllByVacancyId(id), HttpStatus.OK);
     }
 }

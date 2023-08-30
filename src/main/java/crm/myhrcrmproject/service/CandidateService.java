@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -83,23 +84,18 @@ public class CandidateService implements CommonService<Candidate, CandidateReque
     public List<CandidateResponseDTO> findAllByStatusId(Integer id) {
         CandidateStatus status = Optional.of(CandidateStatus.values()[id])
                 .orElseThrow(() -> new NotFoundException("No status found with id: " + id));
-        List<Candidate> candidateList = repository.findByStatus(status);
-        if (candidateList.isEmpty()) {
-            throw new NotFoundException("No candidates found with status: " + status);
-        }
-        return candidateList.stream()
+        List<Candidate> list = repository.findByStatus(status).get();
+        return  list.stream()
                 .map(converter::toDTO)
                 .toList();
     }
 
+    // find All by Vacancy id
     public List<CandidateResponseDTO> findAllByVacancyId(Integer id) {
         Vacancy vacancy = vacancyRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Vacancy with id " + id + " not found!"));
-        List<Candidate> candidateList = repository.findByVacancy(vacancy);
-        if (candidateList.isEmpty()) {
-            throw new NotFoundException("No candidates found with VacancyId: " + id);
-        }
-        return candidateList.stream()
+                .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
+        List<Candidate> list = repository.findByVacancy(vacancy).get();
+        return  list.stream()
                 .map(converter::toDTO)
                 .toList();
     }

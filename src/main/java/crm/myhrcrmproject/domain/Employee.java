@@ -27,7 +27,9 @@ public class Employee {
 
     private String phone;
 
+    @NotBlank(message = "Email must be not blank")
     @Email
+    @Column(unique = true)
     private String email;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
