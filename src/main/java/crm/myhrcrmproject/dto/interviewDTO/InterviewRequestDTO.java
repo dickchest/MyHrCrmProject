@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InterviewsRequestDTO {
+public class InterviewRequestDTO {
     private LocalDateTime dateTime;
     private String location;
     private String comments;

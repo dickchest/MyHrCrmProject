@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommunicationsResponseDTO {
+public class CommunicationResponseDTO {
     private LocalDateTime communicationDateTime;
     private String communicationType;
     private Integer contact_id;

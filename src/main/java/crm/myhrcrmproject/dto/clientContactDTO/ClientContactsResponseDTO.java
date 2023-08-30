@@ -1,6 +1,6 @@
 package crm.myhrcrmproject.dto.clientContactDTO;
 
-import crm.myhrcrmproject.dto.clientDTO.ClientsResponseDTO;
+import crm.myhrcrmproject.dto.clientDTO.ClientResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +15,5 @@ public class ClientContactsResponseDTO {
     private String position;
     private String phone;
     private String email;
-    private ClientsResponseDTO client;
+    private ClientResponseDTO client;
 }
