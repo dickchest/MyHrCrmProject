@@ -1,6 +1,5 @@
 package crm.myhrcrmproject.controller;
 
-import crm.myhrcrmproject.domain.Candidate;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
 import crm.myhrcrmproject.service.CandidateService;
@@ -16,7 +15,7 @@ import java.util.List;
 @RequestMapping("api/candidates")
 @AllArgsConstructor
 @Getter
-public class CandidateController extends GenericController<Candidate, CandidateRequestDTO, CandidateResponseDTO> {
+public class CandidateController extends GenericController<CandidateRequestDTO, CandidateResponseDTO> {
     private final CandidateService service;
 
     @GetMapping("/findAllByStatus/{id}")

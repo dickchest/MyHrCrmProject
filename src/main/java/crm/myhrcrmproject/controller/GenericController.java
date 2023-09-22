@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-public abstract class GenericController<T, RequestDTO, ResponseDTO> {
+public abstract class GenericController<RequestDTO, ResponseDTO> {
 
-    protected abstract CommonService<T, RequestDTO, ResponseDTO> getService();
+    protected abstract CommonService<RequestDTO, ResponseDTO> getService();
 
 
     @GetMapping

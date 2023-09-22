@@ -2,7 +2,7 @@ package crm.myhrcrmproject.service;
 
 import java.util.List;
 
-public interface CommonService<T, Q, R>{
+public interface CommonService<Q, R>{
 
     List<R> findAll();
     R findById(Integer id);

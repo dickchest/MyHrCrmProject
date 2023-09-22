@@ -12,7 +12,6 @@ import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class VacancyService implements CommonService<Vacancy, VacancyRequestDTO, VacancyResponseDTO> {
+public class VacancyService implements CommonService<VacancyRequestDTO, VacancyResponseDTO> {
     private final VacancyRepository repository;
     private final VacancyConverter converter;
     private final EmployeeRepository employeeRepository;
@@ -78,7 +77,7 @@ public class VacancyService implements CommonService<Vacancy, VacancyRequestDTO,
     public List<VacancyResponseDTO> findAllByStatusId(Integer id) {
         VacancyStatus status = Optional.of(VacancyStatus.values()[id])
                 .orElseThrow(() -> new NotFoundException("No status found with id: " + id));
-        List<Vacancy> list = repository.findByStatus(status).orElse(Collections.emptyList());
+        List<Vacancy> list = repository.findByStatus(status);
         return list.stream()
                 .map(converter::toDTO)
                 .toList();
@@ -86,7 +85,7 @@ public class VacancyService implements CommonService<Vacancy, VacancyRequestDTO,
 
     public List<VacancyResponseDTO> findAllByEmployeeId(Integer id) {
         Employee entity = employeeRepository.findById(id).orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-        List<Vacancy> list = repository.findByEmployee(entity).orElse(Collections.emptyList());
+        List<Vacancy> list = repository.findByEmployee(entity);
         return list.stream()
                 .map(converter::toDTO)
                 .toList();

@@ -1,6 +1,5 @@
 package crm.myhrcrmproject.controller;
 
-import crm.myhrcrmproject.domain.Employee;
 import crm.myhrcrmproject.dto.employeeDTO.EmployeeRequestDTO;
 import crm.myhrcrmproject.dto.employeeDTO.EmployeeResponseDTO;
 import crm.myhrcrmproject.service.EmployeeService;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/employees")
 @AllArgsConstructor
 @Getter
-public class EmployeeController extends GenericController<Employee, EmployeeRequestDTO, EmployeeResponseDTO> {
+public class EmployeeController extends GenericController<EmployeeRequestDTO, EmployeeResponseDTO> {
     private final EmployeeService service;
 
 }

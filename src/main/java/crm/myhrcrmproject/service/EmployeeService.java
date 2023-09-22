@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class EmployeeService implements CommonService<Employee, EmployeeRequestDTO, EmployeeResponseDTO> {
+public class EmployeeService implements CommonService<EmployeeRequestDTO, EmployeeResponseDTO> {
     private final EmployeeRepository repository;
     private final EmployeeConverter converter;
 

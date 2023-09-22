@@ -1,6 +1,5 @@
 package crm.myhrcrmproject.controller;
 
-import crm.myhrcrmproject.domain.Vacancy;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyRequestDTO;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyResponseDTO;
 import crm.myhrcrmproject.service.VacancyService;
@@ -19,7 +18,7 @@ import java.util.List;
 @RequestMapping("api/vacancies")
 @AllArgsConstructor
 @Getter
-public class VacancyController extends GenericController<Vacancy, VacancyRequestDTO, VacancyResponseDTO> {
+public class VacancyController extends GenericController<VacancyRequestDTO, VacancyResponseDTO> {
     private final VacancyService service;
 
     @GetMapping("/findAllByStatus/{id}")

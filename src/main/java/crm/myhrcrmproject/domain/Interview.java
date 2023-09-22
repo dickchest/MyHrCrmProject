@@ -1,16 +1,18 @@
 package crm.myhrcrmproject.domain;
 
-import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import crm.myhrcrmproject.domain.enums.InterviewStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
