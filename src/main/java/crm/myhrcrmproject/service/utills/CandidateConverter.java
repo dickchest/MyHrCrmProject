@@ -1,6 +1,8 @@
 package crm.myhrcrmproject.service.utills;
 
+import crm.myhrcrmproject.domain.AddressDetails;
 import crm.myhrcrmproject.domain.Candidate;
+import crm.myhrcrmproject.domain.ContactDetails;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
@@ -48,11 +50,11 @@ public class CandidateConverter {
         }
 
         if (entity.getContactDetails() != null) {
-            dto.setContactDetailsDTO(contactDetailsConverter.toDTO(entity.getContactDetails()));
+            dto.setContactDetails(contactDetailsConverter.toDTO(entity.getContactDetails()));
         }
 
         if (entity.getAddressDetails() != null) {
-            dto.setAddressDetailsDTO(addressDetailsConverter.toDTO(entity.getAddressDetails()));
+            dto.setAddressDetails(addressDetailsConverter.toDTO(entity.getAddressDetails()));
         }
 
         Optional.ofNullable(entity.getInterviewList()).ifPresent(
@@ -67,8 +69,27 @@ public class CandidateConverter {
         Optional.ofNullable(request.getFirstName()).ifPresent(entity::setFirstName);
         Optional.ofNullable(request.getLastName()).ifPresent(entity::setLastName);
         Optional.ofNullable(request.getDateOfBirth()).ifPresent(entity::setDateOfBirth);
-        Optional.ofNullable(request.getContactDetails()).ifPresent(entity::setContactDetails);
-        Optional.ofNullable(request.getAddressDetails()).ifPresent(entity::setAddressDetails);
+
+        if (request.getContactDetails() != null) {
+            ContactDetails contactDetailsEntity = entity.getContactDetails();
+            if (contactDetailsEntity == null) {
+                contactDetailsEntity = new ContactDetails();
+            }
+            entity.setContactDetails(contactDetailsConverter.fromDTO(
+                    contactDetailsEntity,
+                    request.getContactDetails()));
+        }
+
+        if (request.getAddressDetails() != null) {
+            AddressDetails addressDetailsEntity = entity.getAddressDetails();
+            if (addressDetailsEntity == null) {
+                addressDetailsEntity = new AddressDetails();
+            }
+            entity.setAddressDetails(addressDetailsConverter.fromDTO(
+                    addressDetailsEntity,
+                    request.getAddressDetails()));
+        }
+
         Optional.ofNullable(request.getStatus()).ifPresent(entity::setStatus);
         Optional.ofNullable(request.getVacancyId()).ifPresent(
                 id -> entity.setVacancy(vacancyRepository.findById(id)

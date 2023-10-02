@@ -1,5 +1,6 @@
 package crm.myhrcrmproject.dto.employeeDTO;
 
+import crm.myhrcrmproject.dto.contactDetailsDTO.ContactDetailsDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class EmployeeResponseDTO {
+
     private Integer id;
     private String firstName;
     private String lastName;
     private String position;
-    private String email;
-    private String phone;
+    private ContactDetailsDTO contactDetails;
 }

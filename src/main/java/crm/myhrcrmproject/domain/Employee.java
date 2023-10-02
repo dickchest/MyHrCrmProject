@@ -25,17 +25,20 @@ public class Employee {
 
     private String position;
 
-    private String phone;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ContactDetails contactDetails;
 
-    @NotBlank(message = "Email must be not blank")
-    @Email
-    @Column(unique = true)
-    private String email;
+//    private String phone;
+//
+//    @NotBlank(message = "Email must be not blank")
+//    @Email
+//    @Column(unique = true)
+//    private String email;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Vacancy> vacancyList;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "join_id")
+    @JoinColumn(name = "role_id")
     private Role role;
 }

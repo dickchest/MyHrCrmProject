@@ -1,7 +1,5 @@
 package crm.myhrcrmproject.dto.candidateDTO;
 
-import crm.myhrcrmproject.domain.AddressDetails;
-import crm.myhrcrmproject.domain.ContactDetails;
 import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import crm.myhrcrmproject.dto.addressDetailsDTO.AddressDetailsDTO;
 import crm.myhrcrmproject.dto.contactDetailsDTO.ContactDetailsDTO;
@@ -24,8 +22,8 @@ public class CandidateResponseDTO{
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private ContactDetailsDTO contactDetailsDTO;
-    private AddressDetailsDTO addressDetailsDTO;
+    private ContactDetailsDTO contactDetails;
+    private AddressDetailsDTO addressDetails;
     private VacancyShortResponseDTO vacancy;
     private CandidateStatus status;
     private List<InterviewShortResponseDTO> interviewsList;

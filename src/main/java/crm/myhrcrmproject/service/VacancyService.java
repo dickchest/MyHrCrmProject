@@ -86,6 +86,7 @@ public class VacancyService implements CommonService<VacancyRequestDTO, VacancyR
     public List<VacancyResponseDTO> findAllByEmployeeId(Integer id) {
         Employee entity = employeeRepository.findById(id).orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
         List<Vacancy> list = repository.findByEmployee(entity);
+        System.out.println(list);
         return list.stream()
                 .map(converter::toDTO)
                 .toList();
