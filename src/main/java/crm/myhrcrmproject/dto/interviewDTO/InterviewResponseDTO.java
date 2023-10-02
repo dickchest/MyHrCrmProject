@@ -8,7 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +17,8 @@ import java.time.LocalDateTime;
 @Builder
 public class InterviewResponseDTO {
     private Integer id;
-    private LocalDateTime dateTime;
+    private LocalDate date;
+    private LocalTime time;
     private String location;
     private String comments;
     private InterviewStatus status;

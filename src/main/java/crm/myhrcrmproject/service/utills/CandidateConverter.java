@@ -7,17 +7,27 @@ import crm.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyShortResponseDTO;
 import crm.myhrcrmproject.repository.VacancyRepository;
 import crm.myhrcrmproject.service.validation.NotFoundException;
-import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class CandidateConverter {
 
     private final VacancyRepository vacancyRepository;
+    private final InterviewConverter interviewConverter;
+    private final ContactDetailsConverter contactDetailsConverter;
+    private final AddressDetailsConverter addressDetailsConverter;
+
+
+    public CandidateConverter(VacancyRepository vacancyRepository, @Lazy InterviewConverter interviewConverter, ContactDetailsConverter contactDetailsConverter, AddressDetailsConverter addressDetailsConverter) {
+        this.vacancyRepository = vacancyRepository;
+        this.interviewConverter = interviewConverter;
+        this.contactDetailsConverter = contactDetailsConverter;
+        this.addressDetailsConverter = addressDetailsConverter;
+    }
 
     public CandidateResponseDTO toDTO(Candidate entity) {
         CandidateResponseDTO dto = new CandidateResponseDTO();
@@ -26,10 +36,8 @@ public class CandidateConverter {
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setDateOfBirth(entity.getDateOfBirth());
-        dto.setEmail(entity.getEmail());
-        dto.setPhone(entity.getPhone());
-        dto.setAddress(entity.getAddress());
         dto.setStatus(entity.getStatus());
+
         if (entity.getVacancy() != null) {
             VacancyShortResponseDTO vacanciesShortResponseDTO = new VacancyShortResponseDTO(
                     entity.getVacancy().getId(),
@@ -38,9 +46,18 @@ public class CandidateConverter {
             );
             dto.setVacancy(vacanciesShortResponseDTO);
         }
+
+        if (entity.getContactDetails() != null) {
+            dto.setContactDetailsDTO(contactDetailsConverter.toDTO(entity.getContactDetails()));
+        }
+
+        if (entity.getAddressDetails() != null) {
+            dto.setAddressDetailsDTO(addressDetailsConverter.toDTO(entity.getAddressDetails()));
+        }
+
         Optional.ofNullable(entity.getInterviewList()).ifPresent(
                 (list) -> list.stream()
-                        .map((item) -> item) // todo добавить метод в интервью конвертере
+                        .map(interviewConverter::toShortDTO)
                         .collect(Collectors.toList()));
         return dto;
     }
@@ -50,9 +67,8 @@ public class CandidateConverter {
         Optional.ofNullable(request.getFirstName()).ifPresent(entity::setFirstName);
         Optional.ofNullable(request.getLastName()).ifPresent(entity::setLastName);
         Optional.ofNullable(request.getDateOfBirth()).ifPresent(entity::setDateOfBirth);
-        Optional.ofNullable(request.getEmail()).ifPresent(entity::setEmail);
-        Optional.ofNullable(request.getPhone()).ifPresent(entity::setPhone);
-        Optional.ofNullable(request.getAddress()).ifPresent(entity::setAddress);
+        Optional.ofNullable(request.getContactDetails()).ifPresent(entity::setContactDetails);
+        Optional.ofNullable(request.getAddressDetails()).ifPresent(entity::setAddressDetails);
         Optional.ofNullable(request.getStatus()).ifPresent(entity::setStatus);
         Optional.ofNullable(request.getVacancyId()).ifPresent(
                 id -> entity.setVacancy(vacancyRepository.findById(id)
@@ -73,8 +89,8 @@ public class CandidateConverter {
                 .id(entity.getId())
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
-                .email(entity.getEmail())
-                .phone(entity.getPhone())
+                .email(entity.getContactDetails().getEmail())
+                .phone(entity.getContactDetails().getMobilePhone())
                 .status(entity.getStatus())
                 .build();
     }

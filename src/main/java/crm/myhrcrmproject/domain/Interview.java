@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -18,8 +19,11 @@ public class Interview {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "Data & time must be not blank")
-    private LocalDateTime dateTime;
+    @NotBlank(message = "Data blank")
+    private LocalDate date;
+
+    @NotBlank(message = "Time must be not blank")
+    private LocalTime time;
 
     @NotBlank(message = "Location must not be blank")
     @Size(min = 1, max = 255, message = "Location's length must be between 1 and 255")
@@ -27,7 +31,7 @@ public class Interview {
 
     private String comments;
 
-    @NotBlank(message = "Candidate id should not be blank")
+    @NotBlank(message = "Candidate should not be blank")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "candidate_id")
     private Candidate candidate;

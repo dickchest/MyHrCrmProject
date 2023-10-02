@@ -34,4 +34,8 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Vacancy> vacancyList;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "join_id")
+    private Role role;
 }

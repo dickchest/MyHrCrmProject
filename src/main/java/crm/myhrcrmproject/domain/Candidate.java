@@ -3,7 +3,6 @@ package crm.myhrcrmproject.domain;
 import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -34,14 +32,12 @@ public class Candidate {
 
     private LocalDate dateOfBirth;
 
-    private String address;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private AddressDetails addressDetails;
 
-    private String phone;
-
-    @NotBlank(message = "Email must be not blank")
-    @Email
-    @Column(unique = true)
-    private String email;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ContactDetails contactDetails;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vacancy_id")

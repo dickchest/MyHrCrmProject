@@ -13,6 +13,7 @@ import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -93,8 +94,8 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
     public List<InterviewResponseDTO> findAllByDateAndEmployeeId(InterviewDateRequestDTO requestDTO, Integer id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-        LocalDateTime dateTime = requestDTO.getDateTime();
-        List<Interview> list = repository.findByDateTimeAndEmployee(dateTime, employee);
+        LocalDate date = requestDTO.getDate();
+        List<Interview> list = repository.findByDateAndEmployee(date, employee);
         return list.stream()
                 .map(converter::toDTO)
                 .toList();

@@ -21,7 +21,8 @@ public class InterviewConverter {
     public InterviewResponseDTO toDTO(Interview entity) {
         return InterviewResponseDTO.builder()
                 .id(entity.getId())
-                .dateTime(entity.getDateTime())
+                .date(entity.getDate())
+                .time(entity.getTime())
                 .location(entity.getLocation())
                 .comments(entity.getComments())
                 .status(entity.getStatus())
@@ -40,7 +41,8 @@ public class InterviewConverter {
 
 
     public Interview fromDTO(Interview entity, InterviewRequestDTO request) {
-        Optional.ofNullable(request.getDateTime()).ifPresent(entity::setDateTime);
+        Optional.ofNullable(request.getDate()).ifPresent(entity::setDate);
+        Optional.ofNullable(request.getTime()).ifPresent(entity::setTime);
         Optional.ofNullable(request.getLocation()).ifPresent(entity::setLocation);
         Optional.ofNullable(request.getComments()).ifPresent(entity::setComments);
         Optional.ofNullable(request.getCandidateId()).ifPresent(
@@ -57,7 +59,8 @@ public class InterviewConverter {
     public InterviewShortResponseDTO toShortDTO(Interview entity) {
         return InterviewShortResponseDTO.builder()
                 .id(entity.getId())
-                .dateTime(entity.getDateTime())
+                .date(entity.getDate())
+                .time(entity.getTime())
                 .status(entity.getStatus())
                 .comments(entity.getComments())
                 .employee(

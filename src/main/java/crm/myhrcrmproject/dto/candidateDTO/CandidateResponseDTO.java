@@ -1,6 +1,10 @@
 package crm.myhrcrmproject.dto.candidateDTO;
 
+import crm.myhrcrmproject.domain.AddressDetails;
+import crm.myhrcrmproject.domain.ContactDetails;
 import crm.myhrcrmproject.domain.enums.CandidateStatus;
+import crm.myhrcrmproject.dto.addressDetailsDTO.AddressDetailsDTO;
+import crm.myhrcrmproject.dto.contactDetailsDTO.ContactDetailsDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewShortResponseDTO;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyShortResponseDTO;
 import lombok.AllArgsConstructor;
@@ -20,9 +24,8 @@ public class CandidateResponseDTO{
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private String email;
-    private String phone;
-    private String address;
+    private ContactDetailsDTO contactDetailsDTO;
+    private AddressDetailsDTO addressDetailsDTO;
     private VacancyShortResponseDTO vacancy;
     private CandidateStatus status;
     private List<InterviewShortResponseDTO> interviewsList;

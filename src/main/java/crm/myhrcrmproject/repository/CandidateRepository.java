@@ -1,6 +1,7 @@
 package crm.myhrcrmproject.repository;
 
 import crm.myhrcrmproject.domain.Candidate;
+import crm.myhrcrmproject.domain.ContactDetails;
 import crm.myhrcrmproject.domain.Vacancy;
 import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,5 +14,6 @@ import java.util.Optional;
 public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
     List<Candidate> findByStatus(CandidateStatus status);
     List<Candidate> findByVacancy(Vacancy vacancy);
-    Optional<Candidate> findByEmail(String email);
+//    Optional<Candidate> findByEmail(String email);
+    Optional<Candidate> findByContactDetails(ContactDetails contactDetails);
 }

@@ -1,5 +1,7 @@
 package crm.myhrcrmproject.dto.candidateDTO;
 
+import crm.myhrcrmproject.domain.AddressDetails;
+import crm.myhrcrmproject.domain.ContactDetails;
 import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,9 +17,8 @@ public class CandidateRequestDTO{
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private String email;
-    private String phone;
-    private String address;
+    private ContactDetails contactDetails;
+    private AddressDetails addressDetails;
     private Integer vacancyId;
     private CandidateStatus status;
 }
