@@ -5,6 +5,7 @@ import crm.myhrcrmproject.domain.Vacancy;
 import crm.myhrcrmproject.domain.enums.VacancyStatus;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyRequestDTO;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyResponseDTO;
+import crm.myhrcrmproject.dto.vacancyDTO.VacancyShortResponseDTO;
 import crm.myhrcrmproject.repository.EmployeeRepository;
 import crm.myhrcrmproject.repository.VacancyRepository;
 import crm.myhrcrmproject.service.utills.VacancyConverter;
@@ -83,12 +84,12 @@ public class VacancyService implements CommonService<VacancyRequestDTO, VacancyR
                 .toList();
     }
 
-    public List<VacancyResponseDTO> findAllByEmployeeId(Integer id) {
+    public List<VacancyShortResponseDTO> findAllByEmployeeId(Integer id) {
         Employee entity = employeeRepository.findById(id).orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-        List<Vacancy> list = repository.findByEmployee(entity);
+        List<Vacancy> list = repository.findByEmployeeId(id);
         System.out.println(list);
         return list.stream()
-                .map(converter::toDTO)
+                .map(converter::toShortDTO)
                 .toList();
     }
 }

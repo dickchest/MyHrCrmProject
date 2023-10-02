@@ -2,6 +2,7 @@ package crm.myhrcrmproject.controller;
 
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyRequestDTO;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyResponseDTO;
+import crm.myhrcrmproject.dto.vacancyDTO.VacancyShortResponseDTO;
 import crm.myhrcrmproject.service.VacancyService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +28,7 @@ public class VacancyController extends GenericController<VacancyRequestDTO, Vaca
     }
 
     @GetMapping("/findAllByEmployee/{id}")
-    public ResponseEntity<List<VacancyResponseDTO>> findAllByEmployeeId(@PathVariable("id") Integer id) {
+    public ResponseEntity<List<VacancyShortResponseDTO>> findAllByEmployeeId(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(service.findAllByEmployeeId(id), HttpStatus.OK);
     }
 }

@@ -1,3 +1,105 @@
+GET http://localhost:8080/api/vacancies/findAllByEmployee/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-02T184344.200.json
+
+###
+
+PUT http://localhost:8080/api/vacancies/1
+Content-Type: application/json
+Content-Length: 32
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "responsibleEmployeeId": 1
+}
+
+<> 2023-10-02T184319.202.json
+
+###
+
+PUT http://localhost:8080/api/vacancies/2
+Content-Type: application/json
+Content-Length: 32
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "responsibleEmployeeId": 1
+}
+
+<> 2023-10-02T184311.404.txt
+
+###
+
+GET http://localhost:8080/api/vacancies
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-02T184113.200.json
+
+###
+
+GET http://localhost:8080/api/vacancies/findAllByEmployee/3
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-02T183805.200.json
+
+###
+
+GET http://localhost:8080/api/vacancies/findAllByEmployee/4
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-02T183756.404.txt
+
+###
+
+GET http://localhost:8080/api/vacancies/findAllByEmployee/3
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-02T183750.200.json
+
+###
+
+GET http://localhost:8080/api/vacancies/findAllByEmployee/2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-02T183734.200.json
+
+###
+
+GET http://localhost:8080/api/vacancies/findAllByEmployee/2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-02T183336.200.json
+
+###
+
+GET http://localhost:8080/api/vacancies/findAllByEmployee/2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-02T183122.200.json
+
+###
+
 GET http://localhost:8080/api/vacancies/findAllByEmployee/2
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
@@ -563,179 +665,6 @@ User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 <> 2023-10-02T165225.200.json
-
-###
-
-PUT http://localhost:8080/api/employees/2
-Content-Type: application/json
-Content-Length: 59
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "contactDetails": {
-    "mobilePhone": "987-1234"
-  }
-}
-
-<> 2023-10-02T165047.202.json
-
-###
-
-PUT http://localhost:8080/api/employees/2
-Content-Type: application/json
-Content-Length: 59
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "contactDetails": {
-    "mobilePhone": "987-1234"
-  }
-}
-
-<> 2023-10-02T163829.400.txt
-
-###
-
-GET http://localhost:8080/api/employees
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T163755.200.json
-
-###
-
-GET http://localhost:8080/api/employees
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T163611.500.txt
-
-###
-
-POST http://localhost:8080/api/employees
-Content-Type: application/json
-Content-Length: 191
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "firstName": "Ivan2",
-  "lastName": "Ivanov2",
-  "position": "manager",
-  "contactDetails": {
-    "email": "john2.doe@example.com",
-    "homePhone": "123",
-    "mobilePhone": "987-"
-  }
-}
-
-<> 2023-10-02T163442.500.txt
-
-###
-
-POST http://localhost:8080/api/employees
-Content-Type: application/json
-Content-Length: 191
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "firstName": "Ivan1",
-  "lastName": "Ivanov1",
-  "position": "manager",
-  "contactDetails": {
-    "email": "john6.doe@example.com",
-    "homePhone": "123",
-    "mobilePhone": "987-"
-  }
-}
-
-<> 2023-10-02T163414.400.txt
-
-###
-
-GET http://localhost:8080/api/candidates/1
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T163040.200.json
-
-###
-
-GET http://localhost:8080/api/candidates/2
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T163035.404.txt
-
-###
-
-POST http://localhost:8080/api/candidates
-Content-Type: application/json
-Content-Length: 355
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "firstName": "John5",
-  "lastName": "Doe",
-  "dateOfBirth": "1990-05-15",
-  "contactDetails": {
-    "email": "john.doe@example.com",
-    "homePhone": "123-456-7890",
-    "mobilePhone": "987-654-3210"
-  },
-  "addressDetails": {
-    "street": "123 Main St",
-    "city": "Anytown",
-    "state": "CA",
-    "postalCode": "12345"
-  },
-  "status": "ACTIVE"
-}
-
-<> 2023-10-02T163022.201.json
-
-###
-
-POST http://localhost:8080/api/candidates
-Content-Type: application/json
-Content-Length: 373
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "firstName": "John5",
-  "lastName": "Doe",
-  "dateOfBirth": "1990-05-15",
-  "contactDetails": {
-    "email": "john.doe@example.com",
-    "homePhone": "123-456-7890",
-    "mobilePhone": "987-654-3210"
-  },
-  "addressDetails": {
-    "street": "123 Main St",
-    "city": "Anytown",
-    "state": "CA",
-    "postalCode": "12345"
-  },
-  "vacancyId": 1,
-  "status": "ACTIVE"
-}
-
-<> 2023-10-02T163011.404.txt
 
 ###
 
