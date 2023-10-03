@@ -12,7 +12,7 @@
                  relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="01-create-users-table.sql"/>
+                 path="01-create-roles-table.sql"/>
         <rollback>
             <sqlFile dbms="mysql"
                      encoding="utf8"
@@ -20,7 +20,7 @@
                      relativeToChangelogFile="true"
                      splitStatements="true"
                      stripComments="true"
-                     path="01-drop-users-table.sql"/>
+                     path="01-drop-roles-table.sql"/>
         </rollback>
     </changeSet>
 

@@ -1,8 +1,6 @@
 package crm.myhrcrmproject.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -15,11 +13,11 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "Name must be not blank")
+//    @NotBlank(message = "Name must be not blank")
     @Size(min = 3, max = 20, message = "Name length must be between 3 and 15")
     private String firstName;
 
-    @NotBlank(message = "Lastname must be not blank")
+//    @NotBlank(message = "Lastname must be not blank")
     @Size(min = 1, max = 50, message = "Lastname length must be between 1 and 50")
     private String lastName;
 
@@ -28,17 +26,6 @@ public class Employee {
     @OneToOne(cascade = CascadeType.ALL)
     private ContactDetails contactDetails;
 
-//    private String phone;
-//
-//    @NotBlank(message = "Email must be not blank")
-//    @Email
-//    @Column(unique = true)
-//    private String email;
-
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Vacancy> vacancyList;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
-    private Role role;
 }
