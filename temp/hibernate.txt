@@ -1,15 +1,25 @@
 Hibernate:
+    create table address_details (
+        id integer not null auto_increment,
+        address1 varchar(255),
+        address2 varchar(255),
+        city varchar(255),
+        country varchar(255),
+        state varchar(255),
+        zip varchar(255),
+        primary key (id)
+    ) engine=InnoDB
+Hibernate:
     create table candidate (
         id integer not null auto_increment,
-        address varchar(255),
         creating_date datetime(6),
         date_of_birth date,
-        email varchar(255),
         first_name varchar(20),
         last_name varchar(50),
-        phone varchar(255),
         status enum ('ACTIVE','BLACK_LISTED','IN_PROCESS','NOT_ACTIVE','REJECTED') not null,
         updated_date datetime(6),
+        address_id integer,
+        contact_details_id integer,
         vacancy_id integer,
         primary key (id)
     ) engine=InnoDB
@@ -57,6 +67,14 @@ Hibernate:
         primary key (id)
     ) engine=InnoDB
 Hibernate:
+    create table contact_details (
+        id integer not null auto_increment,
+        email varchar(255),
+        home_phone varchar(255),
+        mobile_phone varchar(255),
+        primary key (id)
+    ) engine=InnoDB
+Hibernate:
     create table contacts_candidate (
         contacts_id integer not null,
         candidate_id integer not null
@@ -78,12 +96,10 @@ Hibernate:
 Hibernate:
     create table employee (
         id integer not null auto_increment,
-        email varchar(255),
         first_name varchar(20),
         last_name varchar(50),
-        phone varchar(255),
         position varchar(255),
-        join_id integer,
+        contact_details_id integer,
         primary key (id)
     ) engine=InnoDB
 Hibernate:
@@ -120,6 +136,17 @@ Hibernate:
         primary key (id)
     ) engine=InnoDB
 Hibernate:
+    create table user_details (
+        id integer not null auto_increment,
+        created_date datetime(6),
+        password varchar(255),
+        updated_date datetime(6),
+        user_name varchar(80),
+        employee_id integer,
+        role_id integer,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate:
     create table vacancy (
         id integer not null auto_increment,
         description varchar(255),
@@ -133,10 +160,16 @@ Hibernate:
     ) engine=InnoDB
 Hibernate:
     alter table candidate
-       drop index UK_qfut8ruekode092nlkipgl09g
+       drop index UK_t0biwqd373dg20ia4tnub73i6
 Hibernate:
     alter table candidate
-       add constraint UK_qfut8ruekode092nlkipgl09g unique (email)
+       add constraint UK_t0biwqd373dg20ia4tnub73i6 unique (contact_details_id)
+Hibernate:
+    alter table contact_details
+       drop index UK_1a28vet8t25bte6gjqhwrjlsc
+Hibernate:
+    alter table contact_details
+       add constraint UK_1a28vet8t25bte6gjqhwrjlsc unique (email)
 Hibernate:
     alter table contract
        drop index UK_mrht5112houo8jqd5vdouw8b3
@@ -145,10 +178,10 @@ Hibernate:
        add constraint UK_mrht5112houo8jqd5vdouw8b3 unique (candidate_id)
 Hibernate:
     alter table employee
-       drop index UK_fopic1oh5oln2khj8eat6ino0
+       drop index UK_i3ecosebkifjg6dvox06p1u5w
 Hibernate:
     alter table employee
-       add constraint UK_fopic1oh5oln2khj8eat6ino0 unique (email)
+       add constraint UK_i3ecosebkifjg6dvox06p1u5w unique (contact_details_id)
 Hibernate:
     alter table interview
        drop index UK_pe0kf6sjqo34dsqis5gsraeoe
@@ -173,6 +206,28 @@ Hibernate:
 Hibernate:
     alter table task
        add constraint UK_21eo5bjuxoq965qdqgvpabvl1 unique (vacancy_id)
+Hibernate:
+    alter table user_details
+       drop index UK_7pqjkt6mwigem3tve6e8j2qlp
+Hibernate:
+    alter table user_details
+       add constraint UK_7pqjkt6mwigem3tve6e8j2qlp unique (user_name)
+Hibernate:
+    alter table user_details
+       drop index UK_snognowm6mtx7jx0ymh7x2xks
+Hibernate:
+    alter table user_details
+       add constraint UK_snognowm6mtx7jx0ymh7x2xks unique (employee_id)
+Hibernate:
+    alter table candidate
+       add constraint FKd1s618iem94mvatr7xi9puhia
+       foreign key (address_id)
+       references address_details (id)
+Hibernate:
+    alter table candidate
+       add constraint FKqjo5bl6w5plcoh1g07klc421o
+       foreign key (contact_details_id)
+       references contact_details (id)
 Hibernate:
     alter table candidate
        add constraint FK6n8vqigjcpdk7ewjbsk4u8jeg
@@ -240,9 +295,9 @@ Hibernate:
        references employee (id)
 Hibernate:
     alter table employee
-       add constraint FKsjkvmo824vdm987v5ueaqvwwg
-       foreign key (join_id)
-       references roles (id)
+       add constraint FKs3utm4v4xa7gmmav9pg5b0m0q
+       foreign key (contact_details_id)
+       references contact_details (id)
 Hibernate:
     alter table interview
        add constraint FKjod0wwyxvbi7qyx9cmlnt8xq4
@@ -268,6 +323,16 @@ Hibernate:
        add constraint FK6ll935le9w5ey09wmgs8ryonh
        foreign key (vacancy_id)
        references vacancy (id)
+Hibernate:
+    alter table user_details
+       add constraint FKn5xxcggtt59ps5jdtdx5g78uh
+       foreign key (employee_id)
+       references employee (id)
+Hibernate:
+    alter table user_details
+       add constraint FKqct1sekkjpbuki9c8jkewydqr
+       foreign key (role_id)
+       references roles (id)
 Hibernate:
     alter table vacancy
        add constraint FK3uy53cbi4ew8ju3hcx4789ace

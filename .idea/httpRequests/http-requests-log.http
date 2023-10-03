@@ -1,3 +1,39 @@
+POST http://localhost:8080/api/users
+Content-Type: application/json
+Content-Length: 87
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "userName": "ivan2001",
+  "password": "test2001",
+  "email": "test1@test.com"
+  }
+}
+
+<> 2023-10-03T134538.500.txt
+
+###
+
+GET http://localhost:8080/api/users
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-03T134348.200.json
+
+###
+
+GET http://localhost:8080/api/users
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-03T134345.200.json
+
+###
+
 GET http://localhost:8080/api/vacancies/findAllByEmployee/1
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
@@ -620,51 +656,6 @@ User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 <> 2023-10-02T165620.200.json
-
-###
-
-POST http://localhost:8080/api/candidates
-Content-Type: application/json
-Content-Length: 335
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "firstName": "John6",
-  "lastName": "Doe",
-  "dateOfBirth": "1990-05-15",
-  "contactDetails": {
-    "email": "",
-    "homePhone": "123-456-7890",
-    "mobilePhone": "987-654-3210"
-  },
-  "addressDetails": {
-    "street": "123 Main St",
-    "city": "Anytown",
-    "state": "CA",
-    "postalCode": "12345"
-  },
-  "status": "ACTIVE"
-}
-
-###
-
-GET http://localhost:8080/api/candidates
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T165547.200.json
-
-###
-
-GET http://localhost:8080/api/candidates
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T165225.200.json
 
 ###
 
