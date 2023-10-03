@@ -5,33 +5,28 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-    <changeSet id="3" author="den">
+    <changeSet id="5" author="den">
         <sqlFile dbms="mysql"
                  encoding="utf8"
-                 endDelimiter="\nGO"
+                 endDelimiter=";"
                  relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="10-create-user-details-table.sql"/>
+                 path="20-create-contact-details-table.sql"/>
         <rollback>
             <sqlFile dbms="mysql"
                      encoding="utf8"
-                     endDelimiter="\nGO"
+                     endDelimiter=";"
                      relativeToChangelogFile="true"
                      splitStatements="true"
                      stripComments="true"
-                     path="10-drop-user-details-table.sql"/>
+                     path="20-drop-contact-details-table.sql"/>
         </rollback>
     </changeSet>
-    
-    <changeSet id="4" author="den">
-        <insert tableName="user_details">
-            <column name="user_name" value="admin"></column>
-            <column name="password" value="password0"></column>
-            <column name="employee_id" value="1"></column>
-            <column name="role_id" value="1"></column>
-            <column name="created_date" valueComputed="CURRENT_TIMESTAMP"></column>
-            <column name="updated_date" valueComputed="CURRENT_TIMESTAMP"></column>
+
+    <changeSet id="6" author="den">
+        <insert tableName="contact_details">
+            <column name="email" value="admin@example.com"></column>
         </insert>
     </changeSet>
 
