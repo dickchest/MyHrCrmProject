@@ -1,4 +1,3 @@
-Hibernate:
     alter table candidate
        modify column creating_date  datetime(6)
 Hibernate:
@@ -7,30 +6,9 @@ Hibernate:
 Hibernate:
     alter table candidate
        modify column updated_date  datetime(6)
-
 Hibernate:
-    create table client (
-        id integer not null auto_increment,
-        company_name varchar(255),
-        description varchar(255),
-        primary key (id)
-    ) engine=InnoDB
-Hibernate:
-    create table client_candidate_relation (
-        client_id integer not null,
-        candidate_id integer not null
-    ) engine=InnoDB
-Hibernate:
-    create table communication (
-        id integer not null auto_increment,
-        communication_date_time datetime(6),
-        communication_type tinyint,
-        candidate_id integer,
-        client_id integer,
-        responsible_employee_id integer,
-        vacancy_id integer,
-        primary key (id)
-    ) engine=InnoDB
+    alter table communication
+       modify column communication_date_time  datetime(6)
 Hibernate:
     create table compensation (
         id integer not null auto_increment,
@@ -114,36 +92,6 @@ Hibernate:
 Hibernate:
     alter table task
        add constraint UK_21eo5bjuxoq965qdqgvpabvl1 unique (vacancy_id)
-Hibernate:
-    alter table client_candidate_relation
-       add constraint FKtdh0lnynedqf1s81dmjg7vkmj
-       foreign key (candidate_id)
-       references candidate (id)
-Hibernate:
-    alter table client_candidate_relation
-       add constraint FK2kmbl3cl47cj487yoqhld90x1
-       foreign key (client_id)
-       references client (id)
-Hibernate:
-    alter table communication
-       add constraint FK4bkq2uu08p1atlj299dj65mh6
-       foreign key (candidate_id)
-       references candidate (id)
-Hibernate:
-    alter table communication
-       add constraint FKtk92s4h62otwq7bvve6k4xueb
-       foreign key (client_id)
-       references client (id)
-Hibernate:
-    alter table communication
-       add constraint FKicovkwob7axbvsrluny4ysg5k
-       foreign key (responsible_employee_id)
-       references employee (id)
-Hibernate:
-    alter table communication
-       add constraint FKkufkbu7gx6f9hysfq6xmxge4l
-       foreign key (vacancy_id)
-       references vacancy (id)
 Hibernate:
     alter table compensation
        add constraint FKk2w7vr9qt4yen1w0fkfe4rhqx
