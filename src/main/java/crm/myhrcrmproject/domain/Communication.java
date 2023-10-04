@@ -1,5 +1,6 @@
 package crm.myhrcrmproject.domain;
 
+import crm.myhrcrmproject.domain.enums.CommunicationType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -17,26 +18,21 @@ public class Communication {
     private LocalDateTime communicationDateTime;
 
     @NotBlank(message = "Communication type should be not blank")
-    private String communicationType;   // todo сделать енум или таблицу
+    private CommunicationType communicationType;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "contact_id")
-    private ClientContact contact;
+    @JoinColumn(name = "client_id")
+    private Client client;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "candidate_id")
     private Candidate candidate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "vacansy_id")
+    @JoinColumn(name = "vacancy_id")
     private Vacancy vacancy;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "responsible_employee_id")
     private Employee employee;
-
-    private LocalDateTime createDate;
-
-    private LocalDateTime lastUpdate;
-
 }

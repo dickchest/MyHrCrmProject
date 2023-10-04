@@ -1,0 +1,186 @@
+Hibernate:
+    alter table candidate
+       modify column creating_date  datetime(6)
+Hibernate:
+    alter table candidate
+       modify column status  enum ('ACTIVE','BLACK_LISTED','IN_PROCESS','NOT_ACTIVE','REJECTED') not null
+Hibernate:
+    alter table candidate
+       modify column updated_date  datetime(6)
+
+Hibernate:
+    create table client (
+        id integer not null auto_increment,
+        company_name varchar(255),
+        description varchar(255),
+        primary key (id)
+    ) engine=InnoDB
+Hibernate:
+    create table client_candidate_relation (
+        client_id integer not null,
+        candidate_id integer not null
+    ) engine=InnoDB
+Hibernate:
+    create table communication (
+        id integer not null auto_increment,
+        communication_date_time datetime(6),
+        communication_type tinyint,
+        candidate_id integer,
+        client_id integer,
+        responsible_employee_id integer,
+        vacancy_id integer,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate:
+    create table compensation (
+        id integer not null auto_increment,
+        comments varchar(255),
+        create_date datetime(6),
+        last_update datetime(6),
+        payment_date date,
+        salary float(53),
+        candidate_id integer,
+        contract_id integer,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate:
+    create table contract (
+        id integer not null auto_increment,
+        contract_type varchar(255),
+        create_date datetime(6),
+        end_date date,
+        last_update datetime(6),
+        salary float(53),
+        start_date date,
+        candidate_id integer,
+        client_id integer,
+        responsible_employee_id integer,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate:
+    alter table interview
+       modify column status  enum ('ACCEPTED','CANCELED','COMPLETED','NO_SHOW','PENDING_REVIEW','REJECTED','RESCHEDULED','SCHEDULED') not null
+Hibernate:
+    alter table interview
+       modify column time  time(6)
+Hibernate:
+    create table task (
+        id integer not null auto_increment,
+        create_date datetime(6),
+        description varchar(255),
+        end_date date,
+        last_update datetime(6),
+        start_date date,
+        status enum ('DONE','IN_PROCESS','OPENED','POSTPONED') not null,
+        title varchar(255),
+        candidate_id integer,
+        responsible_employee_id integer,
+        vacancy_id integer,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate:
+    alter table user_details
+       modify column created_date  datetime(6)
+Hibernate:
+    alter table user_details
+       modify column updated_date  datetime(6)
+Hibernate:
+    alter table vacancy
+       modify column salary  float(53)
+Hibernate:
+    alter table vacancy
+       modify column status  enum ('CLOSED','OPEN') not null
+Hibernate:
+    alter table contract
+       drop index UK_mrht5112houo8jqd5vdouw8b3
+Hibernate:
+    alter table contract
+       add constraint UK_mrht5112houo8jqd5vdouw8b3 unique (candidate_id)
+Hibernate:
+    alter table task
+       drop index UK_nwt3e3et25nmn9n4i3ot135r4
+Hibernate:
+    alter table task
+       add constraint UK_nwt3e3et25nmn9n4i3ot135r4 unique (candidate_id)
+Hibernate:
+    alter table task
+       drop index UK_jil6p0gx77mcngplvkeaw2py5
+Hibernate:
+    alter table task
+       add constraint UK_jil6p0gx77mcngplvkeaw2py5 unique (responsible_employee_id)
+Hibernate:
+    alter table task
+       drop index UK_21eo5bjuxoq965qdqgvpabvl1
+Hibernate:
+    alter table task
+       add constraint UK_21eo5bjuxoq965qdqgvpabvl1 unique (vacancy_id)
+Hibernate:
+    alter table client_candidate_relation
+       add constraint FKtdh0lnynedqf1s81dmjg7vkmj
+       foreign key (candidate_id)
+       references candidate (id)
+Hibernate:
+    alter table client_candidate_relation
+       add constraint FK2kmbl3cl47cj487yoqhld90x1
+       foreign key (client_id)
+       references client (id)
+Hibernate:
+    alter table communication
+       add constraint FK4bkq2uu08p1atlj299dj65mh6
+       foreign key (candidate_id)
+       references candidate (id)
+Hibernate:
+    alter table communication
+       add constraint FKtk92s4h62otwq7bvve6k4xueb
+       foreign key (client_id)
+       references client (id)
+Hibernate:
+    alter table communication
+       add constraint FKicovkwob7axbvsrluny4ysg5k
+       foreign key (responsible_employee_id)
+       references employee (id)
+Hibernate:
+    alter table communication
+       add constraint FKkufkbu7gx6f9hysfq6xmxge4l
+       foreign key (vacancy_id)
+       references vacancy (id)
+Hibernate:
+    alter table compensation
+       add constraint FKk2w7vr9qt4yen1w0fkfe4rhqx
+       foreign key (candidate_id)
+       references candidate (id)
+Hibernate:
+    alter table compensation
+       add constraint FK7903v7tnlhoa9idtiv01qkh8c
+       foreign key (contract_id)
+       references contract (id)
+Hibernate:
+    alter table contract
+       add constraint FKcp9q63l07rrrrapl3mlj2sroy
+       foreign key (candidate_id)
+       references candidate (id)
+Hibernate:
+    alter table contract
+       add constraint FKlhq3p3xl25vvnfvyfc51ica0j
+       foreign key (client_id)
+       references client (id)
+Hibernate:
+    alter table contract
+       add constraint FKlcfymsqge87ptsn2nne26fe62
+       foreign key (responsible_employee_id)
+       references employee (id)
+Hibernate:
+    alter table task
+       add constraint FKhq4cqvtiv1vxter4a6h66mnm7
+       foreign key (candidate_id)
+       references candidate (id)
+Hibernate:
+    alter table task
+       add constraint FK4sgerl9iy994m336y03m4omq
+       foreign key (responsible_employee_id)
+       references employee (id)
+Hibernate:
+    alter table task
+       add constraint FK6ll935le9w5ey09wmgs8ryonh
+       foreign key (vacancy_id)
+       references vacancy (id)

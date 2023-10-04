@@ -28,7 +28,7 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TaskStatus status; // default open
+    private TaskStatus status = TaskStatus.OPENED; // default open
 
     @OneToOne
     @JoinColumn(name = "responsible_Employee_ID")

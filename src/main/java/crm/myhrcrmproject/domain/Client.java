@@ -1,12 +1,11 @@
 package crm.myhrcrmproject.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -20,4 +19,12 @@ public class Client {
     private String companyName;
 
     private String description;
+
+    @ManyToMany
+    @JoinTable(
+            name = "client_candidate_relation",
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "candidate_id")
+    )
+    private List<Candidate> candidateList;
 }

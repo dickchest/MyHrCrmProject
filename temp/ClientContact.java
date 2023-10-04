@@ -34,14 +34,6 @@ public class ClientContact {
     @Size(min = 1, max = 255, message = "Email length must be less than 255")
     private String email;
 
-    @ManyToMany
-    @JoinTable(
-        name = "contacts_candidate",
-        joinColumns = @JoinColumn(name = "contacts_id"),
-        inverseJoinColumns = @JoinColumn(name = "candidate_id")
-    )
-    private List<Candidate> candidateList;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
