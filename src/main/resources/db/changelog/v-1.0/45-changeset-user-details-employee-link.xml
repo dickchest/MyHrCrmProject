@@ -5,14 +5,14 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-    <changeSet id="11" author="den">
+    <changeSet id="1.11" author="den">
         <sqlFile dbms="mysql"
                  encoding="utf8"
                  endDelimiter=";"
                  relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="45-add-user-details-employee-link.sql"/>
+                 path="45-create-user-details-employee-link.sql"/>
         <rollback>
             <sqlFile dbms="mysql"
                      encoding="utf8"
