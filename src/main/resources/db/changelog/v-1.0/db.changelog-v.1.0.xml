@@ -17,4 +17,7 @@
     <include file="80-changeset-client-table.xml" relativeToChangelogFile="true"/>
     <include file="90-changeset-client-candidate-relation-table.xml" relativeToChangelogFile="true"/>
     <include file="100-changeset-communication-table.xml" relativeToChangelogFile="true"/>
+    <include file="110-changeset-contract-table.xml" relativeToChangelogFile="true"/>
+    <include file="120-changeset-compensation-table.xml" relativeToChangelogFile="true"/>
+    <include file="130-changeset-task-table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

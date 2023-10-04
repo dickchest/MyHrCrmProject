@@ -5,14 +5,14 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-    <changeSet id="1.16" author="den">
+    <changeSet id="1.19" author="den">
         <sqlFile dbms="mysql"
                  encoding="utf8"
                  endDelimiter=";"
                  relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="90-create-client-candidate-relation-table.sql"/>
+                 path="120-create-compensation-table.sql"/>
         <rollback>
             <sqlFile dbms="mysql"
                      encoding="utf8"
@@ -20,7 +20,7 @@
                      relativeToChangelogFile="true"
                      splitStatements="true"
                      stripComments="true"
-                     path="90-drop-client-candidate-relation-table.sql"/>
+                     path="120-drop-compensation-table.sql"/>
         </rollback>
     </changeSet>
 
