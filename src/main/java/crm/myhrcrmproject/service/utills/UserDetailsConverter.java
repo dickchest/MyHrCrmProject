@@ -1,9 +1,11 @@
 package crm.myhrcrmproject.service.utills;
 
+import crm.myhrcrmproject.domain.Role;
 import crm.myhrcrmproject.domain.UserDetails;
 import crm.myhrcrmproject.dto.userDetailsDTO.UserDetailsRequestDTO;
 import crm.myhrcrmproject.dto.userDetailsDTO.UserDetailsResponseDTO;
 import crm.myhrcrmproject.dto.userDetailsDTO.UserDetailsShortResponseDTO;
+import crm.myhrcrmproject.repository.RoleRepository;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserDetailsConverter {
     private final EmployeeConverter employeeConverter;
+    private final RoleRepository roleRepository;
 
     public UserDetailsResponseDTO toDTO(UserDetails entity) {
         return UserDetailsResponseDTO.builder()

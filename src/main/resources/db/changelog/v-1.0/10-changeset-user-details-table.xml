@@ -27,7 +27,7 @@
     <changeSet id="1.4" author="den">
         <insert tableName="user_details">
             <column name="user_name" value="admin"></column>
-            <column name="password" value="password0"></column>
+            <column name="password" value="admin0000"></column>
             <column name="employee_id" value="1"></column>
             <column name="role_id" value="1"></column>
             <column name="created_date" valueComputed="CURRENT_TIMESTAMP"></column>
