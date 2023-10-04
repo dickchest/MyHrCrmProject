@@ -10,4 +10,5 @@
     <include file="20-changeset-contact-details-table.xml" relativeToChangelogFile="true"/>
     <include file="30-changeset-address-details-table.xml" relativeToChangelogFile="true"/>
     <include file="40-changeset-employee-table.xml" relativeToChangelogFile="true"/>
+    <include file="45-changeset-user-details-employee-link.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
