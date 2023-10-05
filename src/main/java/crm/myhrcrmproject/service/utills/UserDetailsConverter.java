@@ -28,7 +28,7 @@ public class UserDetailsConverter {
                 .build();
     }
 
-    public UserDetails fromDTO (UserDetails entity, UserDetailsRequestDTO request) {
+    public UserDetails fromDTO(UserDetails entity, UserDetailsRequestDTO request) {
         Optional.ofNullable(request.getUserName()).ifPresent(entity::setUserName);
         Optional.ofNullable(request.getPassword()).ifPresent(entity::setPassword);
         return entity;

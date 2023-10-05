@@ -14,6 +14,8 @@ import java.time.LocalTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

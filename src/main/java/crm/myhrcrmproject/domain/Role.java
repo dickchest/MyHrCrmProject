@@ -1,10 +1,15 @@
 package crm.myhrcrmproject.domain;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 @Table(name = "roles")
 public class Role {
     @Id

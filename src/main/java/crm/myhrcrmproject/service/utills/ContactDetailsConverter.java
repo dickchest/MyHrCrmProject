@@ -20,7 +20,6 @@ public class ContactDetailsConverter {
                 .build();
     }
 
-
     public ContactDetails fromDTO(ContactDetails entity, ContactDetailsDTO request) {
         Optional.ofNullable(request.getEmail()).ifPresent(entity::setEmail);
         Optional.ofNullable(request.getHomePhone()).ifPresent(entity::setHomePhone);

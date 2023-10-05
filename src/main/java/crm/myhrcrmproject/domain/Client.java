@@ -3,12 +3,17 @@ package crm.myhrcrmproject.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,12 +24,4 @@ public class Client {
     private String companyName;
 
     private String description;
-
-    @ManyToMany
-    @JoinTable(
-            name = "client_candidate_relation",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "candidate_id")
-    )
-    private List<Candidate> candidateList;
 }

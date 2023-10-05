@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class CandidateService implements CommonService<CandidateRequestDTO, CandidateResponseDTO>{
+public class CandidateService implements CommonService<CandidateRequestDTO, CandidateResponseDTO> {
     private final CandidateRepository repository;
     private final CandidateConverter converter;
     private final VacancyRepository vacancyRepository;
@@ -72,6 +72,7 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
         // set status
         candidate.setStatus(CandidateStatus.ACTIVE);
     }
+
     protected void entityAfterUpdateProcedures(Candidate entity) {
         entity.setUpdatedDate(LocalDateTime.now());
     }
@@ -81,7 +82,7 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
         CandidateStatus status = Optional.of(CandidateStatus.values()[id])
                 .orElseThrow(() -> new NotFoundException("No status found with id: " + id));
         List<Candidate> list = repository.findByStatus(status);
-        return  list.stream()
+        return list.stream()
                 .map(converter::toDTO)
                 .toList();
     }
@@ -91,7 +92,7 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
         Vacancy vacancy = vacancyRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
         List<Candidate> list = repository.findByVacancy(vacancy);
-        return  list.stream()
+        return list.stream()
                 .map(converter::toDTO)
                 .toList();
     }

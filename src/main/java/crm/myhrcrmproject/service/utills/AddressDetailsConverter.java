@@ -22,7 +22,6 @@ public class AddressDetailsConverter {
                 .build();
     }
 
-
     public AddressDetails fromDTO(AddressDetails entity, AddressDetailsDTO request) {
         Optional.ofNullable(request.getAddress1()).ifPresent(entity::setAddress1);
         Optional.ofNullable(request.getAddress2()).ifPresent(entity::setAddress2);

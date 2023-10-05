@@ -29,7 +29,6 @@ public class EmployeeConverter {
                 .build();
     }
 
-
     public Employee fromDTO(Employee entity, EmployeeRequestDTO request) {
         Optional.ofNullable(request.getFirstName()).ifPresent(entity::setFirstName);
         Optional.ofNullable(request.getLastName()).ifPresent(entity::setLastName);
@@ -41,11 +40,11 @@ public class EmployeeConverter {
                 contactDetailsEntity = new ContactDetails();
             }
             entity.setContactDetails(contactDetailsConverter.fromDTO(
-                            contactDetailsEntity,
-                            request.getContactDetails()));
+                    contactDetailsEntity,
+                    request.getContactDetails()));
         }
         return entity;
-}
+    }
 
     public Employee newEntity() {
         return new Employee();

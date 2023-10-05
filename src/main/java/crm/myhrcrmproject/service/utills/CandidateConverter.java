@@ -23,7 +23,6 @@ public class CandidateConverter {
     private final ContactDetailsConverter contactDetailsConverter;
     private final AddressDetailsConverter addressDetailsConverter;
 
-
     public CandidateConverter(VacancyRepository vacancyRepository, @Lazy InterviewConverter interviewConverter, ContactDetailsConverter contactDetailsConverter, AddressDetailsConverter addressDetailsConverter) {
         this.vacancyRepository = vacancyRepository;
         this.interviewConverter = interviewConverter;

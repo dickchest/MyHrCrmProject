@@ -39,7 +39,6 @@ public class InterviewConverter {
                 .build();
     }
 
-
     public Interview fromDTO(Interview entity, InterviewRequestDTO request) {
         Optional.ofNullable(request.getDate()).ifPresent(entity::setDate);
         Optional.ofNullable(request.getTime()).ifPresent(entity::setTime);

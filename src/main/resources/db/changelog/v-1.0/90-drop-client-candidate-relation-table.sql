@@ -1,1 +1,0 @@
-drop table client_candidate_relation;

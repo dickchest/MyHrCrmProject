@@ -9,11 +9,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class Vacancy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,5 +36,5 @@ public class Vacancy {
     private Employee employee;
 
     @OneToMany(mappedBy = "vacancy", cascade = CascadeType.ALL)
-    private List<Candidate> candidate;
+    private List<Candidate> candidates;
 }

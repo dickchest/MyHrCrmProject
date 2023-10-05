@@ -1,3 +1,117 @@
+GET http://localhost:8080/api/clients
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T120137.200.json
+
+###
+
+PUT http://localhost:8080/api/clients/2
+Content-Type: application/json
+Content-Length: 38
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "description": "description 2.1"
+}
+
+<> 2023-10-05T120130.404.txt
+
+###
+
+DELETE http://localhost:8080/api/clients/2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+PUT http://localhost:8080/api/clients/2
+Content-Type: application/json
+Content-Length: 38
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "description": "description 2.1"
+}
+
+<> 2023-10-05T120044.202.json
+
+###
+
+GET http://localhost:8080/api/clients
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T120017.200.json
+
+###
+
+POST http://localhost:8080/api/clients
+Content-Type: application/json
+Content-Length: 66
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "companyName": "Panasonic",
+  "description": "description 2"
+}
+
+<> 2023-10-05T120013.201.json
+
+###
+
+GET http://localhost:8080/api/clients/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T120004.200.json
+
+###
+
+POST http://localhost:8080/api/clients
+Content-Type: application/json
+Content-Length: 64
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "companyName": "Sony",
+  "description": "description Sony"
+}
+
+<> 2023-10-05T115958.201.json
+
+###
+
+GET http://localhost:8080/api/clients/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T115850.404.txt
+
+###
+
+GET http://localhost:8080/api/clients
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T115843.200.json
+
+###
+
 PUT http://localhost:8080/api/users/setRole?id=2&role=manager
 Content-Length: 0
 Connection: Keep-Alive
@@ -455,96 +569,6 @@ User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 <> 2023-10-02T183122.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/2
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T182713.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/2
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T182546.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/1
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T182539.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/1
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T182532-1.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/1
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T182532.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/1
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T182528.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T182511.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/2
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T182358.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/2
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T182237.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/2
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T182013.200.json
 
 ###
 

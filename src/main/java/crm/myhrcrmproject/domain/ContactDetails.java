@@ -6,10 +6,12 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class ContactDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

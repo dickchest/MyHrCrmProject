@@ -3,12 +3,17 @@ package crm.myhrcrmproject.domain;
 import crm.myhrcrmproject.domain.enums.CommunicationType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class Communication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

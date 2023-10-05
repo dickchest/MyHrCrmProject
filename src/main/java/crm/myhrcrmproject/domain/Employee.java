@@ -2,12 +2,17 @@ package crm.myhrcrmproject.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

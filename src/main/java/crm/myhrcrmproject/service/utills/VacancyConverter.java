@@ -33,10 +33,10 @@ public class VacancyConverter {
                         entity.getEmployee() != null ?
                                 employeeConverter.toShortDTO(entity.getEmployee()) :
                                 null
-                        )
+                )
                 .candidatesList(
-                        entity.getCandidate() != null ?
-                                entity.getCandidate()
+                        entity.getCandidates() != null ?
+                                entity.getCandidates()
                                         .stream()
                                         .map(candidateConverter::toShortDTO)
                                         .collect(Collectors.toList())
@@ -44,7 +44,6 @@ public class VacancyConverter {
                 )
                 .build();
     }
-
 
     public Vacancy fromDTO(Vacancy entity, VacancyRequestDTO request) {
         Optional.ofNullable(request.getJobTitle()).ifPresent(entity::setJobTitle);
