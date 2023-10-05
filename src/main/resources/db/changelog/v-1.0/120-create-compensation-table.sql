@@ -2,7 +2,7 @@ create table compensation (
     id integer not null auto_increment,
     comments varchar(255),
     create_date datetime(6),
-    last_update datetime(6),
+    update_date datetime(6),
     payment_date date,
     salary float(53),
     candidate_id integer,
