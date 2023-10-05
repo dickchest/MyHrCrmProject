@@ -7,6 +7,8 @@ create table interview (
     time time(6),
     candidate_id integer,
     employee_id integer,
+    create_date datetime(6),
+    update_date datetime(6),
     primary key (id)
 ) engine=InnoDB
 ;

@@ -33,6 +33,7 @@ public class ClientConverter {
 
     public ClientShortResponseDTO toShortDTO(Client entity) {
         return ClientShortResponseDTO.builder()
+                .id(entity.getId())
                 .companyName(entity.getCompanyName())
                 .build();
     }

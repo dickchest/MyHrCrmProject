@@ -6,6 +6,8 @@ create table communication (
     client_id integer,
     responsible_employee_id integer,
     vacancy_id integer,
+    create_date datetime(6),
+    update_date datetime(6),
     primary key (id)
 ) engine=InnoDB
 ;

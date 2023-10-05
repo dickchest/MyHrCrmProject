@@ -52,9 +52,9 @@ public class Candidate {
     @Column(nullable = false)
     private CandidateStatus status = CandidateStatus.ACTIVE;
 
-    private LocalDateTime creatingDate;
+    private LocalDateTime createDate;
 
-    private LocalDateTime updatedDate;
+    private LocalDateTime updateDate;
 
     @Override
     public String toString() {
@@ -64,8 +64,8 @@ public class Candidate {
                 ", lastName='" + lastName + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", status=" + status +
-                ", creatingDate=" + creatingDate +
-                ", updatedDate=" + updatedDate +
+                ", creatingDate=" + createDate +
+                ", updatedDate=" + updateDate +
                 '}';
     }
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -40,4 +41,7 @@ public class Communication {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "responsible_employee_id")
     private Employee employee;
+
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 }

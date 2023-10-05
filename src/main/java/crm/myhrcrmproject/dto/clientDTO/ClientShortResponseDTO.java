@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ClientShortResponseDTO {
+    private Integer id;
     private String companyName;
 }

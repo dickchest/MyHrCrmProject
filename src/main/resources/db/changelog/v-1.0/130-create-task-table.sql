@@ -3,7 +3,7 @@ create table task (
     create_date datetime(6),
     description varchar(255),
     end_date date,
-    last_update datetime(6),
+    update_date datetime(6),
     start_date date,
     status enum ('DONE','IN_PROCESS','OPENED','POSTPONED') not null,
     title varchar(255),

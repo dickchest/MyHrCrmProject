@@ -38,5 +38,5 @@ public class Compensation {
 
     private LocalDateTime createDate;
 
-    private LocalDateTime lastUpdate;
+    private LocalDateTime updateDate;
 }

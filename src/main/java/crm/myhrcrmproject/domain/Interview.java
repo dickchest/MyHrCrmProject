@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -46,4 +47,8 @@ public class Interview {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private InterviewStatus status = InterviewStatus.SCHEDULED;
+
+    private LocalDateTime createDate;
+
+    private LocalDateTime updateDate;
 }

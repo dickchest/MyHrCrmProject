@@ -47,6 +47,8 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
         if (Optional.ofNullable(requestDTO.getStatus()).isEmpty()) {
             entity.setStatus(InterviewStatus.SCHEDULED);
         }
+        entity.setCreateDate(LocalDateTime.now());
+        entity.setUpdateDate(LocalDateTime.now());
         repository.save(entity);
         return converter.toDTO(entity);
     }
@@ -64,6 +66,8 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
         // filled in existing fields with new dates
         converter.fromDTO(existingEntity, requestDTO);
         // do extra procedures
+        existingEntity.setUpdateDate(LocalDateTime.now());
+
         repository.save(existingEntity);
 
         return converter.toDTO(existingEntity);

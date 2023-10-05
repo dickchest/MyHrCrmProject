@@ -49,5 +49,5 @@ public class Task {
 
     private LocalDateTime createDate;
 
-    private LocalDateTime lastUpdate;
+    private LocalDateTime updateDate;
 }
