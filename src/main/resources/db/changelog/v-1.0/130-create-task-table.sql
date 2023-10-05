@@ -1,15 +1,15 @@
 create table task (
     id integer not null auto_increment,
-    create_date datetime(6),
-    description varchar(255),
-    end_date date,
-    update_date datetime(6),
-    start_date date,
-    status enum ('DONE','IN_PROCESS','OPENED','POSTPONED') not null,
     title varchar(255),
-    candidate_id integer,
+    description varchar(255),
+    start_date date,
+    end_date date,
+    status enum ('DONE','IN_PROCESS','OPENED','POSTPONED') not null,
     responsible_employee_id integer,
+    candidate_id integer,
     vacancy_id integer,
+    create_date datetime(6),
+    update_date datetime(6),
     primary key (id)
 ) engine=InnoDB
 ;

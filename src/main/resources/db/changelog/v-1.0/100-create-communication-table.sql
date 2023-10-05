@@ -2,10 +2,10 @@ create table communication (
     id integer not null auto_increment,
     communication_date_time datetime(6),
     communication_type tinyint,
-    candidate_id integer,
     client_id integer,
-    responsible_employee_id integer,
+    candidate_id integer,
     vacancy_id integer,
+    responsible_employee_id integer,
     create_date datetime(6),
     update_date datetime(6),
     primary key (id)

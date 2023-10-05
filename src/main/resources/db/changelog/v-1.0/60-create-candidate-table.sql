@@ -1,14 +1,14 @@
 create table candidate (
     id integer not null auto_increment,
-    create_date datetime(6),
-    date_of_birth date,
     first_name varchar(20),
     last_name varchar(50),
-    status enum ('ACTIVE','BLACK_LISTED','IN_PROCESS','NOT_ACTIVE','REJECTED') not null,
-    update_date datetime(6),
+    date_of_birth date,
     address_id integer,
     contact_details_id integer,
     vacancy_id integer,
+    status enum ('ACTIVE','BLACK_LISTED','IN_PROCESS','NOT_ACTIVE','REJECTED') not null,
+    create_date datetime(6),
+    update_date datetime(6),
     primary key (id)
 ) engine=InnoDB
 ;

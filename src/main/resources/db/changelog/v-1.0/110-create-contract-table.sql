@@ -1,14 +1,14 @@
 create table contract (
     id integer not null auto_increment,
-    contract_type enum ('CONTRACT_FOR_SERVICE','FULL_TIME','INTERNSHIP','PART_TIME','SEASONAL') not null,
-    create_date datetime(6),
-    end_date date,
-    update_date datetime(6),
-    salary float(53),
     start_date date,
+    end_date date,
+    salary float(53),
+    contract_type enum ('CONTRACT_FOR_SERVICE','FULL_TIME','INTERNSHIP','PART_TIME','SEASONAL') not null,
     candidate_id integer,
-    client_id integer,
     responsible_employee_id integer,
+    client_id integer,
+    create_date datetime(6),
+    update_date datetime(6),
     primary key (id)
 ) engine=InnoDB
 ;

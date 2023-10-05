@@ -1,12 +1,12 @@
 create table interview (
     id integer not null auto_increment,
-    comments varchar(255),
     date date,
-    location varchar(255),
-    status enum ('ACCEPTED','CANCELED','COMPLETED','NO_SHOW','PENDING_REVIEW','REJECTED','RESCHEDULED','SCHEDULED') not null,
     time time(6),
+    location varchar(255),
+    comments varchar(255),
     candidate_id integer,
     employee_id integer,
+    status enum ('ACCEPTED','CANCELED','COMPLETED','NO_SHOW','PENDING_REVIEW','REJECTED','RESCHEDULED','SCHEDULED') not null,
     create_date datetime(6),
     update_date datetime(6),
     primary key (id)

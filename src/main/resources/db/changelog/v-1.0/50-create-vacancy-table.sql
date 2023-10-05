@@ -1,10 +1,10 @@
 create table vacancy (
     id integer not null auto_increment,
-    description varchar(255),
-    end_date date,
     job_title varchar(255),
+    description varchar(255),
     salary float(53),
     start_date date,
+    end_date date,
     status enum ('CLOSED','OPEN') not null,
     responsible_employee_id integer,
     primary key (id)

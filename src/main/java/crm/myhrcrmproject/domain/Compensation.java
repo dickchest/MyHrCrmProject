@@ -20,6 +20,10 @@ public class Compensation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "candidate_id")
+    private Candidate candidate;
+
     @NotNull
     private Double salary;
 
@@ -27,10 +31,6 @@ public class Compensation {
     private LocalDate paymentDate;
 
     private String comments;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "candidate_id")
-    private Candidate candidate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contract_id")

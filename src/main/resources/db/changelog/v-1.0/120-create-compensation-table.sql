@@ -1,12 +1,12 @@
 create table compensation (
     id integer not null auto_increment,
+    candidate_id integer,
+    salary float(53),
+    payment_date date,
     comments varchar(255),
+    contract_id integer,
     create_date datetime(6),
     update_date datetime(6),
-    payment_date date,
-    salary float(53),
-    candidate_id integer,
-    contract_id integer,
     primary key (id)
 ) engine=InnoDB
 ;
