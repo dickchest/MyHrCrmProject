@@ -13,11 +13,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CompensationResponseDTO {
+public class CompensationShortResponseDTO {
     private Integer id;
     private Double salary;
     private LocalDate paymentDate;
-    private String comments;
-    private CandidateShortResponseDTO candidate;
-    private ContractShortResponseDTO contract;
 }

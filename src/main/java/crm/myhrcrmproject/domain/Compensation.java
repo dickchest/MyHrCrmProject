@@ -20,6 +20,7 @@ public class Compensation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull(message = "Candidate should be not null")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "candidate_id")
     private Candidate candidate;
@@ -32,6 +33,7 @@ public class Compensation {
 
     private String comments;
 
+    @NotNull(message = "Contract should be not null")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contract_id")
     private Contract contract;
