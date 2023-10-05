@@ -3,6 +3,7 @@ package crm.myhrcrmproject.controller;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewDateRequestDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewResponseDTO;
+import crm.myhrcrmproject.dto.interviewDTO.InterviewShortResponseDTO;
 import crm.myhrcrmproject.service.InterviewService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,17 +21,22 @@ public class InterviewController extends GenericController<InterviewRequestDTO, 
     private final InterviewService service;
 
     @GetMapping("/findAllByStatus/{id}")
-    public ResponseEntity<List<InterviewResponseDTO>> findAllByStatus(@PathVariable("id") Integer statusId) {
+    public ResponseEntity<List<InterviewShortResponseDTO>> findAllByStatusId(@PathVariable("id") Integer statusId) {
         return new ResponseEntity<>(service.findAllByStatusId(statusId), HttpStatus.OK);
     }
 
     @GetMapping("/findAllByEmployee/{id}")
-    public ResponseEntity<List<InterviewResponseDTO>> findAllByEmployeeId(@PathVariable("id") Integer id) {
+    public ResponseEntity<List<InterviewShortResponseDTO>> findAllByEmployeeId(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(service.findAllByEmployeeId(id), HttpStatus.OK);
     }
 
-    @PutMapping("/findAllByEmployee/{id}")
-    public ResponseEntity<List<InterviewResponseDTO>> findAllByEmployeeId(@PathVariable("id") Integer id, @RequestBody InterviewDateRequestDTO requestDTO) {
+    @PutMapping("/findAllByDateAndEmployee/{id}")
+    public ResponseEntity<List<InterviewShortResponseDTO>> findAllByEmployeeId(@PathVariable("id") Integer id, @RequestBody InterviewDateRequestDTO requestDTO) {
         return new ResponseEntity<>(service.findAllByDateAndEmployeeId(requestDTO, id), HttpStatus.OK);
+    }
+
+    @PutMapping("/findAllByDate")
+    public ResponseEntity<List<InterviewShortResponseDTO>> findAllByDate(@RequestBody InterviewDateRequestDTO requestDTO) {
+        return new ResponseEntity<>(service.findAllByDate(requestDTO), HttpStatus.OK);
     }
 }

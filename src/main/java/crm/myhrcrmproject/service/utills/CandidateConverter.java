@@ -3,6 +3,8 @@ package crm.myhrcrmproject.service.utills;
 import crm.myhrcrmproject.domain.AddressDetails;
 import crm.myhrcrmproject.domain.Candidate;
 import crm.myhrcrmproject.domain.ContactDetails;
+import crm.myhrcrmproject.domain.Vacancy;
+import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
@@ -12,6 +14,7 @@ import crm.myhrcrmproject.service.validation.NotFoundException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -89,12 +92,20 @@ public class CandidateConverter {
                     request.getAddressDetails()));
         }
 
-        Optional.ofNullable(request.getStatus()).ifPresent(entity::setStatus);
-        Optional.ofNullable(request.getVacancyId()).ifPresent(
-                id -> entity.setVacancy(vacancyRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException
-                                ("Vacancy with id " + request.getVacancyId() + " not found"))));
+        // if candidate just have been applied for vacancy set status IN_PROGRESS
+        if (request.getVacancyId() != null) {
+            Optional<Vacancy> vacancy = vacancyRepository.findById(request.getVacancyId());
+            if (vacancy.isPresent()) {
+                entity.setVacancy(vacancy.get());
+                entity.setStatus(CandidateStatus.IN_PROCESS);
+            } else {
+                throw new NotFoundException
+                        ("Vacancy with id " + request.getVacancyId() + " not found");
+            }
+        }
 
+        // if status was provided, set status
+        Optional.ofNullable(request.getStatus()).ifPresent(entity::setStatus);
         return entity;
     }
 

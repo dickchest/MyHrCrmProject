@@ -1,6 +1,7 @@
 package crm.myhrcrmproject.dto.interviewDTO;
 
 import crm.myhrcrmproject.domain.enums.InterviewStatus;
+import crm.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
 import crm.myhrcrmproject.dto.employeeDTO.EmployeeShortResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,5 +21,5 @@ public class InterviewShortResponseDTO {
     private LocalTime time;
     private InterviewStatus status;
     private String comments;
-    private EmployeeShortResponseDTO employee;
+    private CandidateShortResponseDTO candidate;
 }

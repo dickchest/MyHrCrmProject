@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@ToString
 public class Vacancy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +28,7 @@ public class Vacancy {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private VacancyStatus status;
+    private VacancyStatus status = VacancyStatus.OPEN;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "responsible_Employee_ID")
@@ -37,4 +36,11 @@ public class Vacancy {
 
     @OneToMany(mappedBy = "vacancy", cascade = CascadeType.ALL)
     private List<Candidate> candidates;
+
+    @Override
+    public String toString() {
+        return "Vacancy{" +
+                "id=" + id +
+                '}';
+    }
 }

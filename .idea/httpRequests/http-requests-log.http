@@ -1,574 +1,676 @@
-GET http://localhost:8080/api/clients
+GET http://localhost:8080/api/contracts/findAllActiveContracts
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
-<> 2023-10-05T120137.200.json
+<> 2023-10-05T190105.200.json
 
 ###
 
-PUT http://localhost:8080/api/clients/2
+PUT http://localhost:8080/api/contracts/1
 Content-Type: application/json
-Content-Length: 38
+Content-Length: 92
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
-  "description": "description 2.1"
+  "startDate": "2023-10-01",
+  "endDate": "2023-10-04",
+  "description": "description 1"
 }
 
-<> 2023-10-05T120130.404.txt
+<> 2023-10-05T190101.202.json
 
 ###
 
-DELETE http://localhost:8080/api/clients/2
+GET http://localhost:8080/api/contracts/findAllActiveContracts
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
+<> 2023-10-05T190051.200.json
+
 ###
 
-PUT http://localhost:8080/api/clients/2
+PUT http://localhost:8080/api/contracts/1
 Content-Type: application/json
-Content-Length: 38
+Content-Length: 92
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
-  "description": "description 2.1"
+  "startDate": "2023-10-01",
+  "endDate": "2023-10-05",
+  "description": "description 1"
 }
 
-<> 2023-10-05T120044.202.json
+<> 2023-10-05T190033.202.json
 
 ###
 
-GET http://localhost:8080/api/clients
+GET http://localhost:8080/api/contracts/findAllActiveContracts
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
-<> 2023-10-05T120017.200.json
+<> 2023-10-05T190002.200.json
+
+###
+
+PUT http://localhost:8080/api/contracts/1
+Content-Type: application/json
+Content-Length: 65
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-05",
+  "description": "description 1"
+}
+
+<> 2023-10-05T185955.202.json
+
+###
+
+GET http://localhost:8080/api/contracts/findAllActiveContracts
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T185926.200.json
+
+###
+
+GET http://localhost:8080/api/contracts/findAllActiveContracts
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T185542.200.json
+
+###
+
+GET http://localhost:8080/api/contracts
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T185511.200.json
+
+###
+
+GET http://localhost:8080/api/contracts/findAllActiveContracts
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T185502.200.json
+
+###
+
+GET http://localhost:8080/api/contracts/findAllActiveContracts
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T185102.200.json
+
+###
+
+GET http://localhost:8080/api/contracts/findAllByCandidate/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T184956.200.json
+
+###
+
+GET http://localhost:8080/api/contracts/findAllByClient/2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T184924.200.json
+
+###
+
+GET http://localhost:8080/api/contracts/findAllByClient/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T184920.200.json
+
+###
+
+GET http://localhost:8080/api/contracts/findAllByEmployee/0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T184839.404.txt
+
+###
+
+GET http://localhost:8080/api/contracts/findAllByEmployee/2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T184834.200.json
+
+###
+
+GET http://localhost:8080/api/contracts/findAllByEmployee/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T184828.200.json
+
+###
+
+GET http://localhost:8080/api/contracts/findAllByContractTypeId/0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T184747.200.json
+
+###
+
+GET http://localhost:8080/api/contracts/findAllByContractTypeId/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T184744.200.json
+
+###
+
+GET http://localhost:8080/api/contracts
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T184652.200.json
+
+###
+
+DELETE http://localhost:8080/api/contracts/2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+GET http://localhost:8080/api/contracts
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T184530.200.json
+
+###
+
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+Content-Length: 147
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-10",
+  "endDate": "2023-12-31",
+  "salary": 50000.0,
+  "contractType": "FULL_TIME",
+  "candidateId": 3,
+  "clientId": 2
+}
+
+<> 2023-10-05T184522.201.json
+
+###
+
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+Content-Length: 147
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-10",
+  "endDate": "2023-12-31",
+  "salary": 50000.0,
+  "contractType": "FULL_TIME",
+  "candidateId": 2,
+  "clientId": 2
+}
+
+<> 2023-10-05T184511.400.txt
+
+###
+
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+Content-Length: 147
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-10",
+  "endDate": "2023-12-31",
+  "salary": 50000.0,
+  "contractType": "Full Time",
+  "candidateId": 2,
+  "clientId": 2
+}
+
+<> 2023-10-05T184457.404.txt
+
+###
+
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+Content-Length: 147
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-10",
+  "endDate": "2023-12-31",
+  "salary": 50000.0,
+  "contractType": "Full Time",
+  "candidateId": 2,
+  "clientId": 2
+}
+
+<> 2023-10-05T183436.201.json
+
+###
+
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+Content-Length: 147
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-10",
+  "endDate": "2023-12-31",
+  "salary": 50000.0,
+  "contractType": "Full Time",
+  "candidateId": 2,
+  "clientId": 2
+}
+
+<> 2023-10-05T182334.500.json
+
+###
+
+GET http://localhost:8080/api/contracts
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T181322.200.json
+
+###
+
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+Content-Length: 147
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-10",
+  "endDate": "2023-12-31",
+  "salary": 50000.0,
+  "contractType": "FULL_TIME",
+  "candidateId": 1,
+  "clientId": 2
+}
+
+<> 2023-10-05T181253.201.json
+
+###
+
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+Content-Length: 147
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-10",
+  "endDate": "2023-12-31",
+  "salary": 50000.0,
+  "contractType": "FULL_TIME",
+  "candidateId": 1,
+  "clientId": 2
+}
+
+<> 2023-10-05T180544.500.json
+
+###
+
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+Content-Length: 147
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-10",
+  "endDate": "2023-12-31",
+  "salary": 50000.0,
+  "contractType": "FULL_TIME",
+  "candidateId": 1,
+  "clientId": 2
+}
+
+<> 2023-10-05T180521.500.json
+
+###
+
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+Content-Length: 147
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-10",
+  "endDate": "2023-12-31",
+  "salary": 50000.0,
+  "contractType": "Full Time",
+  "candidateId": 1,
+  "clientId": 2
+}
+
+<> 2023-10-05T171624.500.json
+
+###
+
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+Content-Length: 147
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-10",
+  "endDate": "2023-12-31",
+  "salary": 50000.0,
+  "contractType": "Full_Time",
+  "candidateId": 1,
+  "clientId": 2
+}
+
+<> 2023-10-05T171318.500.json
+
+###
+
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+Content-Length: 147
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-10",
+  "endDate": "2023-12-31",
+  "salary": 50000.0,
+  "contractType": "Full_Time",
+  "candidateId": 1,
+  "clientId": 2
+}
+
+<> 2023-10-05T171250.500.json
+
+###
+
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+Content-Length: 147
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-10",
+  "endDate": "2023-12-31",
+  "salary": 50000.0,
+  "contractType": "Full Time",
+  "candidateId": 1,
+  "clientId": 2
+}
+
+<> 2023-10-05T171231.500.json
+
+###
+
+POST http://localhost:8080/api/contracts
+Content-Type: application/json
+Content-Length: 147
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "startDate": "2023-10-10",
+  "endDate": "2023-12-31",
+  "salary": 50000.0,
+  "contractType": "Full-Time",
+  "candidateId": 1,
+  "clientId": 2
+}
+
+<> 2023-10-05T170734.500.json
+
+###
+
+GET http://localhost:8080/api/contracts
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-05T170322.200.json
 
 ###
 
 POST http://localhost:8080/api/clients
 Content-Type: application/json
-Content-Length: 66
+Content-Length: 62
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
-  "companyName": "Panasonic",
-  "description": "description 2"
+  "companyName": "Apple",
+  "description": "description 3"
 }
 
-<> 2023-10-05T120013.201.json
+<> 2023-10-05T170257.201.json
 
 ###
 
-GET http://localhost:8080/api/clients/1
+GET http://localhost:8080/api/clients
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
-<> 2023-10-05T120004.200.json
+<> 2023-10-05T170223.200.json
 
 ###
 
 POST http://localhost:8080/api/clients
 Content-Type: application/json
-Content-Length: 64
+Content-Length: 61
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
   "companyName": "Sony",
-  "description": "description Sony"
+  "description": "description 1"
 }
 
-<> 2023-10-05T115958.201.json
+<> 2023-10-05T170220.201.json
 
 ###
 
-GET http://localhost:8080/api/clients/1
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-05T115850.404.txt
-
-###
-
-GET http://localhost:8080/api/clients
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-05T115843.200.json
-
-###
-
-PUT http://localhost:8080/api/users/setRole?id=2&role=manager
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T171901.202.json
-
-###
-
-PUT http://localhost:8080/api/users/setRole?id=2&role=user
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T171851.202.json
-
-###
-
-GET http://localhost:8080/api/users/2
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T171642.200.json
-
-###
-
-GET http://localhost:8080/api/users/1
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T171637.200.json
-
-###
-
-PUT http://localhost:8080/api/users/setRole/2-manager
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T171630.202.json
-
-###
-
-PUT http://localhost:8080/api/users/setRole/2-user
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T171623.202.json
-
-###
-
-PUT http://localhost:8080/api/users/setRole/2-manager
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T171602.202.json
-
-###
-
-PUT http://localhost:8080/api/users/setRole/2?manager=
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T171141.500.json
-
-###
-
-PUT http://localhost:8080/api/users/setRole/2
+PUT http://localhost:8080/api/interviews/findAllByDate
 Content-Type: application/json
-Content-Length: 23
+Content-Length: 26
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
-  "role": "manager"
+  "date": "2023-10-22"
 }
 
-<> 2023-10-04T170800.404.txt
+<> 2023-10-05T170133.200.json
 
 ###
 
-GET http://localhost:8080/api/users
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T170730.200.json
-
-###
-
-PUT http://localhost:8080/api/users/setRole/2
+PUT http://localhost:8080/api/interviews/1
 Content-Type: application/json
-Content-Length: 23
+Content-Length: 26
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
-  "role": "manager"
+  "date": "2023-10-22"
 }
 
-<> 2023-10-04T170349.404.txt
+<> 2023-10-05T170125.202.json
 
 ###
 
-PUT http://localhost:8080/api/users/2
+PUT http://localhost:8080/api/interviews/findAllByDate
 Content-Type: application/json
-Content-Length: 23
+Content-Length: 26
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
-  "role": "manager"
+  "date": "2023-10-22"
 }
 
-<> 2023-10-04T170319.202.json
+<> 2023-10-05T170049.200.json
 
 ###
 
-GET http://localhost:8080/api/users
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T170256.200.json
-
-###
-
-PUT http://localhost:8080/api/users/2
+PUT http://localhost:8080/api/interviews/findAllByDateAndEmployee/2
 Content-Type: application/json
-Content-Length: 25
+Content-Length: 26
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
-  "roleName": "admin"
+  "date": "2023-10-22"
 }
 
-<> 2023-10-04T164457.202.json
+<> 2023-10-05T165548.200.json
 
 ###
 
-PUT http://localhost:8080/api/users/2
+PUT http://localhost:8080/api/interviews/findAllByDateAndEmployee/2
 Content-Type: application/json
-Content-Length: 27
+Content-Length: 26
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
-  "roleName": "manager"
+  "date": "2023-09-23"
 }
 
-<> 2023-10-04T164431.202.json
+<> 2023-10-05T165515.200.json
 
 ###
 
-GET http://localhost:8080/api/users
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T164337.200.json
-
-###
-
-GET http://localhost:8080/api/employees
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T164233.200.json
-
-###
-
-GET http://localhost:8080/api/employees
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T164158.200.json
-
-###
-
-PUT http://localhost:8080/api/employees/2
+PUT http://localhost:8080/api/interviews/findAllByDateAndEmployee/2
 Content-Type: application/json
-Content-Length: 153
+Content-Length: 26
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
-  "firstName": "Ivan1",
-  "lastName": "Ivanov1",
-  "position": "manager",
-  "contactDetails": {
-    "homePhone": "123",
-    "mobilePhone": "987-"
-  }
+  "date": "2023-09-23"
 }
 
-<> 2023-10-04T164111.202.json
+<> 2023-10-05T165351.200.json
 
 ###
 
-GET http://localhost:8080/api/employees
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T164017.200.json
-
-###
-
-POST http://localhost:8080/api/users
+PUT http://localhost:8080/api/interviews/findAllByDateAndEmployee/2
 Content-Type: application/json
-Content-Length: 87
+Content-Length: 26
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
-  "userName": "ivan2001",
-  "password": "test2001",
-  "email": "test1@test.com"
-  }
+  "date": "2023-09-22"
 }
 
-<> 2023-10-04T163940.201.json
+<> 2023-10-05T165343.200.json
 
 ###
 
-GET http://localhost:8080/api/users/1
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T163900.200.json
-
-###
-
-POST http://localhost:8080/api/users
+GET http://localhost:8080/api/interviews/findAllByDateAndEmployee/2
 Content-Type: application/json
-Content-Length: 87
+Content-Length: 26
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {
-  "userName": "ivan2001",
-  "password": "test2001",
-  "email": "test1@test.com"
-  }
+  "date": "2023-09-22"
 }
 
-<> 2023-10-04T163130.500.txt
+<> 2023-10-05T165333.405.json
 
 ###
 
-GET http://localhost:8080/api/employees
+GET http://localhost:8080/api/interviews/findAllByStatus/0
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
-<> 2023-10-04T163117.200.json
+<> 2023-10-05T165136.200.json
 
 ###
 
-POST http://localhost:8080/api/employees
-Content-Type: application/json
-Content-Length: 191
+GET http://localhost:8080/api/interviews/findAllByEmployee/2
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
-{
-  "firstName": "Ivan6",
-  "lastName": "Ivanov4",
-  "position": "manager",
-  "contactDetails": {
-    "email": "john3.doe@example.com",
-    "homePhone": "123",
-    "mobilePhone": "987-"
-  }
-}
-
-<> 2023-10-04T163000.201.json
-
-###
-
-GET http://localhost:8080/api/employees
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T162834.200.json
-
-###
-
-GET http://localhost:8080/api/users
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-04T162810.200.json
-
-###
-
-POST http://localhost:8080/api/users
-Content-Type: application/json
-Content-Length: 87
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "userName": "ivan2001",
-  "password": "test2001",
-  "email": "test1@test.com"
-  }
-}
-
-<> 2023-10-03T134538.500.txt
-
-###
-
-GET http://localhost:8080/api/users
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-03T134348.200.json
-
-###
-
-GET http://localhost:8080/api/users
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-03T134345.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/1
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T184344.200.json
-
-###
-
-PUT http://localhost:8080/api/vacancies/1
-Content-Type: application/json
-Content-Length: 32
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "responsibleEmployeeId": 1
-}
-
-<> 2023-10-02T184319.202.json
-
-###
-
-PUT http://localhost:8080/api/vacancies/2
-Content-Type: application/json
-Content-Length: 32
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "responsibleEmployeeId": 1
-}
-
-<> 2023-10-02T184311.404.txt
-
-###
-
-GET http://localhost:8080/api/vacancies
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T184113.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/3
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T183805.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/4
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T183756.404.txt
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/3
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T183750.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/2
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T183734.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/2
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T183336.200.json
-
-###
-
-GET http://localhost:8080/api/vacancies/findAllByEmployee/2
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-02T183122.200.json
+<> 2023-10-05T165116.200.json
 
 ###
 

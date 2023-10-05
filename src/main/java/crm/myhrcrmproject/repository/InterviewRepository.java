@@ -15,4 +15,5 @@ public interface InterviewRepository extends JpaRepository<Interview, Integer> {
     List<Interview> findByStatus(InterviewStatus status);
     List<Interview> findByEmployee(Employee employee);
     List<Interview> findByDateAndEmployee(LocalDate date, Employee employee);
+    List<Interview> findByDate(LocalDate date);
 }

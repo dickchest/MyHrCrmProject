@@ -2,6 +2,7 @@ package crm.myhrcrmproject.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -19,10 +20,10 @@ public class Compensation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotNull
     private Double salary;
 
-    @NotBlank
+    @NotNull
     private LocalDate paymentDate;
 
     private String comments;

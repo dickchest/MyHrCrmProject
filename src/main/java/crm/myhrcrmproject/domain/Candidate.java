@@ -1,8 +1,8 @@
 package crm.myhrcrmproject.domain;
 
 import crm.myhrcrmproject.domain.enums.CandidateStatus;
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -17,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@ToString
 @Builder
 public class Candidate {
 
@@ -51,10 +50,22 @@ public class Candidate {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private CandidateStatus status;
+    private CandidateStatus status = CandidateStatus.ACTIVE;
 
     private LocalDateTime creatingDate;
 
     private LocalDateTime updatedDate;
 
+    @Override
+    public String toString() {
+        return "Candidate{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", status=" + status +
+                ", creatingDate=" + creatingDate +
+                ", updatedDate=" + updatedDate +
+                '}';
+    }
 }

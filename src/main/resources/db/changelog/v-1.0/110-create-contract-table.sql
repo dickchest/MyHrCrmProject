@@ -1,6 +1,6 @@
 create table contract (
     id integer not null auto_increment,
-    contract_type varchar(255),
+    contract_type enum ('CONTRACT_FOR_SERVICE','FULL_TIME','INTERNSHIP','PART_TIME','SEASONAL') not null,
     create_date datetime(6),
     end_date date,
     last_update datetime(6),

@@ -2,6 +2,7 @@ package crm.myhrcrmproject.controller;
 
 import crm.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
+import crm.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
 import crm.myhrcrmproject.service.CandidateService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,12 +20,12 @@ public class CandidateController extends GenericController<CandidateRequestDTO, 
     private final CandidateService service;
 
     @GetMapping("/findAllByStatus/{id}")
-    public ResponseEntity<List<CandidateResponseDTO>> findAllByStatusId(@PathVariable("id") Integer statusID) {
+    public ResponseEntity<List<CandidateShortResponseDTO>> findAllByStatusId(@PathVariable("id") Integer statusID) {
         return new ResponseEntity<>(service.findAllByStatusId(statusID), HttpStatus.OK);
     }
 
     @GetMapping("/findAllByVacancy/{id}")
-    public ResponseEntity<List<CandidateResponseDTO>> findAllByVacancyId(@PathVariable("id") Integer id) {
+    public ResponseEntity<List<CandidateShortResponseDTO>> findAllByVacancyId(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(service.findAllByVacancyId(id), HttpStatus.OK);
     }
 }

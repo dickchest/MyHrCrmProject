@@ -1,7 +1,9 @@
 package crm.myhrcrmproject.domain;
 
+import crm.myhrcrmproject.domain.enums.ContractType;
+import crm.myhrcrmproject.service.validation.NotFoundException;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -19,33 +21,43 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotNull(message = "Start date must be not blank")
     private LocalDate startDate;
 
-    @NotBlank
+    @NotNull(message = "End date must be not blank")
     private LocalDate endDate;
 
-    @NotBlank
+    @NotNull(message = "Salary must be not blank")
     private Double salary;
 
-    private String contractType;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ContractType contractType = ContractType.FULL_TIME;
 
-    @NotBlank
+    @NotNull(message = "Candidate should not be blank")
     @OneToOne
     @JoinColumn(name = "candidate_id")
     private Candidate candidate;
 
-    @NotBlank
+    @NotNull(message = "Employee should not be blank")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "responsible_employee_id")
     private Employee employee;
 
-    @NotBlank
+    @NotNull(message = "Client should not be blank")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
 
     private LocalDateTime createDate;
 
-    private LocalDateTime lastUpdate;
+    private LocalDateTime updateDate;
+
+    public void setContractType(String s) {
+        try {
+            this.contractType = ContractType.valueOf(s);
+        } catch (IllegalArgumentException e) {
+            throw new NotFoundException("Invalid ContractType: " + s);
+        }
+    }
 }

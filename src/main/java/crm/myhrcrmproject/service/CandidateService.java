@@ -5,6 +5,7 @@ import crm.myhrcrmproject.domain.Vacancy;
 import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
+import crm.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
 import crm.myhrcrmproject.repository.CandidateRepository;
 import crm.myhrcrmproject.repository.VacancyRepository;
 import crm.myhrcrmproject.service.utills.CandidateConverter;
@@ -53,10 +54,10 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
         Candidate existingEntity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Candidate with id: " + id + " not found!"));
 
-        // filled in existing fields with new dates
         converter.fromDTO(existingEntity, requestDTO);
-        // do extra procedures
-        entityAfterUpdateProcedures(existingEntity);
+
+        // filled in existing fields with new dates
+        existingEntity.setUpdatedDate(LocalDateTime.now());
 
         repository.save(existingEntity);
 
@@ -73,27 +74,23 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
         candidate.setStatus(CandidateStatus.ACTIVE);
     }
 
-    protected void entityAfterUpdateProcedures(Candidate entity) {
-        entity.setUpdatedDate(LocalDateTime.now());
-    }
-
     // find All by Status(status)
-    public List<CandidateResponseDTO> findAllByStatusId(Integer id) {
+    public List<CandidateShortResponseDTO> findAllByStatusId(Integer id) {
         CandidateStatus status = Optional.of(CandidateStatus.values()[id])
                 .orElseThrow(() -> new NotFoundException("No status found with id: " + id));
         List<Candidate> list = repository.findByStatus(status);
         return list.stream()
-                .map(converter::toDTO)
+                .map(converter::toShortDTO)
                 .toList();
     }
 
     // find All by Vacancy id
-    public List<CandidateResponseDTO> findAllByVacancyId(Integer id) {
+    public List<CandidateShortResponseDTO> findAllByVacancyId(Integer id) {
         Vacancy vacancy = vacancyRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
         List<Candidate> list = repository.findByVacancy(vacancy);
         return list.stream()
-                .map(converter::toDTO)
+                .map(converter::toShortDTO)
                 .toList();
     }
 }

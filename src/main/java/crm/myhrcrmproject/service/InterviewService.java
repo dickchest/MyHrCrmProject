@@ -6,6 +6,7 @@ import crm.myhrcrmproject.domain.enums.InterviewStatus;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewDateRequestDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewResponseDTO;
+import crm.myhrcrmproject.dto.interviewDTO.InterviewShortResponseDTO;
 import crm.myhrcrmproject.repository.EmployeeRepository;
 import crm.myhrcrmproject.repository.InterviewRepository;
 import crm.myhrcrmproject.service.utills.InterviewConverter;
@@ -46,8 +47,8 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
         if (Optional.ofNullable(requestDTO.getStatus()).isEmpty()) {
             entity.setStatus(InterviewStatus.SCHEDULED);
         }
-
-        return converter.toDTO(repository.save(entity));
+        repository.save(entity);
+        return converter.toDTO(entity);
     }
 
     public void delete(Integer id) {
@@ -63,41 +64,48 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
         // filled in existing fields with new dates
         converter.fromDTO(existingEntity, requestDTO);
         // do extra procedures
-        // ....
-
         repository.save(existingEntity);
 
         return converter.toDTO(existingEntity);
     }
 
     // find All by Status(status)
-    public List<InterviewResponseDTO> findAllByStatusId(Integer id) {
+    public List<InterviewShortResponseDTO> findAllByStatusId(Integer id) {
         InterviewStatus status = Optional.of(InterviewStatus.values()[id])
                 .orElseThrow(() -> new NotFoundException("No status found with id: " + id));
         List<Interview> list = repository.findByStatus(status);
         return list.stream()
-                .map(converter::toDTO)
+                .map(converter::toShortDTO)
                 .toList();
     }
 
     // find All by Employee id
-    public List<InterviewResponseDTO> findAllByEmployeeId(Integer id) {
+    public List<InterviewShortResponseDTO> findAllByEmployeeId(Integer id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
         List<Interview> list = repository.findByEmployee(employee);
         return list.stream()
-                .map(converter::toDTO)
+                .map(converter::toShortDTO)
                 .toList();
     }
 
     // find All by Date and Employee id
-    public List<InterviewResponseDTO> findAllByDateAndEmployeeId(InterviewDateRequestDTO requestDTO, Integer id) {
+    public List<InterviewShortResponseDTO> findAllByDateAndEmployeeId(InterviewDateRequestDTO requestDTO, Integer id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
         LocalDate date = requestDTO.getDate();
         List<Interview> list = repository.findByDateAndEmployee(date, employee);
         return list.stream()
-                .map(converter::toDTO)
+                .map(converter::toShortDTO)
                 .toList();
+    }
+
+    public List<InterviewShortResponseDTO> findAllByDate(InterviewDateRequestDTO requestDTO) {
+        LocalDate date = requestDTO.getDate();
+        List<Interview> list = repository.findByDate(date);
+        return list.stream()
+                .map(converter::toShortDTO)
+                .toList();
+
     }
 }

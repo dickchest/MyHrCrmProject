@@ -1,10 +1,12 @@
 package crm.myhrcrmproject.service.utills;
 
+import crm.myhrcrmproject.domain.Candidate;
 import crm.myhrcrmproject.domain.Interview;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewResponseDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewShortResponseDTO;
 import crm.myhrcrmproject.repository.CandidateRepository;
+import crm.myhrcrmproject.repository.EmployeeRepository;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ public class InterviewConverter {
     private final CandidateConverter candidateConverter;
     private final EmployeeConverter employeeConverter;
     private final CandidateRepository candidateRepository;
+    private final EmployeeRepository employeeRepository;
 
     public InterviewResponseDTO toDTO(Interview entity) {
         return InterviewResponseDTO.builder()
@@ -48,6 +51,11 @@ public class InterviewConverter {
                 id -> entity.setCandidate(candidateRepository.findById(id)
                         .orElseThrow(() -> new NotFoundException
                                 ("Candidate with id " + request.getCandidateId() + " not found"))));
+        Optional.ofNullable(request.getEmployeeId()).ifPresent(
+                id -> entity.setEmployee(employeeRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException
+                                ("Employee with id " + request.getCandidateId() + " not found"))));
+        Optional.ofNullable(request.getStatus()).ifPresent(entity::setStatus);
         return entity;
     }
 
@@ -62,9 +70,9 @@ public class InterviewConverter {
                 .time(entity.getTime())
                 .status(entity.getStatus())
                 .comments(entity.getComments())
-                .employee(
-                        entity.getEmployee() != null ?
-                                employeeConverter.toShortDTO(entity.getEmployee()) :
+                .candidate(
+                        entity.getCandidate() != null ?
+                                candidateConverter.toShortDTO(entity.getCandidate()) :
                                 null
                 )
                 .build();
