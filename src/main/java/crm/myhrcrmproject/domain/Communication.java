@@ -1,8 +1,11 @@
 package crm.myhrcrmproject.domain;
 
 import crm.myhrcrmproject.domain.enums.CommunicationType;
+import crm.myhrcrmproject.domain.enums.ContractType;
+import crm.myhrcrmproject.service.validation.NotFoundException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -20,10 +23,10 @@ public class Communication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "Communication Date & Time should be not blank")
-    private LocalDateTime communicationDateTime;
+    @NotNull(message = "Communication Date & Time should be not blank")
+    private LocalDateTime communicationDateTime = LocalDateTime.now();
 
-    @NotBlank(message = "Communication type should be not blank")
+    @NotNull(message = "Communication type should be not blank")
     private CommunicationType communicationType;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -44,4 +47,12 @@ public class Communication {
 
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
+
+    public void setCommunicationType(String s) {
+        try {
+            this.communicationType = CommunicationType.valueOf(s.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new NotFoundException("Invalid CommunicationType: " + s);
+        }
+    }
 }

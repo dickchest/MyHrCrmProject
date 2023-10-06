@@ -1,0 +1,64 @@
+### Communication
+GET http://localhost:8080/api/communications
+
+
+###
+GET http://localhost:8080/api/communications/1
+
+
+###
+POST http://localhost:8080/api/communications
+Content-Type:application/json
+
+{
+  "communicationType": "PHONE",
+  "clientId": 1,
+  "candidateId": 1,
+  "vacancyId": 1,
+  "employeeId": 1
+}
+
+###
+POST http://localhost:8080/api/communications
+Content-Type:application/json
+
+{
+  "communicationDateTime": "2023-10-11T09:15:00",
+  "communicationType": "Email",
+  "clientId": 2,
+  "candidateId": 2,
+  "vacancyId": 2,
+  "employeeId": 2
+}
+
+
+
+###
+PUT http://localhost:8080/api/communications/2
+Content-Type:application/json
+
+{
+  "clientId": 3
+}
+
+
+###
+DELETE http://localhost:8080/api/communications/2
+
+### findAllByCommunicationTypeId
+GET http://localhost:8080/api/communications/findAllByCommunicationTypeId/1
+
+### findAllByEmployee/
+GET http://localhost:8080/api/communications/findAllByEmployee/1
+
+
+### findAllByClient/
+GET http://localhost:8080/api/communications/findAllByClient/1
+
+
+### findAllByCandidate/
+GET http://localhost:8080/api/communications/findAllByCandidate/1
+
+### findAllByVacancy/
+GET http://localhost:8080/api/communications/findAllByVacancy/1
+
