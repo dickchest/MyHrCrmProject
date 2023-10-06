@@ -56,8 +56,8 @@ public class Helper {
             Integer id,
             Class<T> enumType,
             Function<T, List<E>> taskMappingFunction,
-            Function<E, R> dtoMappingFunction
-    ) {
+            Function<E, R> dtoMappingFunction) {
+
         T enumValue;
         T[] enumConstants = enumType.getEnumConstants();
         if (enumConstants != null && id >= 0 && id < enumConstants.length) {

@@ -2,7 +2,6 @@ package crm.myhrcrmproject.controller;
 
 import crm.myhrcrmproject.dto.communicationDTO.CommunicationRequestDTO;
 import crm.myhrcrmproject.dto.communicationDTO.CommunicationResponseDTO;
-import crm.myhrcrmproject.dto.contractDTO.ContractResponseDTO;
 import crm.myhrcrmproject.service.CommunicationService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

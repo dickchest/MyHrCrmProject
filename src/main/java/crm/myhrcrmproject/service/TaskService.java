@@ -1,9 +1,12 @@
 package crm.myhrcrmproject.service;
 
 import crm.myhrcrmproject.domain.*;
+import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import crm.myhrcrmproject.domain.enums.TaskStatus;
+import crm.myhrcrmproject.dto.taskDTO.TaskDateRequestDTO;
 import crm.myhrcrmproject.dto.taskDTO.TaskRequestDTO;
 import crm.myhrcrmproject.dto.taskDTO.TaskResponseDTO;
+import crm.myhrcrmproject.dto.taskDTO.TaskShortResponseDTO;
 import crm.myhrcrmproject.repository.*;
 import crm.myhrcrmproject.service.utills.Helper;
 import crm.myhrcrmproject.service.utills.TaskConverter;
@@ -11,6 +14,7 @@ import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -73,12 +77,12 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
 
     // find All by TaskStatusId
     public List<TaskResponseDTO> findAllByTaskStatusId(Integer id) {
-        TaskStatus status = Optional.of(TaskStatus.values()[id])
-                .orElseThrow(() -> new NotFoundException("No task status found with id: " + id));
-        List<Task> list = repository.findAllByStatus(status);
-        return list.stream()
-                .map(converter::toDTO)
-                .toList();
+        return Helper.findAllByEnumId(
+                id,
+                TaskStatus.class,
+                repository::findAllByStatus,
+                converter::toDTO
+        );
     }
 
     // find All by Employee id
@@ -86,7 +90,7 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
         return Helper.findAllByEntityId(
                 id,
                 employeeRepository,
-                repository::findByEmployee,
+                repository::findAllByEmployee,
                 converter::toDTO
         );
     }
@@ -95,18 +99,73 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
     public List<TaskResponseDTO> findAllByCandidateId(Integer id) {
         return Helper.findAllByEntityId(
                 id, candidateRepository,
-                repository::findByCandidate,
+                repository::findAllByCandidate,
                 converter::toDTO
         );
     }
 
+    // find All by Vacancy id
     public List<TaskResponseDTO> findAllByVacancyId(Integer id) {
         return Helper.findAllByEntityId(
                 id,
                 vacancyRepository,
-                repository::findByVacancy,
+                repository::findAllByVacancy,
                 converter::toDTO
         );
     }
 
+    // find All by Date
+    public List<TaskResponseDTO> findAllByStartDate(TaskDateRequestDTO requestDTO) {
+        LocalDate date = requestDTO.getDate();
+        List<Task> list = repository.findAllByStartDate(date);
+        return list.stream()
+                .map(converter::toDTO)
+                .toList();
+    }
+
+    // find All By Date And Employee Id
+    public List<TaskShortResponseDTO> findAllByDateAndEmployeeId(Integer id, TaskDateRequestDTO requestDTO) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Employee with id " + id + " not found!"));
+        LocalDate date = requestDTO.getDate();
+        List<Task> list = repository.findAllByStartDateAndEmployee(date, employee);
+        return list.stream()
+                .map(converter::toShortDTO)
+                .toList();
+    }
+    // find All By Candidate Id And Employee Id
+    public List<TaskShortResponseDTO> findAllByCandidateIdAndEmployeeId(Integer candidateId, Integer employeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new NotFoundException("Employee with id " + employeeId + " not found!"));
+        Candidate candidate = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> new NotFoundException("Candidate with id " + candidateId + " not found!"));
+        List<Task> list = repository.findAllByCandidateAndEmployee(candidate, employee);
+        return list.stream()
+                .map(converter::toShortDTO)
+                .toList();
+    }
+
+    // find All By Status Id and Employee Id
+    public List<TaskShortResponseDTO> findAllByStatusIdAndEmployeeId(Integer statusId, Integer employeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new NotFoundException("Employee with id " + employeeId + " not found!"));
+        CandidateStatus status = Optional.ofNullable(CandidateStatus.values()[statusId]).
+                orElseThrow(() -> new NotFoundException("No enum found with id: " + statusId));
+        List<Task> list = repository.findAllByStatusAndEmployee(status, employee);
+        return list.stream()
+                .map(converter::toShortDTO)
+                .toList();
+    }
+
+    // find All By Vacancy Id And Employee Id
+    public List<TaskShortResponseDTO> findAllByVacancyIdAndEmployeeId(Integer vacancyId, Integer employeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new NotFoundException("Employee with id " + employeeId + " not found!"));
+        Vacancy vacancy = vacancyRepository.findById(vacancyId)
+                .orElseThrow(() -> new NotFoundException("Vacancy with id " + vacancyId + " not found!"));
+        List<Task> list = repository.findAllByVacancyAndEmployee(vacancy, employee);
+        return list.stream()
+                .map(converter::toShortDTO)
+                .toList();
+    }
 }

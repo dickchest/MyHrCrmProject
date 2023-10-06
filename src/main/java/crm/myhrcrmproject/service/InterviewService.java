@@ -113,6 +113,5 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
         return list.stream()
                 .map(converter::toShortDTO)
                 .toList();
-
     }
 }
