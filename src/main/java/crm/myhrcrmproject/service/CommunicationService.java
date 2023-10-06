@@ -81,7 +81,7 @@ public class CommunicationService implements CommonService<CommunicationRequestD
 
     // find All by CommunicationTypeId
     public List<CommunicationResponseDTO> findAllByCommunicationTypeId(Integer id) {
-        CommunicationType type = Optional.of(CommunicationType.values()[id])
+        CommunicationType type = Optional.ofNullable(CommunicationType.values()[id])
                 .orElseThrow(() -> new NotFoundException("No communication type found with id: " + id));
         List<Communication> list = repository.findAllByCommunicationType(type);
         return list.stream()
@@ -120,9 +120,9 @@ public class CommunicationService implements CommonService<CommunicationRequestD
     }
 
     public List<CommunicationResponseDTO> findAllByVacancyId(Integer id) {
-        Vacancy candidate = vacancyRepository.findById(id)
+        Vacancy vacancy = vacancyRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-        List<Communication> list = repository.findByVacancy(candidate);
+        List<Communication> list = repository.findByVacancy(vacancy);
         return list.stream()
                 .map(converter::toDTO)
                 .toList();

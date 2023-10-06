@@ -69,7 +69,7 @@ public class CommunicationConverter {
         return CommunicationShortResponseDTO.builder()
                 .id(entity.getId())
                 .communicationDateTime(entity.getCommunicationDateTime())
-                .communicationType(entity.getCommunicationType().toString())
+                .communicationType(entity.getCommunicationType())
                 .candidate(entity.getCandidate() != null ?
                         candidateConverter.toShortDTO(entity.getCandidate()) : null)
                 .employee(entity.getEmployee() != null ?

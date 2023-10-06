@@ -15,14 +15,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TaskResponseDTO {
+public class TaskShortResponseDTO {
     private Integer id;
     private String title;
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
     private TaskStatus status;
-    private EmployeeShortResponseDTO employee;
-    private CandidateShortResponseDTO candidate;
-    private VacancyShortResponseDTO vacancy;
 }
