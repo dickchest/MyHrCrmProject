@@ -1,7 +1,5 @@
 package crm.myhrcrmproject.service;
 
-import crm.myhrcrmproject.domain.Candidate;
-import crm.myhrcrmproject.domain.Contract;
 import crm.myhrcrmproject.domain.Compensation;
 import crm.myhrcrmproject.dto.compensationDTO.CompensationRequestDTO;
 import crm.myhrcrmproject.dto.compensationDTO.CompensationResponseDTO;
@@ -10,6 +8,7 @@ import crm.myhrcrmproject.repository.CandidateRepository;
 import crm.myhrcrmproject.repository.ContractRepository;
 import crm.myhrcrmproject.repository.CompensationRepository;
 import crm.myhrcrmproject.service.utills.CompensationConverter;
+import crm.myhrcrmproject.service.utills.Helper;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -70,21 +69,21 @@ public class CompensationService implements CommonService<CompensationRequestDTO
 
     // find All by Candidate id
     public List<CompensationShortResponseDTO> findAllByCandidateId(Integer id) {
-        Candidate candidate = candidateRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Candidate with id " + id + " not found!"));
-        List<Compensation> list = repository.findByCandidate(candidate);
-        return list.stream()
-                .map(converter::toShortDTO)
-                .toList();
+        return Helper.findAllByEntityId(
+                id,
+                candidateRepository,
+                repository::findByCandidate,
+                converter::toShortDTO
+        );
     }
 
     // find All by Contract id
     public List<CompensationShortResponseDTO> findAllByContractId(Integer id) {
-        Contract contract = contractRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Contract with id " + id + " not found!"));
-        List<Compensation> list = repository.findByContract(contract);
-        return list.stream()
-                .map(converter::toShortDTO)
-                .toList();
+        return Helper.findAllByEntityId(
+                id,
+                contractRepository,
+                repository::findByContract,
+                converter::toShortDTO
+        );
     }
 }

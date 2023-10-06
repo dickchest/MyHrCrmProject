@@ -2,6 +2,8 @@ package crm.myhrcrmproject.service;
 
 import crm.myhrcrmproject.domain.Employee;
 import crm.myhrcrmproject.domain.Interview;
+import crm.myhrcrmproject.domain.enums.CandidateStatus;
+import crm.myhrcrmproject.domain.enums.ContractType;
 import crm.myhrcrmproject.domain.enums.InterviewStatus;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewDateRequestDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;
@@ -9,6 +11,7 @@ import crm.myhrcrmproject.dto.interviewDTO.InterviewResponseDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewShortResponseDTO;
 import crm.myhrcrmproject.repository.EmployeeRepository;
 import crm.myhrcrmproject.repository.InterviewRepository;
+import crm.myhrcrmproject.service.utills.Helper;
 import crm.myhrcrmproject.service.utills.InterviewConverter;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -75,22 +78,22 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
 
     // find All by Status(status)
     public List<InterviewShortResponseDTO> findAllByStatusId(Integer id) {
-        InterviewStatus status = Optional.of(InterviewStatus.values()[id])
-                .orElseThrow(() -> new NotFoundException("No status found with id: " + id));
-        List<Interview> list = repository.findByStatus(status);
-        return list.stream()
-                .map(converter::toShortDTO)
-                .toList();
+        return Helper.findAllByEnumId(
+                id,
+                InterviewStatus.class,
+                repository::findByStatus,
+                converter::toShortDTO
+        );
     }
 
     // find All by Employee id
     public List<InterviewShortResponseDTO> findAllByEmployeeId(Integer id) {
-        Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-        List<Interview> list = repository.findByEmployee(employee);
-        return list.stream()
-                .map(converter::toShortDTO)
-                .toList();
+        return Helper.findAllByEntityId(
+                id,
+                employeeRepository,
+                repository::findByEmployee,
+                converter::toShortDTO
+        );
     }
 
     // find All by Date and Employee id

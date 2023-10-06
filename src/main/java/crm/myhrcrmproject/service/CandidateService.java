@@ -76,15 +76,6 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
     }
 
     // find All by Status(status)
-//    public List<CandidateShortResponseDTO> findAllByStatusId(Integer id) {
-//        CandidateStatus status = Optional.of(CandidateStatus.values()[id])
-//                .orElseThrow(() -> new NotFoundException("No status found with id: " + id));
-//        List<Candidate> list = repository.findByStatus(status);
-//        return list.stream()
-//                .map(converter::toShortDTO)
-//                .toList();
-//    }
-
     public List<CandidateShortResponseDTO> findAllByStatusId(Integer id) {
         return Helper.findAllByEnumId(
                 id,
@@ -95,14 +86,6 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
     }
 
     // find All by Vacancy id
-//    public List<CandidateShortResponseDTO> findAllByVacancyId(Integer id) {
-//        Vacancy vacancy = vacancyRepository.findById(id)
-//                .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-//        List<Candidate> list = repository.findByVacancy(vacancy);
-//        return list.stream()
-//                .map(converter::toShortDTO)
-//                .toList();
-//    }
     public List<CandidateShortResponseDTO> findAllByVacancyId(Integer id) {
         return Helper.findAllByEntityId(
                 id,

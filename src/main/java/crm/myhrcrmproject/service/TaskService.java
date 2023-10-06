@@ -83,24 +83,15 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
 
     // find All by Employee id
     public List<TaskResponseDTO> findAllByEmployeeId(Integer id) {
-        Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-        List<Task> list = repository.findByEmployee(employee);
-        return list.stream()
-                .map(converter::toDTO)
-                .toList();
+        return Helper.findAllByEntityId(
+                id,
+                employeeRepository,
+                repository::findByEmployee,
+                converter::toDTO
+        );
     }
 
     // find All by Candidate id
-//    public List<TaskResponseDTO> findAllByCandidateId(Integer id) {
-//        Candidate candidate = candidateRepository.findById(id)
-//                .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-//        List<Task> list = repository.findByCandidate(candidate);
-//        return list.stream()
-//                .map(converter::toDTO)
-//                .toList();
-//    }
-
     public List<TaskResponseDTO> findAllByCandidateId(Integer id) {
         return Helper.findAllByEntityId(
                 id, candidateRepository,
@@ -110,12 +101,12 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
     }
 
     public List<TaskResponseDTO> findAllByVacancyId(Integer id) {
-        Vacancy vacancy = vacancyRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-        List<Task> list = repository.findByVacancy(vacancy);
-        return list.stream()
-                .map(converter::toDTO)
-                .toList();
+        return Helper.findAllByEntityId(
+                id,
+                vacancyRepository,
+                repository::findByVacancy,
+                converter::toDTO
+        );
     }
 
 }

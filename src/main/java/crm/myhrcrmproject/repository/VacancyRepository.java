@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface VacancyRepository extends JpaRepository<Vacancy, Integer> {
     List<Vacancy> findByStatus(VacancyStatus status);
-    List<Vacancy> findByEmployeeId(Integer id);
+    List<Vacancy> findByEmployee(Employee employee);
 }

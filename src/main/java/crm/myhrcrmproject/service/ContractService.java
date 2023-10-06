@@ -4,6 +4,7 @@ import crm.myhrcrmproject.domain.Candidate;
 import crm.myhrcrmproject.domain.Client;
 import crm.myhrcrmproject.domain.Employee;
 import crm.myhrcrmproject.domain.Contract;
+import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import crm.myhrcrmproject.domain.enums.ContractType;
 import crm.myhrcrmproject.dto.contractDTO.ContractRequestDTO;
 import crm.myhrcrmproject.dto.contractDTO.ContractResponseDTO;
@@ -12,6 +13,7 @@ import crm.myhrcrmproject.repository.ClientRepository;
 import crm.myhrcrmproject.repository.EmployeeRepository;
 import crm.myhrcrmproject.repository.ContractRepository;
 import crm.myhrcrmproject.service.utills.ContractConverter;
+import crm.myhrcrmproject.service.utills.Helper;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -81,42 +83,42 @@ public class ContractService implements CommonService<ContractRequestDTO, Contra
 
     // find All by Status(status)
     public List<ContractResponseDTO> findAllByContractTypeId(Integer id) {
-        ContractType type = Optional.of(ContractType.values()[id])
-                .orElseThrow(() -> new NotFoundException("No contact type found with id: " + id));
-        List<Contract> list = repository.findAllByContractType(type);
-        return list.stream()
-                .map(converter::toDTO)
-                .toList();
+        return Helper.findAllByEnumId(
+                id,
+                ContractType.class,
+                repository::findAllByContractType,
+                converter::toDTO
+        );
     }
 
     // find All by Employee id
     public List<ContractResponseDTO> findAllByEmployeeId(Integer id) {
-        Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-        List<Contract> list = repository.findByEmployee(employee);
-        return list.stream()
-                .map(converter::toDTO)
-                .toList();
+        return Helper.findAllByEntityId(
+                id,
+                employeeRepository,
+                repository::findByEmployee,
+                converter::toDTO
+        );
     }
 
     // find All by Client id
     public List<ContractResponseDTO> findAllByClientId(Integer id) {
-        Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-        List<Contract> list = repository.findByClient(client);
-        return list.stream()
-                .map(converter::toDTO)
-                .toList();
+        return Helper.findAllByEntityId(
+                id,
+                clientRepository,
+                repository::findByClient,
+                converter::toDTO
+        );
     }
 
     // find All by Candidate id
     public List<ContractResponseDTO> findAllByCandidateId(Integer id) {
-        Candidate candidate = candidateRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-        List<Contract> list = repository.findByCandidate(candidate);
-        return list.stream()
-                .map(converter::toDTO)
-                .toList();
+        return Helper.findAllByEntityId(
+                id,
+                candidateRepository,
+                repository::findByCandidate,
+                converter::toDTO
+        );
     }
     
     // find All active contracts

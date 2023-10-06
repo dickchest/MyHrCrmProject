@@ -2,12 +2,14 @@ package crm.myhrcrmproject.service;
 
 import crm.myhrcrmproject.domain.Employee;
 import crm.myhrcrmproject.domain.Vacancy;
+import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import crm.myhrcrmproject.domain.enums.VacancyStatus;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyRequestDTO;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyResponseDTO;
 import crm.myhrcrmproject.dto.vacancyDTO.VacancyShortResponseDTO;
 import crm.myhrcrmproject.repository.EmployeeRepository;
 import crm.myhrcrmproject.repository.VacancyRepository;
+import crm.myhrcrmproject.service.utills.Helper;
 import crm.myhrcrmproject.service.utills.VacancyConverter;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -76,20 +78,20 @@ public class VacancyService implements CommonService<VacancyRequestDTO, VacancyR
     }
 
     public List<VacancyResponseDTO> findAllByStatusId(Integer id) {
-        VacancyStatus status = Optional.of(VacancyStatus.values()[id])
-                .orElseThrow(() -> new NotFoundException("No status found with id: " + id));
-        List<Vacancy> list = repository.findByStatus(status);
-        return list.stream()
-                .map(converter::toDTO)
-                .toList();
+        return Helper.findAllByEnumId(
+                id,
+                VacancyStatus.class,
+                repository::findByStatus,
+                converter::toDTO
+        );
     }
 
     public List<VacancyShortResponseDTO> findAllByEmployeeId(Integer id) {
-        Employee entity = employeeRepository.findById(id).orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
-        List<Vacancy> list = repository.findByEmployeeId(id);
-        System.out.println(list);
-        return list.stream()
-                .map(converter::toShortDTO)
-                .toList();
+        return Helper.findAllByEntityId(
+                id,
+                employeeRepository,
+                repository::findByEmployee,
+                converter::toShortDTO
+        );
     }
 }
