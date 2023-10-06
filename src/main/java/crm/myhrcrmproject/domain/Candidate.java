@@ -1,6 +1,7 @@
 package crm.myhrcrmproject.domain;
 
 import crm.myhrcrmproject.domain.enums.CandidateStatus;
+import crm.myhrcrmproject.service.validation.NotFoundException;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.NotBlank;

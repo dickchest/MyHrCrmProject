@@ -28,7 +28,7 @@ public class ContractConverter {
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
                 .salary(entity.getSalary())
-                .contractType(entity.getContractType().toString())
+                .contractType(entity.getContractType())
                 .candidate(
                         entity.getCandidate() != null ?
                                 candidateConverter.toShortDTO(entity.getCandidate()) :

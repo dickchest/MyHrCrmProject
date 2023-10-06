@@ -52,12 +52,4 @@ public class Contract {
     private LocalDateTime createDate;
 
     private LocalDateTime updateDate;
-
-    public void setContractType(String s) {
-        try {
-            this.contractType = ContractType.valueOf(s);
-        } catch (IllegalArgumentException e) {
-            throw new NotFoundException("Invalid ContractType: " + s);
-        }
-    }
 }

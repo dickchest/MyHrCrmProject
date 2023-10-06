@@ -1,5 +1,6 @@
 package crm.myhrcrmproject.dto.contractDTO;
 
+import crm.myhrcrmproject.domain.enums.ContractType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ public class ContractRequestDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private Double salary;
-    private String contractType;
+    private ContractType contractType;
     private Integer candidateId;
     private Integer clientId;
 }

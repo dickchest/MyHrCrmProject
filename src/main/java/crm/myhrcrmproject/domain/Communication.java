@@ -47,12 +47,4 @@ public class Communication {
 
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
-
-    public void setCommunicationType(String s) {
-        try {
-            this.communicationType = CommunicationType.valueOf(s.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new NotFoundException("Invalid CommunicationType: " + s);
-        }
-    }
 }

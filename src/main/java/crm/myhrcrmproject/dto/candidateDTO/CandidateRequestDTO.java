@@ -1,7 +1,5 @@
 package crm.myhrcrmproject.dto.candidateDTO;
 
-import crm.myhrcrmproject.domain.AddressDetails;
-import crm.myhrcrmproject.domain.ContactDetails;
 import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import crm.myhrcrmproject.dto.addressDetailsDTO.AddressDetailsDTO;
 import crm.myhrcrmproject.dto.contactDetailsDTO.ContactDetailsDTO;

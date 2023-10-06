@@ -1,5 +1,6 @@
 package crm.myhrcrmproject.dto.contractDTO;
 
+import crm.myhrcrmproject.domain.enums.ContractType;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
 import crm.myhrcrmproject.dto.clientDTO.ClientShortResponseDTO;
 import crm.myhrcrmproject.dto.employeeDTO.EmployeeShortResponseDTO;
@@ -19,7 +20,7 @@ public class ContractResponseDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private Double salary;
-    private String contractType;
+    private ContractType contractType;
     private CandidateShortResponseDTO candidate;
     private EmployeeShortResponseDTO employee;
     private ClientShortResponseDTO client;

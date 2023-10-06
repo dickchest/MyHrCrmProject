@@ -29,29 +29,17 @@ public class CommunicationConverter {
         return CommunicationResponseDTO.builder()
                 .id(entity.getId())
                 .communicationDateTime(entity.getCommunicationDateTime())
-                .communicationType(entity.getCommunicationType().toString())
+                .communicationType(entity.getCommunicationType())
                 .createDate(entity.getCreateDate())
                 .updateDate(entity.getUpdateDate())
-                .candidate(
-                        entity.getCandidate() != null ?
-                                candidateConverter.toShortDTO(entity.getCandidate()) :
-                                null
-                )
-                .employee(
-                        entity.getEmployee() != null ?
-                                employeeConverter.toShortDTO(entity.getEmployee()) :
-                                null
-                )
-                .client(
-                        entity.getClient() != null ?
-                                clientConverter.toShortDTO(entity.getClient()) :
-                                null
-                )
-                .vacancy(
-                        entity.getVacancy() != null ?
-                                vacancyConverter.toShortDTO(entity.getVacancy()) :
-                                null
-                )
+                .candidate(entity.getCandidate() != null ?
+                        candidateConverter.toShortDTO(entity.getCandidate()) : null)
+                .employee(entity.getEmployee() != null ?
+                        employeeConverter.toShortDTO(entity.getEmployee()) : null)
+                .client(entity.getClient() != null ?
+                        clientConverter.toShortDTO(entity.getClient()) : null)
+                .vacancy(entity.getVacancy() != null ?
+                        vacancyConverter.toShortDTO(entity.getVacancy()) : null)
                 .build();
     }
 
@@ -59,16 +47,16 @@ public class CommunicationConverter {
         Optional.ofNullable(request.getCommunicationDateTime()).ifPresent(entity::setCommunicationDateTime);
         Optional.ofNullable(request.getCommunicationType()).ifPresent(entity::setCommunicationType);
         Optional.ofNullable(request.getClientId()).ifPresent(
-                id -> entity.setClient(EntityUtils.findByIdOrThrow(
+                id -> entity.setClient(Helper.findByIdOrThrow(
                         clientRepository, id, "Client")));
         Optional.ofNullable(request.getCandidateId()).ifPresent(
-                id -> entity.setCandidate(EntityUtils.findByIdOrThrow(
+                id -> entity.setCandidate(Helper.findByIdOrThrow(
                         candidateRepository, id, "Candidate")));
         Optional.ofNullable(request.getVacancyId()).ifPresent(
-                id -> entity.setVacancy(EntityUtils.findByIdOrThrow(
+                id -> entity.setVacancy(Helper.findByIdOrThrow(
                         vacancyRepository, id, "Vacancy")));
         Optional.ofNullable(request.getEmployeeId()).ifPresent(
-                id -> entity.setEmployee(EntityUtils.findByIdOrThrow(
+                id -> entity.setEmployee(Helper.findByIdOrThrow(
                         employeeRepository, id, "Employee")));
         return entity;
     }
@@ -82,21 +70,12 @@ public class CommunicationConverter {
                 .id(entity.getId())
                 .communicationDateTime(entity.getCommunicationDateTime())
                 .communicationType(entity.getCommunicationType().toString())
-                .candidate(
-                        entity.getCandidate() != null ?
-                                candidateConverter.toShortDTO(entity.getCandidate()) :
-                                null
-                )
-                .employee(
-                        entity.getEmployee() != null ?
-                                employeeConverter.toShortDTO(entity.getEmployee()) :
-                                null
-                )
-                .client(
-                        entity.getClient() != null ?
-                                clientConverter.toShortDTO(entity.getClient()) :
-                                null
-                )
+                .candidate(entity.getCandidate() != null ?
+                        candidateConverter.toShortDTO(entity.getCandidate()) : null)
+                .employee(entity.getEmployee() != null ?
+                        employeeConverter.toShortDTO(entity.getEmployee()) : null)
+                .client(entity.getClient() != null ?
+                        clientConverter.toShortDTO(entity.getClient()) : null)
                 .build();
     }
 }

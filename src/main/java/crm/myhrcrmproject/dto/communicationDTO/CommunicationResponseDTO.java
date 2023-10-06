@@ -1,5 +1,6 @@
 package crm.myhrcrmproject.dto.communicationDTO;
 
+import crm.myhrcrmproject.domain.enums.CommunicationType;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
 import crm.myhrcrmproject.dto.clientDTO.ClientShortResponseDTO;
 import crm.myhrcrmproject.dto.employeeDTO.EmployeeShortResponseDTO;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 public class CommunicationResponseDTO {
     private Integer id;
     private LocalDateTime communicationDateTime;
-    private String communicationType;
+    private CommunicationType communicationType;
     private ClientShortResponseDTO client;
     private CandidateShortResponseDTO candidate;
     private VacancyShortResponseDTO vacancy;

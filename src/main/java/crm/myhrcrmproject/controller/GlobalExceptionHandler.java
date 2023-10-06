@@ -1,5 +1,6 @@
 package crm.myhrcrmproject.controller;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import crm.myhrcrmproject.service.validation.AlreadyExistsException;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -43,5 +44,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handlerNotFoundException(NotFoundException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+//    @ExceptionHandler(JsonParseException.class)
+//    public ResponseEntity<String> handlerJsonParseException(JsonParseException e) {
+//        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//    }
 
 }
