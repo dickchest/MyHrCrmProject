@@ -3,15 +3,40 @@ package crm.myhrcrmproject.service.utills;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Helper {
-    public static <T> T findByIdOrThrow(JpaRepository<T, Integer> repository, Integer id, String entityName) {
-        return repository.findById(id)
-                .orElseThrow((() -> new NotFoundException(entityName + " with id " + id + " not found")));
+
+    public static <T> void setEntityById(
+            Supplier<Integer> getFromRequestFunction,
+            Consumer<T> setToEntityFunction,
+            JpaRepository<T, Integer> repository,
+            String entityName
+    ) {
+
+        Integer id = getFromRequestFunction.get();
+        if (id != null) {
+            setToEntityFunction.accept(
+                    repository.findById(id)
+                            .orElseThrow(
+                                    () -> new NotFoundException(entityName + " with id " + id + " not found")
+                            )
+            );
+        }
     }
+
+//    public static <T> T findByIdOrThrow(
+//            JpaRepository<T, Integer> repository,
+//            Integer id,
+//            String entityName) {
+//        return repository.findById(id)
+//                .orElseThrow(() -> new NotFoundException(entityName + " with id " + id + " not found"));
+//    }
 
     public static <E, T, R> List<R> findAllByEntityId(
             Integer id,
@@ -28,14 +53,14 @@ public class Helper {
     }
 
     public static <T extends Enum<T>, E, R> List<R> findAllByEnumId(
-        Integer id,
-        Class<T> enumType,
-        Function<T, List<E>> taskMappingFunction,
-        Function<E, R> dtoMappingFunction
+            Integer id,
+            Class<T> enumType,
+            Function<T, List<E>> taskMappingFunction,
+            Function<E, R> dtoMappingFunction
     ) {
         T enumValue;
         T[] enumConstants = enumType.getEnumConstants();
-        if (enumConstants != null && id >= 0 && id< enumConstants.length) {
+        if (enumConstants != null && id >= 0 && id < enumConstants.length) {
             enumValue = enumConstants[id];
         } else {
             throw new NotFoundException("No enum found with id: " + id);
@@ -46,6 +71,7 @@ public class Helper {
                 .map(dtoMappingFunction)
                 .toList();
     }
+
 //    public static <T extends Enum<T>> T getEnumFromString(Class<T> enumType, String value) {
 //        try {
 //            return Enum.valueOf(enumType, value.toUpperCase());

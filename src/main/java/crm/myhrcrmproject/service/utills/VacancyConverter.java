@@ -52,10 +52,8 @@ public class VacancyConverter {
         Optional.ofNullable(request.getStartDate()).ifPresent(entity::setStartDate);
         Optional.ofNullable(request.getEndDate()).ifPresent(entity::setEndDate);
         Optional.ofNullable(request.getStatus()).ifPresent(entity::setStatus);
-        Optional.ofNullable(request.getResponsibleEmployeeId()).ifPresent(
-                id -> entity.setEmployee(employeeRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException
-                                ("Employee with id " + request.getResponsibleEmployeeId() + " not found"))));
+        Helper.setEntityById(
+                request::getResponsibleEmployeeId, entity::setEmployee, employeeRepository, "Employee");
         return entity;
     }
 

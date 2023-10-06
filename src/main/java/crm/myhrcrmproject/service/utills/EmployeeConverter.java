@@ -21,11 +21,8 @@ public class EmployeeConverter {
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
                 .position(entity.getPosition())
-                .contactDetails(
-                        entity.getContactDetails() != null ?
-                                contactDetailsConverter.toDTO(entity.getContactDetails()) :
-                                null
-                )
+                .contactDetails(entity.getContactDetails() != null ?
+                        contactDetailsConverter.toDTO(entity.getContactDetails()) : null)
                 .build();
     }
 

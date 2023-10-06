@@ -47,14 +47,10 @@ public class InterviewConverter {
         Optional.ofNullable(request.getTime()).ifPresent(entity::setTime);
         Optional.ofNullable(request.getLocation()).ifPresent(entity::setLocation);
         Optional.ofNullable(request.getComments()).ifPresent(entity::setComments);
-        Optional.ofNullable(request.getCandidateId()).ifPresent(
-                id -> entity.setCandidate(candidateRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException
-                                ("Candidate with id " + request.getCandidateId() + " not found"))));
-        Optional.ofNullable(request.getEmployeeId()).ifPresent(
-                id -> entity.setEmployee(employeeRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException
-                                ("Employee with id " + request.getCandidateId() + " not found"))));
+        Helper.setEntityById(
+                request::getCandidateId, entity::setCandidate, candidateRepository, "Candidate");
+        Helper.setEntityById(
+                request::getEmployeeId, entity::setEmployee, employeeRepository, "Employee");
         Optional.ofNullable(request.getStatus()).ifPresent(entity::setStatus);
         return entity;
     }

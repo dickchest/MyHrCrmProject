@@ -46,18 +46,14 @@ public class CommunicationConverter {
     public Communication fromDTO(Communication entity, CommunicationRequestDTO request) {
         Optional.ofNullable(request.getCommunicationDateTime()).ifPresent(entity::setCommunicationDateTime);
         Optional.ofNullable(request.getCommunicationType()).ifPresent(entity::setCommunicationType);
-        Optional.ofNullable(request.getClientId()).ifPresent(
-                id -> entity.setClient(Helper.findByIdOrThrow(
-                        clientRepository, id, "Client")));
-        Optional.ofNullable(request.getCandidateId()).ifPresent(
-                id -> entity.setCandidate(Helper.findByIdOrThrow(
-                        candidateRepository, id, "Candidate")));
-        Optional.ofNullable(request.getVacancyId()).ifPresent(
-                id -> entity.setVacancy(Helper.findByIdOrThrow(
-                        vacancyRepository, id, "Vacancy")));
-        Optional.ofNullable(request.getEmployeeId()).ifPresent(
-                id -> entity.setEmployee(Helper.findByIdOrThrow(
-                        employeeRepository, id, "Employee")));
+        Helper.setEntityById(
+                request::getClientId, entity::setClient, clientRepository, "Client");
+        Helper.setEntityById(
+                request::getCandidateId, entity::setCandidate, candidateRepository, "Candidate");
+        Helper.setEntityById(
+                request::getVacancyId, entity::setVacancy, vacancyRepository, "Vacancy");
+        Helper.setEntityById(
+                request::getEmployeeId, entity::setEmployee, employeeRepository, "Employee");
         return entity;
     }
 

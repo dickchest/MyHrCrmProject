@@ -29,21 +29,12 @@ public class ContractConverter {
                 .endDate(entity.getEndDate())
                 .salary(entity.getSalary())
                 .contractType(entity.getContractType())
-                .candidate(
-                        entity.getCandidate() != null ?
-                                candidateConverter.toShortDTO(entity.getCandidate()) :
-                                null
-                )
-                .employee(
-                        entity.getEmployee() != null ?
-                                employeeConverter.toShortDTO(entity.getEmployee()) :
-                                null
-                )
-                .client(
-                        entity.getClient() != null ?
-                                clientConverter.toShortDTO(entity.getClient()) :
-                                null
-                )
+                .candidate(entity.getCandidate() != null ?
+                        candidateConverter.toShortDTO(entity.getCandidate()) : null)
+                .employee(entity.getEmployee() != null ?
+                        employeeConverter.toShortDTO(entity.getEmployee()) : null)
+                .client(entity.getClient() != null ?
+                        clientConverter.toShortDTO(entity.getClient()) : null)
                 .build();
     }
 
@@ -52,14 +43,10 @@ public class ContractConverter {
         Optional.ofNullable(request.getEndDate()).ifPresent(entity::setEndDate);
         Optional.ofNullable(request.getSalary()).ifPresent(entity::setSalary);
         Optional.ofNullable(request.getContractType()).ifPresent(entity::setContractType);
-        Optional.ofNullable(request.getCandidateId()).ifPresent(
-                id -> entity.setCandidate(candidateRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException
-                                ("Candidate with id " + request.getCandidateId() + " not found"))));
-        Optional.ofNullable(request.getClientId()).ifPresent(
-                id -> entity.setClient(clientRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException
-                                ("Client with id " + request.getCandidateId() + " not found"))));
+        Helper.setEntityById(
+                request::getClientId, entity::setClient, clientRepository, "Client");
+        Helper.setEntityById(
+                request::getCandidateId, entity::setCandidate, candidateRepository, "Candidate");
         return entity;
     }
 

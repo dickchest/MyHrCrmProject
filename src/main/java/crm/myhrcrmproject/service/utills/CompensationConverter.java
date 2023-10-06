@@ -35,14 +35,11 @@ public class CompensationConverter {
         Optional.ofNullable(request.getSalary()).ifPresent(entity::setSalary);
         Optional.ofNullable(request.getPaymentDate()).ifPresent(entity::setPaymentDate);
         Optional.ofNullable(request.getComments()).ifPresent(entity::setComments);
-        Optional.ofNullable(request.getCandidateId()).ifPresent(
-                id -> entity.setCandidate(candidateRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException
-                                ("Candidate with id " + request.getCandidateId() + " not found"))));
-        Optional.ofNullable(request.getContractId()).ifPresent(
-                id -> entity.setContract(contractRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException
-                                ("Contract with id " + request.getCandidateId() + " not found"))));
+        Helper.setEntityById(
+                request::getCandidateId, entity::setCandidate, candidateRepository, "Candidate");
+        Helper.setEntityById(
+                request::getContractId, entity::setContract, contractRepository, "Contract");
+
         return entity;
     }
 

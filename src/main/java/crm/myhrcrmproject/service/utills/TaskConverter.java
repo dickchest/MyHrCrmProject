@@ -46,16 +46,12 @@ public class TaskConverter {
         Optional.ofNullable(request.getStartDate()).ifPresent(entity::setStartDate);
         Optional.ofNullable(request.getEndDate()).ifPresent(entity::setEndDate);
         Optional.ofNullable(request.getStatus()).ifPresent(entity::setStatus);
-
-        Optional.ofNullable(request.getCandidateId()).ifPresent(
-                id -> entity.setCandidate(Helper.findByIdOrThrow(
-                        candidateRepository, id, "Candidate")));
-        Optional.ofNullable(request.getVacancyId()).ifPresent(
-                id -> entity.setVacancy(Helper.findByIdOrThrow(
-                        vacancyRepository, id, "Vacancy")));
-        Optional.ofNullable(request.getEmployeeId()).ifPresent(
-                id -> entity.setEmployee(Helper.findByIdOrThrow(
-                        employeeRepository, id, "Employee")));
+        Helper.setEntityById(
+                request::getCandidateId, entity::setCandidate, candidateRepository, "Candidate");
+        Helper.setEntityById(
+                request::getVacancyId, entity::setVacancy, vacancyRepository, "Vacancy");
+        Helper.setEntityById(
+                request::getEmployeeId, entity::setEmployee, employeeRepository, "Employee");
         return entity;
     }
 
