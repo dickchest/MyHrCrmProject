@@ -1,3 +1,12 @@
+GET http://localhost:8080/api/candidates
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-10-07T141857.200.json
+
+###
+
 POST http://localhost:8080/api/communications
 Content-Type: application/json
 Content-Length: 156
@@ -625,15 +634,6 @@ User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 <> 2023-10-06T154328.200.json
-
-###
-
-GET http://localhost:8080/api/contracts/findAllActiveContracts
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-06T005928.200.json
 
 ###
 
