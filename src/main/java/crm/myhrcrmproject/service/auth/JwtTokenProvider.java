@@ -1,18 +1,10 @@
 package crm.myhrcrmproject.service.auth;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import crm.myhrcrmproject.dto.auth.AuthRequest;
-import crm.myhrcrmproject.dto.auth.AuthResponse;
 import crm.myhrcrmproject.service.validation.InvalidJwtException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /*
@@ -70,8 +62,7 @@ public class JwtTokenProvider {
             throw new InvalidJwtException("Unsupported JWT token");
         } catch (IllegalArgumentException e) {
             // JWT claims string is empty
-            throw new InvalidJwtException("JWT claims string is empty")
+            throw new InvalidJwtException("JWT claims string is empty");
         }
-
     }
 }
