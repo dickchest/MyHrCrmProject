@@ -1,6 +1,22 @@
 GET http://localhost:8080/api/candidates
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=FE53B7DECEDBA628FA337251724D6191
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+GET http://localhost:8080/api/candidates
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=B103B84A1C8180E03D1B74EC6E0C658E
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+GET http://localhost:8080/api/candidates
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Cookie: JSESSIONID=B103B84A1C8180E03D1B74EC6E0C658E
 Accept-Encoding: br,deflate,gzip,x-gzip
 
@@ -570,46 +586,6 @@ User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 <> 2023-10-06T155903.200.json
-
-###
-
-POST http://localhost:8080/api/communications
-Content-Type: application/json
-Content-Length: 158
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "communicationDateTime": "2023-10-11T09:15:00",
-  "communicationType": "Email",
-  "clientId": 2,
-  "candidateId": 2,
-  "vacancyId": 2,
-  "employeeId": 2
-}
-
-<> 2023-10-06T155839.201.json
-
-###
-
-POST http://localhost:8080/api/communications
-Content-Type: application/json
-Content-Length: 158
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "communicationDateTime": "2023-10-11T09:15:00",
-  "communicationType": "Email",
-  "clientId": 2,
-  "candidateId": 2,
-  "vacancyId": 2,
-  "employeeId": 2
-}
-
-<> 2023-10-06T155800.404.txt
 
 ###
 

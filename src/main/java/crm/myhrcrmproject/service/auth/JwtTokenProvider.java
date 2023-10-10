@@ -4,6 +4,7 @@ import crm.myhrcrmproject.service.validation.InvalidJwtException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
@@ -14,6 +15,7 @@ import java.util.Date;
     и переменная, которая храниться о алгоритме шифрования
 
  */
+@Service
 public class JwtTokenProvider {
     @Value("${jwt.lifetime}")
     private long jwtLifeTime;
@@ -46,7 +48,8 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJwt(authToken);
+            System.out.println(authToken);
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
             // Invalid JWT signature

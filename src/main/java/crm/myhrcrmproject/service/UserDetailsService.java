@@ -13,6 +13,7 @@ import crm.myhrcrmproject.repository.UserDetailsRepository;
 import crm.myhrcrmproject.service.utills.UserDetailsConverter;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class UserDetailsService implements CommonService<UserDetailsRequestDTO, UserDetailsResponseDTO> {
+public class UserDetailsService implements CommonService<UserDetailsRequestDTO, UserDetailsResponseDTO>, org.springframework.security.core.userdetails.UserDetailsService {
     private final UserDetailsRepository repository;
     private final UserDetailsConverter converter;
     private final EmployeeService employeeService;
@@ -100,5 +101,12 @@ public class UserDetailsService implements CommonService<UserDetailsRequestDTO, 
         entity.setUpdatedDate(LocalDateTime.now());
         repository.save(entity);
         return converter.toShortDTO(entity);
+    }
+
+    @Override
+    public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        UserDetails entity = repository.findByUserName(userName)
+                .orElseThrow(()-> new NotFoundException("User with name: " + userName + " not found!"));
+        return entity;
     }
 }

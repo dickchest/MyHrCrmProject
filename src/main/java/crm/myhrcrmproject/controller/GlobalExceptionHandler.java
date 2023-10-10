@@ -2,6 +2,7 @@ package crm.myhrcrmproject.controller;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import crm.myhrcrmproject.service.validation.AlreadyExistsException;
+import crm.myhrcrmproject.service.validation.InvalidJwtException;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -49,5 +50,10 @@ public class GlobalExceptionHandler {
 //    public ResponseEntity<String> handlerJsonParseException(JsonParseException e) {
 //        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 //    }
+
+    @ExceptionHandler(InvalidJwtException.class)
+    public ResponseEntity<String> handlerInvalidJwtException(InvalidJwtException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+    }
 
 }
