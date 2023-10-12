@@ -17,8 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class LogConfiguration {
 
     @Pointcut("execution (public * crm.myhrcrmproject.controller.*.*(..))")
-    public void controllerLog() {
-    }
+    public void controllerLog() {}
 
     @Before("controllerLog()")
     public void beforeUsingAnyController(JoinPoint point) {
@@ -42,7 +41,10 @@ public class LogConfiguration {
     @AfterThrowing(throwing = "e", pointcut = "controllerLog()")
     public void exceptionHandler(JoinPoint point, Exception e) {
         log.error("Exception situation by the reason: {}.{}",
-                point.getArgs(),
+//                point.getArgs(),
+                point.getSignature().getName(),
                 e.getMessage());
     }
+
+
 }

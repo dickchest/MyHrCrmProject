@@ -2,6 +2,7 @@ package crm.myhrcrmproject.configuration.security;
 
 import crm.myhrcrmproject.service.UserDetailsServiceImpl;
 import crm.myhrcrmproject.service.auth.JwtTokenProvider;
+import crm.myhrcrmproject.service.validation.InvalidJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +37,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error("Could not set user authentication in security context", e);
+            logger.error("Could not set user authentication in security context: " + e.getMessage(), e);
+//            throw new InvalidJwtException(e.getMessage());
         }
 
         filterChain.doFilter(request, response);
