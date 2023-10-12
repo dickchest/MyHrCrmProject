@@ -1,4 +1,4 @@
-package crm.myhrcrmproject.configuration;
+package crm.myhrcrmproject.configuration.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

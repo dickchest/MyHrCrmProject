@@ -1,4 +1,4 @@
-package crm.myhrcrmproject.configuration;
+package crm.myhrcrmproject.configuration.security;
 
 import crm.myhrcrmproject.service.UserDetailsServiceImpl;
 import crm.myhrcrmproject.service.auth.JwtTokenProvider;
