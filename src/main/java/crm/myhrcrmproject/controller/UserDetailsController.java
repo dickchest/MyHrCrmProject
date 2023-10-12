@@ -3,7 +3,7 @@ package crm.myhrcrmproject.controller;
 import crm.myhrcrmproject.dto.userDetailsDTO.UserDetailsRequestDTO;
 import crm.myhrcrmproject.dto.userDetailsDTO.UserDetailsResponseDTO;
 import crm.myhrcrmproject.dto.userDetailsDTO.UserDetailsShortResponseDTO;
-import crm.myhrcrmproject.service.UserDetailsService;
+import crm.myhrcrmproject.service.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @Getter
 public class UserDetailsController extends GenericController<UserDetailsRequestDTO, UserDetailsResponseDTO>{
-    private final UserDetailsService service;
+    private final UserDetailsServiceImpl service;
 
     @PutMapping("/setRole") // запрос: api/users/setRole?id=2&role=manager
     public ResponseEntity<UserDetailsShortResponseDTO> setRole(@RequestParam("id") Integer id, @RequestParam("role") String request) {

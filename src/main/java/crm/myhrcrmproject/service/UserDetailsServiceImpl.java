@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class UserDetailsService implements CommonService<UserDetailsRequestDTO, UserDetailsResponseDTO>, org.springframework.security.core.userdetails.UserDetailsService {
+public class UserDetailsServiceImpl implements CommonService<UserDetailsRequestDTO, UserDetailsResponseDTO>, org.springframework.security.core.userdetails.UserDetailsService {
     private final UserDetailsRepository repository;
     private final UserDetailsConverter converter;
     private final EmployeeService employeeService;
@@ -46,7 +46,9 @@ public class UserDetailsService implements CommonService<UserDetailsRequestDTO, 
 
     @Override
     public UserDetailsResponseDTO create(UserDetailsRequestDTO requestDTO) {
+
         UserDetails entity = converter.fromDTO(converter.newEntity(), requestDTO);
+
 
         // обновляем даты
         entity.setCreatedDate(LocalDateTime.now());

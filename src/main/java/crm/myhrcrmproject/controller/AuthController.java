@@ -25,7 +25,6 @@ public class AuthController {
 
     @PostMapping
     public ResponseEntity<AuthResponse> authenticate(@Valid @RequestBody AuthRequest authRequest) {
-        System.out.println("зашли в контроллер");
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authRequest.getUserName(),
@@ -34,11 +33,8 @@ public class AuthController {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println("получили контекст и установили");
-        System.out.println(authRequest.getUserName());
 
         String jwt = tokenProvider.createToken(authRequest.getUserName());
-        System.out.println(jwt);
         return ResponseEntity.ok(new AuthResponse(jwt));
     }
 }

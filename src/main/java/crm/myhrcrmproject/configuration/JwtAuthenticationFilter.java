@@ -1,6 +1,6 @@
 package crm.myhrcrmproject.configuration;
 
-import crm.myhrcrmproject.service.UserDetailsService;
+import crm.myhrcrmproject.service.UserDetailsServiceImpl;
 import crm.myhrcrmproject.service.auth.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,7 +21,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
-    private final UserDetailsService userService;
+    private final UserDetailsServiceImpl userService;
 
 
     @Override
