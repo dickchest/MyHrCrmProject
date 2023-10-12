@@ -1,5 +1,6 @@
 package crm.myhrcrmproject.controller;
 
+import crm.myhrcrmproject.domain.annotations.IsAdministrator;
 import crm.myhrcrmproject.service.CommonService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,6 @@ import java.util.List;
 public abstract class GenericController<RequestDTO, ResponseDTO> {
 
     protected abstract CommonService<RequestDTO, ResponseDTO> getService();
-
 
     @GetMapping
     public ResponseEntity<List<ResponseDTO>> findAll() {
