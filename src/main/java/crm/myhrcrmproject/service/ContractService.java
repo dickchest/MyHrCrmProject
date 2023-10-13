@@ -12,6 +12,7 @@ import crm.myhrcrmproject.repository.CandidateRepository;
 import crm.myhrcrmproject.repository.ClientRepository;
 import crm.myhrcrmproject.repository.EmployeeRepository;
 import crm.myhrcrmproject.repository.ContractRepository;
+import crm.myhrcrmproject.service.auth.SecurityHelper;
 import crm.myhrcrmproject.service.utills.ContractConverter;
 import crm.myhrcrmproject.service.utills.Helper;
 import crm.myhrcrmproject.service.validation.NotFoundException;
@@ -32,6 +33,7 @@ public class ContractService implements CommonService<ContractRequestDTO, Contra
     private final EmployeeRepository employeeRepository;
     private final ClientRepository clientRepository;
     private final CandidateRepository candidateRepository;
+    private final SecurityHelper securityHelper;
 
     public List<ContractResponseDTO> findAll() {
         return repository.findAll().stream()
@@ -49,11 +51,13 @@ public class ContractService implements CommonService<ContractRequestDTO, Contra
         Contract entity = converter.fromDTO(converter.newEntity(), requestDTO);
 
         // extra methods
-        // todo доделать, что б автоматически заносился employee кто меняет эту запись
-        entity.setEmployee(employeeRepository.findById(1)
-                .orElseThrow(
-                        () -> new NotFoundException("Employee with id: " + "1" + " not found!"))
-        );
+        // set current auth user as employee
+        if (entity.getEmployee() == null) {
+            Optional<Employee> employee = securityHelper.getCurrentAuthEmployeeId();
+            employee.ifPresent(entity::setEmployee);
+        }
+
+
         entity.setCreateDate(LocalDateTime.now());
         entity.setUpdateDate(LocalDateTime.now());
 
@@ -73,7 +77,11 @@ public class ContractService implements CommonService<ContractRequestDTO, Contra
         // filled in existing fields with new dates
         converter.fromDTO(existingEntity, requestDTO);
         // do extra procedures
-        // ....
+        // remember employee who updated the entry
+
+        Optional<Employee> employee = securityHelper.getCurrentAuthEmployeeId();
+        employee.ifPresent(existingEntity::setEmployee);
+
         existingEntity.setUpdateDate(LocalDateTime.now());
 
         repository.save(existingEntity);
@@ -120,12 +128,12 @@ public class ContractService implements CommonService<ContractRequestDTO, Contra
                 converter::toDTO
         );
     }
-    
+
     // find All active contracts
     public List<ContractResponseDTO> findAllActiveContracts() {
         LocalDate date = LocalDate.now();
         List<Contract> list = repository.findByStartDateBeforeAndEndDateAfter(
-                        date.plusDays(1), date.minusDays(1));
+                date.plusDays(1), date.minusDays(1));
         return list.stream()
                 .map(converter::toDTO)
                 .toList();

@@ -2,8 +2,6 @@ package crm.myhrcrmproject.service;
 
 import crm.myhrcrmproject.domain.Employee;
 import crm.myhrcrmproject.domain.Interview;
-import crm.myhrcrmproject.domain.enums.CandidateStatus;
-import crm.myhrcrmproject.domain.enums.ContractType;
 import crm.myhrcrmproject.domain.enums.InterviewStatus;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewDateRequestDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;

@@ -1,5 +1,6 @@
 package crm.myhrcrmproject.controller;
 
+import crm.myhrcrmproject.domain.annotations.IsManager;
 import crm.myhrcrmproject.dto.contractDTO.ContractRequestDTO;
 import crm.myhrcrmproject.dto.contractDTO.ContractResponseDTO;
 import crm.myhrcrmproject.service.ContractService;
@@ -15,8 +16,35 @@ import java.util.List;
 @RequestMapping("api/contracts")
 @AllArgsConstructor
 @Getter
-public class ContractController extends GenericController<ContractRequestDTO, ContractResponseDTO> {
+public class ContractController {
     private final ContractService service;
+
+    @GetMapping
+    public ResponseEntity<List<ContractResponseDTO>> findAll() {
+        return new ResponseEntity<>(getService().findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ContractResponseDTO> findById(@PathVariable("id") Integer id) {
+        return new ResponseEntity<>(getService().findById(id), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<ContractResponseDTO> createNew(@RequestBody ContractRequestDTO requestDTO) {
+        return new ResponseEntity<>(getService().create(requestDTO), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ContractResponseDTO> update(@PathVariable("id") Integer id, @RequestBody ContractRequestDTO requestDTO) {
+        return new ResponseEntity<>(getService().update(id, requestDTO), HttpStatus.ACCEPTED);
+    }
+
+    @IsManager
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCandidate(@PathVariable("id") Integer id) {
+        getService().delete(id);
+    }
 
     @GetMapping("/findAllByContractTypeId/{id}")
     public ResponseEntity<List<ContractResponseDTO>> findAllByContractTypeId(@PathVariable("id") Integer id) {

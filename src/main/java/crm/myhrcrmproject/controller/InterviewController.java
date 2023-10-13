@@ -1,7 +1,6 @@
 package crm.myhrcrmproject.controller;
 
 import crm.myhrcrmproject.domain.annotations.IsManager;
-import crm.myhrcrmproject.domain.annotations.IsUser;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewDateRequestDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewResponseDTO;

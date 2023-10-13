@@ -55,12 +55,10 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
         Task entity = converter.fromDTO(converter.newEntity(), requestDTO);
 
         // extra methods
-        // todo доделать, что б автоматически заносился employee кто меняет эту запись
+        // set current auth user as employee
         if (entity.getEmployee() == null) {
             Optional<Employee> employee = securityHelper.getCurrentAuthEmployeeId();
-            if (employee.isPresent()) {
-                entity.setEmployee(employee.get());
-            }
+            employee.ifPresent(entity::setEmployee);
         }
         entity.setCreateDate(LocalDateTime.now());
         entity.setUpdateDate(LocalDateTime.now());

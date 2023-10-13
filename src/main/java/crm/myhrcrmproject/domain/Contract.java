@@ -1,7 +1,6 @@
 package crm.myhrcrmproject.domain;
 
 import crm.myhrcrmproject.domain.enums.ContractType;
-import crm.myhrcrmproject.service.validation.NotFoundException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
