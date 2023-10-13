@@ -1,5 +1,7 @@
 package crm.myhrcrmproject.controller;
 
+import crm.myhrcrmproject.domain.annotations.IsManager;
+import crm.myhrcrmproject.domain.annotations.IsUser;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewDateRequestDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewResponseDTO;
@@ -17,8 +19,35 @@ import java.util.List;
 @RequestMapping("api/interviews")
 @AllArgsConstructor
 @Getter
-public class InterviewController extends GenericController<InterviewRequestDTO, InterviewResponseDTO> {
+public class InterviewController{
     private final InterviewService service;
+
+    @IsManager
+    @GetMapping
+    public ResponseEntity<List<InterviewResponseDTO>> findAll() {
+        return new ResponseEntity<>(getService().findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<InterviewResponseDTO> findById(@PathVariable("id") Integer id) {
+        return new ResponseEntity<>(getService().findById(id), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<InterviewResponseDTO> createNew(@RequestBody InterviewRequestDTO requestDTO) {
+        return new ResponseEntity<>(getService().create(requestDTO), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<InterviewResponseDTO> update(@PathVariable("id") Integer id, @RequestBody InterviewRequestDTO requestDTO) {
+        return new ResponseEntity<>(getService().update(id, requestDTO), HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCandidate(@PathVariable("id") Integer id) {
+        getService().delete(id);
+    }
 
     @GetMapping("/findAllByStatus/{id}")
     public ResponseEntity<List<InterviewShortResponseDTO>> findAllByStatusId(@PathVariable("id") Integer statusId) {

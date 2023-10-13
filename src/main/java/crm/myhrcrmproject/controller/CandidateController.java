@@ -1,5 +1,6 @@
 package crm.myhrcrmproject.controller;
 
+import crm.myhrcrmproject.domain.annotations.IsManager;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
 import crm.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
@@ -16,7 +17,7 @@ import java.util.List;
 @RequestMapping("api/candidates")
 @AllArgsConstructor
 @Getter
-public class CandidateController extends GenericController<CandidateRequestDTO, CandidateResponseDTO> {
+public class CandidateController{
     private final CandidateService service;
 
     @GetMapping
@@ -39,6 +40,7 @@ public class CandidateController extends GenericController<CandidateRequestDTO, 
         return new ResponseEntity<>(getService().update(id, requestDTO), HttpStatus.ACCEPTED);
     }
 
+    @IsManager
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCandidate(@PathVariable("id") Integer id) {

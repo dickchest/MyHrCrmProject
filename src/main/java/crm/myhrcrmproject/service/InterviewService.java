@@ -11,11 +11,13 @@ import crm.myhrcrmproject.dto.interviewDTO.InterviewResponseDTO;
 import crm.myhrcrmproject.dto.interviewDTO.InterviewShortResponseDTO;
 import crm.myhrcrmproject.repository.EmployeeRepository;
 import crm.myhrcrmproject.repository.InterviewRepository;
+import crm.myhrcrmproject.service.auth.SecurityHelper;
 import crm.myhrcrmproject.service.utills.Helper;
 import crm.myhrcrmproject.service.utills.InterviewConverter;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.NotAcceptableStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,6 +31,7 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
     private final InterviewRepository repository;
     private final InterviewConverter converter;
     private final EmployeeRepository employeeRepository;
+    private final SecurityHelper securityHelper;
 
     public List<InterviewResponseDTO> findAll() {
         return repository.findAll().stream()
@@ -39,6 +42,11 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
     public InterviewResponseDTO findById(Integer id) {
         Interview entity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Interview with id " + id + " not found!"));
+        // check if user has access to this entity
+        if (!securityHelper.isAuthUserEqualsEmployee(entity.getEmployee())) {
+            throw new NotAcceptableStatusException("You have not permission to access this entity");
+        }
+
         return converter.toDTO(entity);
     }
 
@@ -88,18 +96,29 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
 
     // find All by Employee id
     public List<InterviewShortResponseDTO> findAllByEmployeeId(Integer id) {
-        return Helper.findAllByEntityId(
-                id,
-                employeeRepository,
-                repository::findByEmployee,
-                converter::toShortDTO
-        );
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
+
+        // check if user has access to this entity
+        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {
+            throw new NotAcceptableStatusException("You have not permission to access this entity");
+        }
+
+        return repository.findByEmployee(employee).stream()
+                .map(converter::toShortDTO)
+                .toList();
     }
 
     // find All by Date and Employee id
     public List<InterviewShortResponseDTO> findAllByDateAndEmployeeId(InterviewDateRequestDTO requestDTO, Integer id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
+
+        // check if user has access to this entity
+        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {
+            throw new NotAcceptableStatusException("You have not permission to access this entity");
+        }
+
         LocalDate date = requestDTO.getDate();
         List<Interview> list = repository.findByDateAndEmployee(date, employee);
         return list.stream()
