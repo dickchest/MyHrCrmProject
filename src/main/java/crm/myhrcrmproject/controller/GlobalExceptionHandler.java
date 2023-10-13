@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.NotAcceptableStatusException;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
@@ -48,6 +49,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidJwtException.class)
     public ResponseEntity<String> handlerInvalidJwtException(InvalidJwtException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+    }
+
+    @ExceptionHandler(NotAcceptableStatusException.class)
+    public ResponseEntity<String> handlerNotAcceptableStatusException(NotAcceptableStatusException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
 }

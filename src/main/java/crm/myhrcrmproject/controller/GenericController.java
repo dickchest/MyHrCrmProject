@@ -1,6 +1,5 @@
 package crm.myhrcrmproject.controller;
 
-import crm.myhrcrmproject.domain.annotations.IsAdministrator;
 import crm.myhrcrmproject.service.CommonService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

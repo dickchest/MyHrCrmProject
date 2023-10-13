@@ -2,7 +2,6 @@ package crm.myhrcrmproject.configuration.security;
 
 import crm.myhrcrmproject.service.UserDetailsServiceImpl;
 import crm.myhrcrmproject.service.auth.JwtTokenProvider;
-import crm.myhrcrmproject.service.validation.InvalidJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
