@@ -35,15 +35,15 @@ public class Task {
     @Column(nullable = false)
     private TaskStatus status = TaskStatus.OPENED; // default open
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "responsible_Employee_ID")
     private Employee employee;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "candidate_id")
     private Candidate candidate;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "vacancy_id")
     private Vacancy vacancy;
 

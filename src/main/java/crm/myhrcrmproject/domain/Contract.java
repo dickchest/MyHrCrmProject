@@ -35,7 +35,7 @@ public class Contract {
     private ContractType contractType = ContractType.FULL_TIME;
 
     @NotNull(message = "Candidate should not be blank")
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "candidate_id")
     private Candidate candidate;
 

@@ -15,18 +15,6 @@ create table task (
 ;
 
 alter table task
-add constraint UK_nwt3e3et25nmn9n4i3ot135r4 unique (candidate_id)
-;
-
-alter table task
-add constraint UK_jil6p0gx77mcngplvkeaw2py5 unique (responsible_employee_id)
-;
-
-alter table task
-add constraint UK_21eo5bjuxoq965qdqgvpabvl1 unique (vacancy_id)
-;
-
-alter table task
 add constraint FKhq4cqvtiv1vxter4a6h66mnm7
 foreign key (candidate_id)
 references candidate (id)

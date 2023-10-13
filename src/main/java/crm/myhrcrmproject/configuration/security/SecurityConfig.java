@@ -33,8 +33,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // todo попробовать включить csrf защиту
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/clients/**").hasAnyAuthority("ROLE_USER", "ROLE_MANAGER", "ROLE_ADMIN")
-                        .requestMatchers("/api/communications/**").hasAnyAuthority("ROLE_USER", "ROLE_MANAGER", "ROLE_ADMIN")
                         .requestMatchers("/api/users/**").hasAnyAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

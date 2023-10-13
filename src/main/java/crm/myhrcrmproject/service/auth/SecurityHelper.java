@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class SecurityHelper {
@@ -28,6 +30,16 @@ public class SecurityHelper {
             return isAdmin || isManager || (userDetails.getEmployee() != null && userDetails.getEmployee().equals(employee));
         }
         return false;
+    }
+
+    public Optional<Employee> getCurrentAuthEmployeeId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = userDetailsRepository.findByUserName(authentication.getName()).orElse(null);
+
+        if (userDetails != null) {
+            return Optional.of(userDetails.getEmployee());
+        }
+        return Optional.empty();
     }
 
 }

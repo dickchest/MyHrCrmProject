@@ -14,10 +14,6 @@ create table contract (
 ;
 
 alter table contract
-add constraint UK_mrht5112houo8jqd5vdouw8b3 unique (candidate_id)
-;
-
-alter table contract
 add constraint FKcp9q63l07rrrrapl3mlj2sroy
 foreign key (candidate_id)
 references candidate (id)

@@ -8,11 +8,13 @@ import crm.myhrcrmproject.dto.taskDTO.TaskRequestDTO;
 import crm.myhrcrmproject.dto.taskDTO.TaskResponseDTO;
 import crm.myhrcrmproject.dto.taskDTO.TaskShortResponseDTO;
 import crm.myhrcrmproject.repository.*;
+import crm.myhrcrmproject.service.auth.SecurityHelper;
 import crm.myhrcrmproject.service.utills.Helper;
 import crm.myhrcrmproject.service.utills.TaskConverter;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.NotAcceptableStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,6 +30,7 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
     private final EmployeeRepository employeeRepository;
     private final CandidateRepository candidateRepository;
     private final VacancyRepository vacancyRepository;
+    private final SecurityHelper securityHelper;
 
     public List<TaskResponseDTO> findAll() {
         return repository.findAll().stream()
@@ -38,16 +41,27 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
     public TaskResponseDTO findById(Integer id) {
         Task entity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task with id " + id + " not found!"));
+
+        // check if user has access to this entity
+        if (!securityHelper.isAuthUserEqualsEmployee(entity.getEmployee())) {
+            throw new NotAcceptableStatusException("You have not permission to access this entity");
+        }
+
         return converter.toDTO(entity);
     }
 
     public TaskResponseDTO create(TaskRequestDTO requestDTO) {
-        Task newEntity = converter.newEntity();
 
         Task entity = converter.fromDTO(converter.newEntity(), requestDTO);
 
         // extra methods
         // todo доделать, что б автоматически заносился employee кто меняет эту запись
+        if (entity.getEmployee() == null) {
+            Optional<Employee> employee = securityHelper.getCurrentAuthEmployeeId();
+            if (employee.isPresent()) {
+                entity.setEmployee(employee.get());
+            }
+        }
         entity.setCreateDate(LocalDateTime.now());
         entity.setUpdateDate(LocalDateTime.now());
 
@@ -57,12 +71,22 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
     public void delete(Integer id) {
         Task entity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task with id: " + id + " not found!"));
+
+        // check if user has access to this entity
+        if (!securityHelper.isAuthUserEqualsEmployee(entity.getEmployee())) {
+            throw new NotAcceptableStatusException("You have not permission to access this entity");
+        }
         repository.delete(entity);
     }
 
     public TaskResponseDTO update(Integer id, TaskRequestDTO requestDTO) {
         Task existingEntity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task with id: " + id + " not found!"));
+
+        // check if user has access to this entity
+        if (!securityHelper.isAuthUserEqualsEmployee(existingEntity.getEmployee())) {
+            throw new NotAcceptableStatusException("You have not permission to access this entity");
+        }
 
         // filled in existing fields with new dates
         converter.fromDTO(existingEntity, requestDTO);
@@ -87,12 +111,17 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
 
     // find All by Employee id
     public List<TaskResponseDTO> findAllByEmployeeId(Integer id) {
-        return Helper.findAllByEntityId(
-                id,
-                employeeRepository,
-                repository::findAllByEmployee,
-                converter::toDTO
-        );
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Employee with id " + id + " not found!"));
+
+        // check if user has access to this entity
+        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {
+            throw new NotAcceptableStatusException("You have not permission to access this entity");
+        }
+
+        return repository.findAllByEmployee(employee).stream()
+                .map(converter::toDTO)
+                .toList();
     }
 
     // find All by Candidate id
@@ -127,16 +156,28 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
     public List<TaskShortResponseDTO> findAllByDateAndEmployeeId(Integer id, TaskDateRequestDTO requestDTO) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Employee with id " + id + " not found!"));
+
+        // check if user has access to this entity
+        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {
+            throw new NotAcceptableStatusException("You have not permission to access this entity");
+        }
         LocalDate date = requestDTO.getDate();
         List<Task> list = repository.findAllByStartDateAndEmployee(date, employee);
         return list.stream()
                 .map(converter::toShortDTO)
                 .toList();
     }
+
     // find All By Candidate Id And Employee Id
     public List<TaskShortResponseDTO> findAllByCandidateIdAndEmployeeId(Integer candidateId, Integer employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee with id " + employeeId + " not found!"));
+
+        // check if user has access to this entity
+        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {
+            throw new NotAcceptableStatusException("You have not permission to access this entity");
+        }
+
         Candidate candidate = candidateRepository.findById(candidateId)
                 .orElseThrow(() -> new NotFoundException("Candidate with id " + candidateId + " not found!"));
         List<Task> list = repository.findAllByCandidateAndEmployee(candidate, employee);
@@ -149,6 +190,12 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
     public List<TaskShortResponseDTO> findAllByStatusIdAndEmployeeId(Integer statusId, Integer employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee with id " + employeeId + " not found!"));
+
+        // check if user has access to this entity
+        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {
+            throw new NotAcceptableStatusException("You have not permission to access this entity");
+        }
+
         CandidateStatus status = Optional.ofNullable(CandidateStatus.values()[statusId]).
                 orElseThrow(() -> new NotFoundException("No enum found with id: " + statusId));
         List<Task> list = repository.findAllByStatusAndEmployee(status, employee);
@@ -161,6 +208,12 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
     public List<TaskShortResponseDTO> findAllByVacancyIdAndEmployeeId(Integer vacancyId, Integer employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee with id " + employeeId + " not found!"));
+
+        // check if user has access to this entity
+        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {
+            throw new NotAcceptableStatusException("You have not permission to access this entity");
+        }
+
         Vacancy vacancy = vacancyRepository.findById(vacancyId)
                 .orElseThrow(() -> new NotFoundException("Vacancy with id " + vacancyId + " not found!"));
         List<Task> list = repository.findAllByVacancyAndEmployee(vacancy, employee);
