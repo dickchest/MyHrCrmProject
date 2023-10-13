@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("api/tasks")
 @AllArgsConstructor
 @Getter
-public class TaskController{
+public class TaskController {
     private final TaskService service;
 
     @IsManager

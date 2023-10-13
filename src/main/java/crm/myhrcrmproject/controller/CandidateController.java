@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("api/candidates")
 @AllArgsConstructor
 @Getter
-public class CandidateController{
+public class CandidateController {
     private final CandidateService service;
 
     @GetMapping

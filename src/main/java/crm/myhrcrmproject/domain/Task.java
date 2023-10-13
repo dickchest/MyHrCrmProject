@@ -9,6 +9,8 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 @Entity
 @Getter
 @Setter
@@ -35,15 +37,15 @@ public class Task {
     @Column(nullable = false)
     private TaskStatus status = TaskStatus.OPENED; // default open
 
-    @ManyToOne
-    @JoinColumn(name = "responsible_Employee_ID")
+    @ManyToOne(cascade = ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "responsible_employee_id")
     private Employee employee;
 
-    @ManyToOne
+    @ManyToOne(cascade = ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
     private Candidate candidate;
 
-    @ManyToOne
+    @ManyToOne(cascade = ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "vacancy_id")
     private Vacancy vacancy;
 

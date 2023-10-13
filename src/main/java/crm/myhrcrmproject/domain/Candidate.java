@@ -1,7 +1,6 @@
 package crm.myhrcrmproject.domain;
 
 import crm.myhrcrmproject.domain.enums.CandidateStatus;
-import crm.myhrcrmproject.service.validation.NotFoundException;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.NotBlank;
@@ -35,7 +34,7 @@ public class Candidate {
 
     private LocalDate dateOfBirth;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
     private AddressDetails addressDetails;
 

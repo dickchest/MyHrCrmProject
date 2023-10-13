@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("api/interviews")
 @AllArgsConstructor
 @Getter
-public class InterviewController{
+public class InterviewController {
     private final InterviewService service;
 
     @IsManager

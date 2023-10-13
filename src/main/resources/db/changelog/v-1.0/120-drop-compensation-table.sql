@@ -1,1 +1,1 @@
-drop table compansation;
+drop table compensation;

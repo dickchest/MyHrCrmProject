@@ -1,7 +1,7 @@
 create table interview (
     id integer not null auto_increment,
     date date,
-    time time(6),
+    time time(6) not null,
     location varchar(255),
     comments varchar(255),
     candidate_id integer,

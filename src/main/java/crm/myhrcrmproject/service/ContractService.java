@@ -1,10 +1,7 @@
 package crm.myhrcrmproject.service;
 
-import crm.myhrcrmproject.domain.Candidate;
-import crm.myhrcrmproject.domain.Client;
 import crm.myhrcrmproject.domain.Employee;
 import crm.myhrcrmproject.domain.Contract;
-import crm.myhrcrmproject.domain.enums.CandidateStatus;
 import crm.myhrcrmproject.domain.enums.ContractType;
 import crm.myhrcrmproject.dto.contractDTO.ContractRequestDTO;
 import crm.myhrcrmproject.dto.contractDTO.ContractResponseDTO;
@@ -52,10 +49,8 @@ public class ContractService implements CommonService<ContractRequestDTO, Contra
 
         // extra methods
         // set current auth user as employee
-        if (entity.getEmployee() == null) {
-            Optional<Employee> employee = securityHelper.getCurrentAuthEmployeeId();
-            employee.ifPresent(entity::setEmployee);
-        }
+        Optional<Employee> employee = securityHelper.getCurrentAuthEmployeeId();
+        employee.ifPresent(entity::setEmployee);
 
 
         entity.setCreateDate(LocalDateTime.now());

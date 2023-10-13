@@ -34,7 +34,7 @@ public class Contract {
     private ContractType contractType = ContractType.FULL_TIME;
 
     @NotNull(message = "Candidate should not be blank")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "candidate_id")
     private Candidate candidate;
 
