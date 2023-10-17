@@ -11,6 +11,7 @@ import crm.myhrcrmproject.repository.EmployeeRepository;
 import crm.myhrcrmproject.repository.RoleRepository;
 import crm.myhrcrmproject.repository.UserDetailsRepository;
 import crm.myhrcrmproject.service.utills.UserDetailsConverter;
+import crm.myhrcrmproject.service.validation.AlreadyExistsException;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -47,30 +48,35 @@ public class UserDetailsServiceImpl implements CommonService<UserDetailsRequestD
     @Override
     public UserDetailsResponseDTO create(UserDetailsRequestDTO requestDTO) {
 
-        UserDetails entity = converter.fromDTO(converter.newEntity(), requestDTO);
+        if (repository.findByUserName(requestDTO.getUserName()).isEmpty()) {
+
+            UserDetails entity = converter.fromDTO(converter.newEntity(), requestDTO);
 
 
-        // обновляем даты
-        entity.setCreatedDate(LocalDateTime.now());
-        entity.setUpdatedDate(LocalDateTime.now());
+            // обновляем даты
+            entity.setCreatedDate(LocalDateTime.now());
+            entity.setUpdatedDate(LocalDateTime.now());
 
-        // устанавливаем роль по умолчанию
-        Role role = roleRepository.findByName("user").get();
-        entity.setRole(role);
+            // устанавливаем роль по умолчанию
+            Role role = roleRepository.findByName("user").get();
+            entity.setRole(role);
 
-        // создаем employee, который будет привязан к user
-        // и устанавливаем емейл
-        EmployeeRequestDTO employeeRequestDTO = new EmployeeRequestDTO();
-        ContactDetailsDTO contactDetailsDTO = new ContactDetailsDTO();
-        contactDetailsDTO.setEmail(requestDTO.getEmail());
-        employeeRequestDTO.setContactDetails(contactDetailsDTO);
+            // создаем employee, который будет привязан к user
+            // и устанавливаем mail
+            EmployeeRequestDTO employeeRequestDTO = new EmployeeRequestDTO();
+            ContactDetailsDTO contactDetailsDTO = new ContactDetailsDTO();
+            contactDetailsDTO.setEmail(requestDTO.getEmail());
+            employeeRequestDTO.setContactDetails(contactDetailsDTO);
 
-        EmployeeResponseDTO employeeResponseDTO = employeeService.create(employeeRequestDTO);
-        Employee employee = employeeRepository.findById(employeeResponseDTO.getId()).get();
+            EmployeeResponseDTO employeeResponseDTO = employeeService.create(employeeRequestDTO);
+            Employee employee = employeeRepository.findById(employeeResponseDTO.getId()).get();
 
-        // связываем их
-        entity.setEmployee(employee);
-        return converter.toDTO(repository.save(entity));
+            // связываем их
+            entity.setEmployee(employee);
+            return converter.toDTO(repository.save(entity));
+        } else {
+            throw new AlreadyExistsException("User with name " + requestDTO.getUserName() + " already exists");
+        }
     }
 
     @Override

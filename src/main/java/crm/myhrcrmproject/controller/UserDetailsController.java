@@ -44,7 +44,7 @@ public class UserDetailsController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCandidate(@PathVariable("id") Integer id) {
-        getService().delete(id);
+        service.delete(id);
     }
 
     @PutMapping("/setRole") // запрос: api/users/setRole?id=2&role=manager

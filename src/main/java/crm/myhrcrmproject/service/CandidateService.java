@@ -60,9 +60,7 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
         // filled in existing fields with new dates
         existingEntity.setUpdateDate(LocalDateTime.now());
 
-        repository.save(existingEntity);
-
-        return converter.toDTO(existingEntity);
+        return converter.toDTO(repository.save(existingEntity));
     }
 
     // Extra method for create and update
