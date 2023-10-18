@@ -1,0 +1,189 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > InterviewConverter</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">crm.myhrcrmproject.service.utills</a>
+</div>
+
+<h1>Coverage Summary for Class: InterviewConverter (crm.myhrcrmproject.service.utills)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">InterviewConverter</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (1/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    2,6%
+  </span>
+  <span class="absValue">
+    (1/39)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">InterviewConverter$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (1/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    2,6%
+  </span>
+  <span class="absValue">
+    (1/39)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package crm.myhrcrmproject.service.utills;
+&nbsp;
+&nbsp;import crm.myhrcrmproject.domain.Candidate;
+&nbsp;import crm.myhrcrmproject.domain.Interview;
+&nbsp;import crm.myhrcrmproject.dto.interviewDTO.InterviewResponseDTO;
+&nbsp;import crm.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;
+&nbsp;import crm.myhrcrmproject.dto.interviewDTO.InterviewShortResponseDTO;
+&nbsp;import crm.myhrcrmproject.repository.CandidateRepository;
+&nbsp;import crm.myhrcrmproject.repository.EmployeeRepository;
+&nbsp;import crm.myhrcrmproject.service.validation.NotFoundException;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;public class InterviewConverter {
+&nbsp;    private final CandidateConverter candidateConverter;
+&nbsp;    private final EmployeeConverter employeeConverter;
+&nbsp;    private final CandidateRepository candidateRepository;
+&nbsp;    private final EmployeeRepository employeeRepository;
+&nbsp;
+&nbsp;    public InterviewResponseDTO toDTO(Interview entity) {
+<b class="nc">&nbsp;        return InterviewResponseDTO.builder()</b>
+<b class="nc">&nbsp;                .id(entity.getId())</b>
+<b class="nc">&nbsp;                .date(entity.getDate())</b>
+<b class="nc">&nbsp;                .time(entity.getTime())</b>
+<b class="nc">&nbsp;                .location(entity.getLocation())</b>
+<b class="nc">&nbsp;                .comments(entity.getComments())</b>
+<b class="nc">&nbsp;                .status(entity.getStatus())</b>
+<b class="nc">&nbsp;                .candidate(</b>
+<b class="nc">&nbsp;                        entity.getCandidate() != null ?</b>
+<b class="nc">&nbsp;                                candidateConverter.toShortDTO(entity.getCandidate()) :</b>
+<b class="nc">&nbsp;                                null</b>
+&nbsp;                )
+<b class="nc">&nbsp;                .employee(</b>
+<b class="nc">&nbsp;                        entity.getEmployee() != null ?</b>
+<b class="nc">&nbsp;                                employeeConverter.toShortDTO(entity.getEmployee()) :</b>
+<b class="nc">&nbsp;                                null</b>
+&nbsp;                )
+<b class="nc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Interview fromDTO(Interview entity, InterviewRequestDTO request) {
+<b class="nc">&nbsp;        Optional.ofNullable(request.getDate()).ifPresent(entity::setDate);</b>
+<b class="nc">&nbsp;        Optional.ofNullable(request.getTime()).ifPresent(entity::setTime);</b>
+<b class="nc">&nbsp;        Optional.ofNullable(request.getLocation()).ifPresent(entity::setLocation);</b>
+<b class="nc">&nbsp;        Optional.ofNullable(request.getComments()).ifPresent(entity::setComments);</b>
+<b class="nc">&nbsp;        Helper.setEntityById(</b>
+<b class="nc">&nbsp;                request::getCandidateId, entity::setCandidate, candidateRepository, &quot;Candidate&quot;);</b>
+<b class="nc">&nbsp;        Helper.setEntityById(</b>
+<b class="nc">&nbsp;                request::getEmployeeId, entity::setEmployee, employeeRepository, &quot;Employee&quot;);</b>
+<b class="nc">&nbsp;        Optional.ofNullable(request.getStatus()).ifPresent(entity::setStatus);</b>
+<b class="nc">&nbsp;        return entity;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Interview newEntity() {
+<b class="nc">&nbsp;        return new Interview();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public InterviewShortResponseDTO toShortDTO(Interview entity) {
+<b class="nc">&nbsp;        return InterviewShortResponseDTO.builder()</b>
+<b class="nc">&nbsp;                .id(entity.getId())</b>
+<b class="nc">&nbsp;                .date(entity.getDate())</b>
+<b class="nc">&nbsp;                .time(entity.getTime())</b>
+<b class="nc">&nbsp;                .status(entity.getStatus())</b>
+<b class="nc">&nbsp;                .comments(entity.getComments())</b>
+<b class="nc">&nbsp;                .candidate(</b>
+<b class="nc">&nbsp;                        entity.getCandidate() != null ?</b>
+<b class="nc">&nbsp;                                candidateConverter.toShortDTO(entity.getCandidate()) :</b>
+<b class="nc">&nbsp;                                null</b>
+&nbsp;                )
+<b class="nc">&nbsp;                .build();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-18 15:47</div>
+</div>
+</body>
+</html>

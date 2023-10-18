@@ -1,0 +1,200 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > VacancyService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">crm.myhrcrmproject.service</a>
+</div>
+
+<h1>Coverage Summary for Class: VacancyService (crm.myhrcrmproject.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">VacancyService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11,1%
+  </span>
+  <span class="absValue">
+    (1/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    3,8%
+  </span>
+  <span class="absValue">
+    (1/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package crm.myhrcrmproject.service;
+&nbsp;
+&nbsp;import crm.myhrcrmproject.domain.Employee;
+&nbsp;import crm.myhrcrmproject.domain.Vacancy;
+&nbsp;import crm.myhrcrmproject.domain.enums.CandidateStatus;
+&nbsp;import crm.myhrcrmproject.domain.enums.VacancyStatus;
+&nbsp;import crm.myhrcrmproject.dto.vacancyDTO.VacancyRequestDTO;
+&nbsp;import crm.myhrcrmproject.dto.vacancyDTO.VacancyResponseDTO;
+&nbsp;import crm.myhrcrmproject.dto.vacancyDTO.VacancyShortResponseDTO;
+&nbsp;import crm.myhrcrmproject.repository.EmployeeRepository;
+&nbsp;import crm.myhrcrmproject.repository.VacancyRepository;
+&nbsp;import crm.myhrcrmproject.service.utills.Helper;
+&nbsp;import crm.myhrcrmproject.service.utills.VacancyConverter;
+&nbsp;import crm.myhrcrmproject.service.validation.NotFoundException;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;public class VacancyService implements CommonService&lt;VacancyRequestDTO, VacancyResponseDTO&gt; {
+&nbsp;    private final VacancyRepository repository;
+&nbsp;    private final VacancyConverter converter;
+&nbsp;    private final EmployeeRepository employeeRepository;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;VacancyResponseDTO&gt; findAll() {
+<b class="nc">&nbsp;        return repository.findAll().stream()</b>
+<b class="nc">&nbsp;                .map(converter::toDTO)</b>
+<b class="nc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public VacancyResponseDTO findById(Integer id) {
+<b class="nc">&nbsp;        Vacancy entity = repository.findById(id)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Vacancy with id &quot; + id + &quot; not found!&quot;));</b>
+<b class="nc">&nbsp;        return converter.toDTO(entity);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public VacancyResponseDTO create(VacancyRequestDTO requestDTO) {
+<b class="nc">&nbsp;        Vacancy entity = converter.fromDTO(converter.newEntity(), requestDTO);</b>
+&nbsp;
+<b class="nc">&nbsp;        entityAfterCreateProcedures(entity, requestDTO);</b>
+<b class="nc">&nbsp;        return converter.toDTO(repository.save(entity));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public VacancyResponseDTO update(Integer id, VacancyRequestDTO requestDTO) {
+<b class="nc">&nbsp;        Vacancy existingEntity = repository.findById(id)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Vacancy with id: &quot; + id + &quot; not found!&quot;));</b>
+&nbsp;
+&nbsp;        // filled in existing fields with new dates
+<b class="nc">&nbsp;        converter.fromDTO(existingEntity, requestDTO);</b>
+&nbsp;
+<b class="nc">&nbsp;        repository.save(existingEntity);</b>
+&nbsp;
+<b class="nc">&nbsp;        return converter.toDTO(existingEntity);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void delete(Integer id) {
+<b class="nc">&nbsp;        Vacancy entity = repository.findById(id)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Vacancy with id: &quot; + id + &quot; not found!&quot;));</b>
+<b class="nc">&nbsp;        repository.delete(entity);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Extra method for create and update
+&nbsp;
+&nbsp;    private void entityAfterCreateProcedures(Vacancy entity, VacancyRequestDTO requestDTO) {
+<b class="nc">&nbsp;        if (requestDTO.getStatus() == null) {</b>
+<b class="nc">&nbsp;            entity.setStatus(VacancyStatus.OPEN);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;VacancyResponseDTO&gt; findAllByStatusId(Integer id) {
+<b class="nc">&nbsp;        return Helper.findAllByEnumId(</b>
+&nbsp;                id,
+&nbsp;                VacancyStatus.class,
+<b class="nc">&nbsp;                repository::findByStatus,</b>
+<b class="nc">&nbsp;                converter::toDTO</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;VacancyShortResponseDTO&gt; findAllByEmployeeId(Integer id) {
+<b class="nc">&nbsp;        return Helper.findAllByEntityId(</b>
+&nbsp;                id,
+&nbsp;                employeeRepository,
+<b class="nc">&nbsp;                repository::findByEmployee,</b>
+<b class="nc">&nbsp;                converter::toShortDTO</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-18 15:47</div>
+</div>
+</body>
+</html>

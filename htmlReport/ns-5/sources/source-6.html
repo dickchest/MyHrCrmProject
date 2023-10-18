@@ -1,0 +1,144 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ContactDetails</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">crm.myhrcrmproject.domain</a>
+</div>
+
+<h1>Coverage Summary for Class: ContactDetails (crm.myhrcrmproject.domain)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ContactDetails</td>
+<td class="coverageStat">
+  <span class="percent">
+    11,1%
+  </span>
+  <span class="absValue">
+    (1/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11,1%
+  </span>
+  <span class="absValue">
+    (1/9)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ContactDetails$HibernateInstantiator$5JGjrbkr</td>
+  </tr>
+  <tr>
+    <td class="name">ContactDetails$HibernateProxy$ZoCSbFSz</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    11,1%
+  </span>
+  <span class="absValue">
+    (1/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11,1%
+  </span>
+  <span class="absValue">
+    (1/9)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package crm.myhrcrmproject.domain;
+&nbsp;
+&nbsp;import jakarta.persistence.*;
+&nbsp;import jakarta.validation.constraints.Email;
+&nbsp;import jakarta.validation.constraints.NotBlank;
+&nbsp;import lombok.*;
+&nbsp;
+&nbsp;@Entity
+&nbsp;@Getter
+<b class="nc">&nbsp;@Setter</b>
+<b class="fc">&nbsp;@NoArgsConstructor</b>
+<b class="nc">&nbsp;@AllArgsConstructor</b>
+<b class="nc">&nbsp;@EqualsAndHashCode</b>
+<b class="nc">&nbsp;@ToString</b>
+&nbsp;public class ContactDetails {
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<b class="nc">&nbsp;    private Integer id;</b>
+&nbsp;
+&nbsp;    @NotBlank(message = &quot;Email must be not blank&quot;)
+&nbsp;    @Email
+&nbsp;    @Column(unique = true)
+<b class="nc">&nbsp;    private String email;</b>
+&nbsp;
+<b class="nc">&nbsp;    private String homePhone;</b>
+&nbsp;
+<b class="nc">&nbsp;    private String mobilePhone;</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-18 15:47</div>
+</div>
+</body>
+</html>

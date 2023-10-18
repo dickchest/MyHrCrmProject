@@ -1,0 +1,325 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > TaskService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">crm.myhrcrmproject.service</a>
+</div>
+
+<h1>Coverage Summary for Class: TaskService (crm.myhrcrmproject.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TaskService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    6,7%
+  </span>
+  <span class="absValue">
+    (1/15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    1,1%
+  </span>
+  <span class="absValue">
+    (1/89)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package crm.myhrcrmproject.service;
+&nbsp;
+&nbsp;import crm.myhrcrmproject.domain.*;
+&nbsp;import crm.myhrcrmproject.domain.enums.CandidateStatus;
+&nbsp;import crm.myhrcrmproject.domain.enums.TaskStatus;
+&nbsp;import crm.myhrcrmproject.dto.taskDTO.TaskDateRequestDTO;
+&nbsp;import crm.myhrcrmproject.dto.taskDTO.TaskRequestDTO;
+&nbsp;import crm.myhrcrmproject.dto.taskDTO.TaskResponseDTO;
+&nbsp;import crm.myhrcrmproject.dto.taskDTO.TaskShortResponseDTO;
+&nbsp;import crm.myhrcrmproject.repository.*;
+&nbsp;import crm.myhrcrmproject.service.auth.SecurityHelper;
+&nbsp;import crm.myhrcrmproject.service.utills.Helper;
+&nbsp;import crm.myhrcrmproject.service.utills.TaskConverter;
+&nbsp;import crm.myhrcrmproject.service.validation.NotFoundException;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.web.server.NotAcceptableStatusException;
+&nbsp;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.LocalDateTime;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;public class TaskService implements CommonService&lt;TaskRequestDTO, TaskResponseDTO&gt; {
+&nbsp;    private final TaskRepository repository;
+&nbsp;    private final TaskConverter converter;
+&nbsp;    private final EmployeeRepository employeeRepository;
+&nbsp;    private final CandidateRepository candidateRepository;
+&nbsp;    private final VacancyRepository vacancyRepository;
+&nbsp;    private final SecurityHelper securityHelper;
+&nbsp;
+&nbsp;    public List&lt;TaskResponseDTO&gt; findAll() {
+<b class="nc">&nbsp;        return repository.findAll().stream()</b>
+<b class="nc">&nbsp;                .map(converter::toDTO)</b>
+<b class="nc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public TaskResponseDTO findById(Integer id) {
+<b class="nc">&nbsp;        Task entity = repository.findById(id)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Task with id &quot; + id + &quot; not found!&quot;));</b>
+&nbsp;
+&nbsp;        // check if user has access to this entity
+<b class="nc">&nbsp;        if (!securityHelper.isAuthUserEqualsEmployee(entity.getEmployee())) {</b>
+<b class="nc">&nbsp;            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return converter.toDTO(entity);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public TaskResponseDTO create(TaskRequestDTO requestDTO) {
+&nbsp;
+<b class="nc">&nbsp;        Task entity = converter.fromDTO(converter.newEntity(), requestDTO);</b>
+&nbsp;
+&nbsp;        // extra methods
+&nbsp;        // set current auth user as employee
+<b class="nc">&nbsp;        if (entity.getEmployee() == null) {</b>
+<b class="nc">&nbsp;            Optional&lt;Employee&gt; employee = securityHelper.getCurrentAuthEmployeeId();</b>
+<b class="nc">&nbsp;            employee.ifPresent(entity::setEmployee);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        entity.setCreateDate(LocalDateTime.now());</b>
+<b class="nc">&nbsp;        entity.setUpdateDate(LocalDateTime.now());</b>
+&nbsp;
+<b class="nc">&nbsp;        return converter.toDTO(repository.save(entity));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void delete(Integer id) {
+<b class="nc">&nbsp;        Task entity = repository.findById(id)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Task with id: &quot; + id + &quot; not found!&quot;));</b>
+&nbsp;
+&nbsp;        // check if user has access to this entity
+<b class="nc">&nbsp;        if (!securityHelper.isAuthUserEqualsEmployee(entity.getEmployee())) {</b>
+<b class="nc">&nbsp;            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        repository.delete(entity);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public TaskResponseDTO update(Integer id, TaskRequestDTO requestDTO) {
+<b class="nc">&nbsp;        Task existingEntity = repository.findById(id)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Task with id: &quot; + id + &quot; not found!&quot;));</b>
+&nbsp;
+&nbsp;        // check if user has access to this entity
+<b class="nc">&nbsp;        if (!securityHelper.isAuthUserEqualsEmployee(existingEntity.getEmployee())) {</b>
+<b class="nc">&nbsp;            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // filled in existing fields with new dates
+<b class="nc">&nbsp;        converter.fromDTO(existingEntity, requestDTO);</b>
+&nbsp;        // do extra procedures
+&nbsp;        // ....
+<b class="nc">&nbsp;        existingEntity.setUpdateDate(LocalDateTime.now());</b>
+&nbsp;
+<b class="nc">&nbsp;        repository.save(existingEntity);</b>
+&nbsp;
+<b class="nc">&nbsp;        return converter.toDTO(existingEntity);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // find All by TaskStatusId
+&nbsp;    public List&lt;TaskResponseDTO&gt; findAllByTaskStatusId(Integer id) {
+<b class="nc">&nbsp;        return Helper.findAllByEnumId(</b>
+&nbsp;                id,
+&nbsp;                TaskStatus.class,
+<b class="nc">&nbsp;                repository::findAllByStatus,</b>
+<b class="nc">&nbsp;                converter::toDTO</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    // find All by Employee id
+&nbsp;    public List&lt;TaskResponseDTO&gt; findAllByEmployeeId(Integer id) {
+<b class="nc">&nbsp;        Employee employee = employeeRepository.findById(id)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id &quot; + id + &quot; not found!&quot;));</b>
+&nbsp;
+&nbsp;        // check if user has access to this entity
+<b class="nc">&nbsp;        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {</b>
+<b class="nc">&nbsp;            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return repository.findAllByEmployee(employee).stream()</b>
+<b class="nc">&nbsp;                .map(converter::toDTO)</b>
+<b class="nc">&nbsp;                .toList();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // find All by Candidate id
+&nbsp;    public List&lt;TaskResponseDTO&gt; findAllByCandidateId(Integer id) {
+<b class="nc">&nbsp;        return Helper.findAllByEntityId(</b>
+&nbsp;                id, candidateRepository,
+<b class="nc">&nbsp;                repository::findAllByCandidate,</b>
+<b class="nc">&nbsp;                converter::toDTO</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    // find All by Vacancy id
+&nbsp;    public List&lt;TaskResponseDTO&gt; findAllByVacancyId(Integer id) {
+<b class="nc">&nbsp;        return Helper.findAllByEntityId(</b>
+&nbsp;                id,
+&nbsp;                vacancyRepository,
+<b class="nc">&nbsp;                repository::findAllByVacancy,</b>
+<b class="nc">&nbsp;                converter::toDTO</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    // find All by Date
+&nbsp;    public List&lt;TaskResponseDTO&gt; findAllByStartDate(TaskDateRequestDTO requestDTO) {
+<b class="nc">&nbsp;        LocalDate date = requestDTO.getDate();</b>
+<b class="nc">&nbsp;        List&lt;Task&gt; list = repository.findAllByStartDate(date);</b>
+<b class="nc">&nbsp;        return list.stream()</b>
+<b class="nc">&nbsp;                .map(converter::toDTO)</b>
+<b class="nc">&nbsp;                .toList();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // find All By Date And Employee Id
+&nbsp;    public List&lt;TaskShortResponseDTO&gt; findAllByDateAndEmployeeId(Integer id, TaskDateRequestDTO requestDTO) {
+<b class="nc">&nbsp;        Employee employee = employeeRepository.findById(id)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id &quot; + id + &quot; not found!&quot;));</b>
+&nbsp;
+&nbsp;        // check if user has access to this entity
+<b class="nc">&nbsp;        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {</b>
+<b class="nc">&nbsp;            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        LocalDate date = requestDTO.getDate();</b>
+<b class="nc">&nbsp;        List&lt;Task&gt; list = repository.findAllByStartDateAndEmployee(date, employee);</b>
+<b class="nc">&nbsp;        return list.stream()</b>
+<b class="nc">&nbsp;                .map(converter::toShortDTO)</b>
+<b class="nc">&nbsp;                .toList();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // find All By Candidate Id And Employee Id
+&nbsp;    public List&lt;TaskShortResponseDTO&gt; findAllByCandidateIdAndEmployeeId(Integer candidateId, Integer employeeId) {
+<b class="nc">&nbsp;        Employee employee = employeeRepository.findById(employeeId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id &quot; + employeeId + &quot; not found!&quot;));</b>
+&nbsp;
+&nbsp;        // check if user has access to this entity
+<b class="nc">&nbsp;        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {</b>
+<b class="nc">&nbsp;            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Candidate candidate = candidateRepository.findById(candidateId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Candidate with id &quot; + candidateId + &quot; not found!&quot;));</b>
+<b class="nc">&nbsp;        List&lt;Task&gt; list = repository.findAllByCandidateAndEmployee(candidate, employee);</b>
+<b class="nc">&nbsp;        return list.stream()</b>
+<b class="nc">&nbsp;                .map(converter::toShortDTO)</b>
+<b class="nc">&nbsp;                .toList();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // find All By Status Id and Employee Id
+&nbsp;    public List&lt;TaskShortResponseDTO&gt; findAllByStatusIdAndEmployeeId(Integer statusId, Integer employeeId) {
+<b class="nc">&nbsp;        Employee employee = employeeRepository.findById(employeeId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id &quot; + employeeId + &quot; not found!&quot;));</b>
+&nbsp;
+&nbsp;        // check if user has access to this entity
+<b class="nc">&nbsp;        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {</b>
+<b class="nc">&nbsp;            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        CandidateStatus status = Optional.ofNullable(CandidateStatus.values()[statusId]).</b>
+<b class="nc">&nbsp;                orElseThrow(() -&gt; new NotFoundException(&quot;No enum found with id: &quot; + statusId));</b>
+<b class="nc">&nbsp;        List&lt;Task&gt; list = repository.findAllByStatusAndEmployee(status, employee);</b>
+<b class="nc">&nbsp;        return list.stream()</b>
+<b class="nc">&nbsp;                .map(converter::toShortDTO)</b>
+<b class="nc">&nbsp;                .toList();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // find All By Vacancy Id And Employee Id
+&nbsp;    public List&lt;TaskShortResponseDTO&gt; findAllByVacancyIdAndEmployeeId(Integer vacancyId, Integer employeeId) {
+<b class="nc">&nbsp;        Employee employee = employeeRepository.findById(employeeId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id &quot; + employeeId + &quot; not found!&quot;));</b>
+&nbsp;
+&nbsp;        // check if user has access to this entity
+<b class="nc">&nbsp;        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {</b>
+<b class="nc">&nbsp;            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Vacancy vacancy = vacancyRepository.findById(vacancyId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Vacancy with id &quot; + vacancyId + &quot; not found!&quot;));</b>
+<b class="nc">&nbsp;        List&lt;Task&gt; list = repository.findAllByVacancyAndEmployee(vacancy, employee);</b>
+<b class="nc">&nbsp;        return list.stream()</b>
+<b class="nc">&nbsp;                .map(converter::toShortDTO)</b>
+<b class="nc">&nbsp;                .toList();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-18 15:47</div>
+</div>
+</body>
+</html>

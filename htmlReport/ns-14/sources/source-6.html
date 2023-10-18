@@ -1,0 +1,175 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > EmployeeService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">crm.myhrcrmproject.service</a>
+</div>
+
+<h1>Coverage Summary for Class: EmployeeService (crm.myhrcrmproject.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EmployeeService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16,7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5,3%
+  </span>
+  <span class="absValue">
+    (1/19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package crm.myhrcrmproject.service;
+&nbsp;
+&nbsp;import crm.myhrcrmproject.domain.Employee;
+&nbsp;import crm.myhrcrmproject.dto.employeeDTO.EmployeeRequestDTO;
+&nbsp;import crm.myhrcrmproject.dto.employeeDTO.EmployeeResponseDTO;
+&nbsp;import crm.myhrcrmproject.repository.EmployeeRepository;
+&nbsp;import crm.myhrcrmproject.service.auth.SecurityHelper;
+&nbsp;import crm.myhrcrmproject.service.utills.EmployeeConverter;
+&nbsp;import crm.myhrcrmproject.service.validation.NotFoundException;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import org.springframework.security.core.Authentication;
+&nbsp;import org.springframework.security.core.context.SecurityContextHolder;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.web.server.NotAcceptableStatusException;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;public class EmployeeService implements CommonService&lt;EmployeeRequestDTO, EmployeeResponseDTO&gt; {
+&nbsp;    private final EmployeeRepository repository;
+&nbsp;    private final EmployeeConverter converter;
+&nbsp;    private final SecurityHelper securityHelper;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;EmployeeResponseDTO&gt; findAll() {
+<b class="nc">&nbsp;        return repository.findAll().stream()</b>
+<b class="nc">&nbsp;                .map(converter::toDTO)</b>
+<b class="nc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public EmployeeResponseDTO findById(Integer id) {
+<b class="nc">&nbsp;        Employee entity = repository.findById(id)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id &quot; + id + &quot; not found!&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        return converter.toDTO(entity);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public EmployeeResponseDTO create(EmployeeRequestDTO requestDTO) {
+<b class="nc">&nbsp;        Employee entity = converter.fromDTO(converter.newEntity(), requestDTO);</b>
+&nbsp;
+<b class="nc">&nbsp;        return converter.toDTO(repository.save(entity));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public EmployeeResponseDTO update(Integer id, EmployeeRequestDTO requestDTO) {
+<b class="nc">&nbsp;        Employee existingEntity = repository.findById(id)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id: &quot; + id + &quot; not found!&quot;));</b>
+&nbsp;
+&nbsp;        // check if user has access to this entity
+<b class="nc">&nbsp;        if (!securityHelper.isAuthUserEqualsEmployee(existingEntity)) {</b>
+<b class="nc">&nbsp;            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // filled in existing fields with new dates
+<b class="nc">&nbsp;        converter.fromDTO(existingEntity, requestDTO);</b>
+<b class="nc">&nbsp;        repository.save(existingEntity);</b>
+&nbsp;
+<b class="nc">&nbsp;        return converter.toDTO(existingEntity);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void delete(Integer id) {
+<b class="nc">&nbsp;        Employee entity = repository.findById(id)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id: &quot; + id + &quot; not found!&quot;));</b>
+<b class="nc">&nbsp;        repository.delete(entity);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-18 15:47</div>
+</div>
+</body>
+</html>

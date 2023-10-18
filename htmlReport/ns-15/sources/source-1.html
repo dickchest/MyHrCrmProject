@@ -1,0 +1,173 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > JwtTokenProvider</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">crm.myhrcrmproject.service.auth</a>
+</div>
+
+<h1>Coverage Summary for Class: JwtTokenProvider (crm.myhrcrmproject.service.auth)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">JwtTokenProvider</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    3,8%
+  </span>
+  <span class="absValue">
+    (1/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package crm.myhrcrmproject.service.auth;
+&nbsp;
+&nbsp;import crm.myhrcrmproject.service.validation.InvalidJwtException;
+&nbsp;import io.jsonwebtoken.*;
+&nbsp;import io.jsonwebtoken.security.SignatureException;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.Date;
+&nbsp;
+&nbsp;/*
+&nbsp;    этим методом мы создаем екземпл€р класса
+&nbsp;    cоздаем и заполн€ем 2 пол€: алгорит и верификаци€
+&nbsp;    в момент создани€ эекз класса у нас хранитьс€ переменна€ (кусочек токена)
+&nbsp;    и переменна€, котора€ хранитьс€ о алгоритме шифровани€
+&nbsp;
+&nbsp; */
+&nbsp;@Service
+<b class="fc">&nbsp;public class JwtTokenProvider {</b>
+&nbsp;    @Value(&quot;${jwt.lifetime}&quot;)
+&nbsp;    private long jwtLifeTime;
+&nbsp;
+&nbsp;    @Value(&quot;${jwt.secret}&quot;)
+&nbsp;    private String jwtSecret;
+&nbsp;
+&nbsp;    // метод создает новый токен
+&nbsp;    public String createToken(String userName) {
+<b class="nc">&nbsp;        Date now = new Date();</b>
+<b class="nc">&nbsp;        Date expiryDate = new Date(now.getTime() + jwtLifeTime);</b>
+&nbsp;
+<b class="nc">&nbsp;        return Jwts.builder()</b>
+<b class="nc">&nbsp;                .setSubject(userName)</b>
+<b class="nc">&nbsp;                .setIssuedAt(now)</b>
+<b class="nc">&nbsp;                .setExpiration(expiryDate)</b>
+<b class="nc">&nbsp;                .signWith(SignatureAlgorithm.HS256, jwtSecret)</b>
+<b class="nc">&nbsp;                .compact();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // метод, провер€ющий валидацию токена
+&nbsp;    public String getUserNameFromJwt(String token) {
+<b class="nc">&nbsp;        Claims claims = Jwts.parser()</b>
+<b class="nc">&nbsp;                .setSigningKey(jwtSecret)</b>
+<b class="nc">&nbsp;                .parseClaimsJws(token)</b>
+<b class="nc">&nbsp;                .getBody();</b>
+&nbsp;
+<b class="nc">&nbsp;        return claims.getSubject();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean validateToken(String authToken) {
+&nbsp;        try {
+<b class="nc">&nbsp;            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);</b>
+<b class="nc">&nbsp;            return true;</b>
+<b class="nc">&nbsp;        } catch (SignatureException e) {</b>
+&nbsp;            // Invalid JWT signature
+<b class="nc">&nbsp;            throw new InvalidJwtException(&quot;Invalid JWT signature&quot;);</b>
+<b class="nc">&nbsp;        } catch (MalformedJwtException e) {</b>
+&nbsp;            // Invalid JWT token
+<b class="nc">&nbsp;            throw new InvalidJwtException(&quot;Invalid JWT token&quot;);</b>
+<b class="nc">&nbsp;        } catch (ExpiredJwtException e) {</b>
+&nbsp;            // Expired JWT token
+<b class="nc">&nbsp;            throw new InvalidJwtException(&quot;Expired JWT token&quot;);</b>
+<b class="nc">&nbsp;        } catch (UnsupportedJwtException e) {</b>
+&nbsp;            // Unsupported JWT token
+<b class="nc">&nbsp;            throw new InvalidJwtException(&quot;Unsupported JWT token&quot;);</b>
+<b class="nc">&nbsp;        } catch (IllegalArgumentException e) {</b>
+&nbsp;            // JWT claims string is empty
+<b class="nc">&nbsp;            throw new InvalidJwtException(&quot;JWT claims string is empty&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-18 15:47</div>
+</div>
+</body>
+</html>
