@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("api/users")
@@ -23,12 +24,12 @@ public class UserDetailsController {
 
     @GetMapping
     public ResponseEntity<List<UserDetailsResponseDTO>> findAll() {
-        return new ResponseEntity<>(getService().findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDetailsResponseDTO> findById(@PathVariable("id") Integer id) {
-        return new ResponseEntity<>(getService().findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
 //    @PostMapping
@@ -38,12 +39,15 @@ public class UserDetailsController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDetailsResponseDTO> update(@PathVariable("id") Integer id, @RequestBody UserDetailsRequestDTO requestDTO) {
-        return new ResponseEntity<>(getService().update(id, requestDTO), HttpStatus.ACCEPTED);
+        UserDetailsResponseDTO responseDTO = service.update(id, requestDTO);
+        log.info(responseDTO.toString());
+        return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCandidate(@PathVariable("id") Integer id) {
+        log.info("enter delete controller");
         service.delete(id);
     }
 

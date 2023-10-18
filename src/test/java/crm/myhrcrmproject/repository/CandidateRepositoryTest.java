@@ -29,6 +29,7 @@ class CandidateRepositoryTest {
     @BeforeAll
     public static void setup(){
         candidate = Candidate.builder()
+                .id(1)
                 .firstName("Oleg")
                 .lastName("Kozlov")
                 .status(CandidateStatus.ACTIVE)
@@ -71,19 +72,18 @@ class CandidateRepositoryTest {
         assertThat(candidates.size()).isEqualTo(1);
     }
 
-//    @Test
-//    public void updateTest() {
-//        savedCandidate.setEmail("1234@test.com");
-//        Candidate updatedCandidate = candidatesRepository.save(savedCandidate);
-//        assertThat(updatedCandidate.getEmail()).isEqualTo("1234@test.com");
-//    }
+    @Test
+    public void updateTest() {
+        savedCandidate.setLastName("Petrov");
+        Candidate updatedCandidate = candidatesRepository.save(savedCandidate);
+        assertThat(updatedCandidate.getLastName()).isEqualTo("Petrov");
+    }
 
-//    @Test
-//    public void deleteTest() {
-//        candidatesRepository.delete(savedCandidate);
-//        Optional<Candidate> optionalCandidate = candidatesRepository.findByEmail("1234@test.com");
-//
-//        assertThat(optionalCandidate).isEmpty();
-//    }
+    @Test
+    public void deleteTest() {
+        candidatesRepository.delete(savedCandidate);
+        Optional<Candidate> optionalCandidate = candidatesRepository.findById(1);
+        assertThat(optionalCandidate).isEmpty();
+    }
 
 }
