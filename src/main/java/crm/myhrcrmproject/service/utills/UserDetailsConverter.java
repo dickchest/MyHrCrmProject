@@ -1,22 +1,25 @@
 package crm.myhrcrmproject.service.utills;
 
-import crm.myhrcrmproject.domain.Role;
 import crm.myhrcrmproject.domain.UserDetails;
 import crm.myhrcrmproject.dto.userDetailsDTO.UserDetailsRequestDTO;
 import crm.myhrcrmproject.dto.userDetailsDTO.UserDetailsResponseDTO;
 import crm.myhrcrmproject.dto.userDetailsDTO.UserDetailsShortResponseDTO;
-import crm.myhrcrmproject.repository.RoleRepository;
-import lombok.*;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class UserDetailsConverter {
     private final EmployeeConverter employeeConverter;
     private PasswordEncoder passwordEncoder;
+
+    public UserDetailsConverter(EmployeeConverter employeeConverter, @Lazy PasswordEncoder passwordEncoder) {
+        this.employeeConverter = employeeConverter;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     public UserDetailsResponseDTO toDTO(UserDetails entity) {
         return UserDetailsResponseDTO.builder()

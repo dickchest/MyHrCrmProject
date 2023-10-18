@@ -49,6 +49,7 @@ public class UserDetailsServiceImpl implements CommonService<UserDetailsRequestD
     public UserDetailsResponseDTO create(UserDetailsRequestDTO requestDTO) {
 
         if (repository.findByUserName(requestDTO.getUserName()).isEmpty()) {
+            // todo добавить проверку, что такой емейл существует
 
             UserDetails entity = converter.fromDTO(converter.newEntity(), requestDTO);
 
