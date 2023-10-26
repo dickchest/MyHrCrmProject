@@ -12,6 +12,8 @@ import crm.myhrcrmproject.service.utills.CandidateConverter;
 import crm.myhrcrmproject.service.utills.Helper;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,6 +28,8 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
     private final CandidateConverter converter;
     private final VacancyRepository vacancyRepository;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CandidateService.class);
+
     public List<CandidateResponseDTO> findAll() {
         return repository.findAll().stream()
                 .map(converter::toDTO)
@@ -33,6 +37,7 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
     }
 
     public CandidateResponseDTO findById(Integer id) {
+//        LOGGER.info("Запрошен кандидат с идентификатором {}.", id);
         Candidate entity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Candidate with id " + id + " not found!"));
         return converter.toDTO(entity);

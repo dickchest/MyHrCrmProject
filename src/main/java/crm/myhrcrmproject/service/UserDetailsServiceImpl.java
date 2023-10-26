@@ -14,6 +14,9 @@ import crm.myhrcrmproject.service.utills.UserDetailsConverter;
 import crm.myhrcrmproject.service.validation.AlreadyExistsException;
 import crm.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,7 @@ public class UserDetailsServiceImpl implements CommonService<UserDetailsRequestD
     private final EmployeeService employeeService;
     private final EmployeeRepository employeeRepository;
     private final RoleRepository roleRepository;
+    private static final Logger LOGGER = LogManager.getLogger(UserDetailsServiceImpl.class);
 
 
     @Override
@@ -40,6 +44,7 @@ public class UserDetailsServiceImpl implements CommonService<UserDetailsRequestD
 
     @Override
     public UserDetailsResponseDTO findById(Integer id) {
+//        LOGGER.log(Level.INFO, String.format("Вызван метод findById с параметром %d", id));
         UserDetails entity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with id " + id + " not found!"));
         return converter.toDTO(entity);
@@ -47,6 +52,7 @@ public class UserDetailsServiceImpl implements CommonService<UserDetailsRequestD
 
     @Override
     public UserDetailsResponseDTO create(UserDetailsRequestDTO requestDTO) {
+//        LOGGER.info("Вызван метод create с параметром %d");
 
         if (repository.findByUserName(requestDTO.getUserName()).isEmpty()) {
             // todo добавить проверку, что такой емейл существует

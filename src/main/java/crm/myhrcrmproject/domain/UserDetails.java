@@ -18,6 +18,7 @@ import java.util.Collections;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
+@Builder
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +31,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
     private String userName;
 
     @NotBlank(message = "Password must be not blank")
-//    @Length(min = 6, message = "Password should be more then 6 symbols")
+//    @Length(min = 6, message = "Password should be more than 6 symbols")
 //    @Pattern(regexp = "^[A-Za-z0-9!@#$%^&*()]+$", message = "Password could contain only latin letters and numbers and some special characters")
     private String password;
 

@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,18 +31,16 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(UserDetailsController.class)
+@AutoConfigureMockMvc
 class UserDetailsControllerTest {
 
     @Autowired
@@ -58,11 +56,10 @@ class UserDetailsControllerTest {
     private JwtTokenProvider jwtTokenProvider;
 
     @Test
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
+//    @WithMockUser(username = "admin", roles = {"ADMIN"})
     void testFilterForValidToken() throws Exception {
         // given
         GrantedAuthority adminAuthority = new SimpleGrantedAuthority("ROLE_ADMIN");
-        System.out.println("");
 
         UserDetails userDetails = new User("username", "password", Collections.singletonList(adminAuthority));
         UserDetailsResponseDTO responseDTO = new UserDetailsResponseDTO();
@@ -71,11 +68,13 @@ class UserDetailsControllerTest {
         // Mock an expired token
         String expiredToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY5NzIwODM2NiwiZXhwIjoxNjk3MjE0MzY2fQ.CWwJF4aYxeFJNxLTLU6zoYdpUVrHv_HErZFYXiTC4QA";
         // Create a custom authentication object
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, expiredToken);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, expiredToken, userDetails.getAuthorities());
         // Create security context and set the Authentication
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        var securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(authentication);
+        System.out.println(securityContext.getAuthentication());
         SecurityContextHolder.setContext(securityContext);
+
 
         // when
         when(service.loadUserByUsername(anyString())).thenReturn(userDetails);
@@ -96,7 +95,7 @@ class UserDetailsControllerTest {
         Mockito.when(jwtTokenProvider.validateToken(Mockito.anyString())).thenReturn(false);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/some-secure-endpoint")
+                        .get("/api/")
                         .header("Authorization", "Bearer invalid-token")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
@@ -154,7 +153,7 @@ class UserDetailsControllerTest {
         when(service.update(1, requestDTO)).thenReturn(responseDTO);
 
         // then
-        mockMvc.perform(put("/api/users/1")
+        mockMvc.perform(put("/api/users/1").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
 //                        .content("{\"userName\":\"updatedUser\"}"))
                         .content(objectMapper.writeValueAsString(requestDTO)))
@@ -165,16 +164,22 @@ class UserDetailsControllerTest {
 
     @Test
     @WithMockUser(roles="ADMIN")
-    void testDeleteCandidate() throws Exception {
-        mockMvc.perform(delete("/api/users/{id}", "1"))
+    void testDeleteUser() throws Exception {
+        mockMvc.perform(delete("/api/users/{id}", "2").with(csrf()))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    void setRole() {
+    @WithMockUser(roles="ADMIN")
+    void setRole() throws Exception {
+        mockMvc.perform(put("/api/users/setRole?id=2&role=manager")
+                        .with(csrf()))
+                .andExpect(status().isAccepted());
     }
 
     @Test
-    void getService() {
+    void notLoggedIn_shouldNotSeeSecuredEndpoint() throws Exception {
+        mockMvc.perform(get("/api/users"))
+                .andExpect(status().isUnauthorized());
     }
 }
