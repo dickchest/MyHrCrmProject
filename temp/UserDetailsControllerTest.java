@@ -7,23 +7,30 @@ import crm.myhrcrmproject.service.UserDetailsServiceImpl;
 import crm.myhrcrmproject.service.auth.JwtTokenProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -35,19 +42,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class UserDetailsControllerTest {
 
-    @Value("/api/users")
-    String basePath;
-
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @MockBean
     private UserDetailsServiceImpl service;
 
-    @MockBean
-    private JwtTokenProvider jwtTokenProvider;
+//    @MockBean
+//    private JwtTokenProvider jwtTokenProvider;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @Test
+    public void testFilterForInvalidToken() throws Exception {
+        UserDetails userDetails = new User("username", "password", Collections.emptyList());
+
+        Mockito.when(jwtTokenProvider.validateToken(Mockito.anyString())).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/")
+                        .header("Authorization", "Bearer invalid-token")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
 
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
@@ -62,7 +80,7 @@ class UserDetailsControllerTest {
         when(service.findAll()).thenReturn(users);
 
         // then
-        mockMvc.perform(get(basePath))
+        mockMvc.perform(get("/api/users"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].userName").value("admin"))
@@ -113,9 +131,6 @@ class UserDetailsControllerTest {
     @Test
     @WithMockUser(roles="ADMIN")
     void testDeleteUser() throws Exception {
-
-        doNothing().when(service).delete(anyInt());
-
         mockMvc.perform(delete("/api/users/{id}", "2").with(csrf()))
                 .andExpect(status().isNoContent());
     }
@@ -132,5 +147,12 @@ class UserDetailsControllerTest {
     void notLoggedIn_shouldNotSeeSecuredEndpoint() throws Exception {
         mockMvc.perform(get("/api/users"))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(roles="1")
+    void simpleUser_shouldNotSeeSecuredEndpoint() throws Exception {
+        mockMvc.perform(get("/api/users"))
+                .andExpect(status().isForbidden());
     }
 }

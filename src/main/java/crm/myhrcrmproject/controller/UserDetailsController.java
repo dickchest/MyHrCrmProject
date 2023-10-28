@@ -1,5 +1,6 @@
 package crm.myhrcrmproject.controller;
 
+import crm.myhrcrmproject.domain.annotations.IsAdministrator;
 import crm.myhrcrmproject.dto.userDetailsDTO.UserDetailsRequestDTO;
 import crm.myhrcrmproject.dto.userDetailsDTO.UserDetailsResponseDTO;
 import crm.myhrcrmproject.dto.userDetailsDTO.UserDetailsShortResponseDTO;
@@ -24,6 +25,7 @@ public class UserDetailsController {
 
     @GetMapping
     public ResponseEntity<List<UserDetailsResponseDTO>> findAll() {
+        log.info("ENTER FIND ALL CONTROLLER");
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
@@ -32,15 +34,9 @@ public class UserDetailsController {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
-//    @PostMapping
-//    public ResponseEntity<UserDetailsResponseDTO> createNew(@RequestBody UserDetailsRequestDTO requestDTO) {
-//        return new ResponseEntity<>(getService().create(requestDTO), HttpStatus.CREATED);
-//    }
-
     @PutMapping("/{id}")
     public ResponseEntity<UserDetailsResponseDTO> update(@PathVariable("id") Integer id, @RequestBody UserDetailsRequestDTO requestDTO) {
         UserDetailsResponseDTO responseDTO = service.update(id, requestDTO);
-        log.info(responseDTO.toString());
         return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }
 

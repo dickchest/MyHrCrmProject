@@ -28,14 +28,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> corsConfigurationSource()) // настройка необходима для обеспечения доступа из разных портов для нашего приложения
+                .cors(AbstractHttpConfigurer::disable) // настройка необходима для обеспечения доступа из разных портов для нашего приложения
                 .csrf(AbstractHttpConfigurer::disable) // todo попробовать включить csrf защиту
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("api/communications/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER")
-                        .requestMatchers("/api/users/**").hasAnyAuthority("ROLE_ADMIN")
-//                        .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers("/api/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
