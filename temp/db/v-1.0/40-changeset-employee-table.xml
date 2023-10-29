@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1.9" author="den">
+        <sqlFile dbms="mysql"
+                 encoding="utf8"
+                 endDelimiter=";"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"
+                 path="40-create-employee-table.sql"/>
+        <rollback>
+            <sqlFile dbms="mysql"
+                     encoding="utf8"
+                     endDelimiter=";"
+                     relativeToChangelogFile="true"
+                     splitStatements="true"
+                     stripComments="true"
+                     path="40-drop-employee-table.sql"/>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="1.10" author="den">
+        <insert tableName="employee">
+            <column name="position" value="Administrator"></column>
+            <column name="contact_details_id" value="1"></column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

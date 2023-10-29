@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1.3" author="den">
+        <sqlFile dbms="mysql"
+                 encoding="utf8"
+                 endDelimiter="\nGO"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"
+                 path="10-create-user-details-table.sql"/>
+        <rollback>
+            <sqlFile dbms="mysql"
+                     encoding="utf8"
+                     endDelimiter="\nGO"
+                     relativeToChangelogFile="true"
+                     splitStatements="true"
+                     stripComments="true"
+                     path="10-drop-user-details-table.sql"/>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="1.4" author="den">
+        <insert tableName="user_details">
+            <column name="user_name" value="admin"></column>
+            <column name="password" value="$2a$10$hPwbjRLE6z6N/pVAjbeYFOj2EHHwdAnKcDJMd/AltknrhLsStKJMW"></column>
+            <column name="employee_id" value="1"></column>
+            <column name="role_id" value="1"></column>
+            <column name="created_date" valueComputed="CURRENT_TIMESTAMP"></column>
+            <column name="updated_date" valueComputed="CURRENT_TIMESTAMP"></column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
