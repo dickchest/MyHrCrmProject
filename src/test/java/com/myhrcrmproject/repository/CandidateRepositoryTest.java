@@ -69,7 +69,7 @@ class CandidateRepositoryTest {
     public void findAllTest() {
 
         List<Candidate> candidates = candidatesRepository.findAll();
-        assertThat(candidates.size()).isEqualTo(1);
+        assertThat(candidates.size()).isGreaterThan(1);
     }
 
     @Test

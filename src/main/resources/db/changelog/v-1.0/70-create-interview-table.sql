@@ -14,10 +14,6 @@ create table interview (
 ;
 
 alter table interview
-add constraint UK_pe0kf6sjqo34dsqis5gsraeoe unique (employee_id)
-;
-
-alter table interview
 add constraint FKjod0wwyxvbi7qyx9cmlnt8xq4
 foreign key (candidate_id)
 references candidate (id)

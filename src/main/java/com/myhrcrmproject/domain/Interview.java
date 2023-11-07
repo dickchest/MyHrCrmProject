@@ -40,7 +40,7 @@ public class Interview {
     @JoinColumn(name = "candidate_id")
     private Candidate candidate;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_ID")
     private Employee employee;
 

@@ -1,7 +1,7 @@
 create table communication (
     id integer not null auto_increment,
     communication_date_time datetime(6),
-    communication_type tinyint,
+    communication_type enum ('EMAIL', 'PHONE', 'CHAT', 'SOCIAL_MEDIA', 'MAIL', 'FAX') not null,
     client_id integer,
     candidate_id integer,
     vacancy_id integer,

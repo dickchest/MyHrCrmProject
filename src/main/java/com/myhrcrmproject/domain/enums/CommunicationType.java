@@ -1,10 +1,10 @@
 package com.myhrcrmproject.domain.enums;
 
 public enum CommunicationType {
-    EMAIL,        // Электронная почта
-    PHONE,        // Телефонный номер
-    CHAT,         // Чат
-    SOCIAL_MEDIA, // Социальные сети
-    MAIL,         // Почтовый адрес
-    FAX           // Факс
+    EMAIL,
+    PHONE,
+    CHAT,
+    SOCIAL_MEDIA,
+    MAIL,
+    FAX
 }

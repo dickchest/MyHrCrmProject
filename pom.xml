@@ -199,9 +199,8 @@
                 </executions>
                 <configuration>
                     <excludes>
-                        <exclude>com/**/aspect/*</exclude>
-                        <exclude>com/**/configuration/*</exclude>
-                        <exclude>com/**/dto/*</exclude>
+                        <exclude>com/**/configuration/**</exclude>
+                        <exclude>com/**/dto/**</exclude>
                         <exclude>com/**/domain/**</exclude>
                     </excludes>
                     <destFile>${project.build.directory}/jacoco.exec</destFile>

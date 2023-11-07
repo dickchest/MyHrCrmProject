@@ -3,7 +3,7 @@ create table contract (
     start_date date,
     end_date date,
     salary float(53),
-    contract_type enum ('CONTRACT_FOR_SERVICE','FULL_TIME','INTERNSHIP','PART_TIME','SEASONAL') not null,
+    contract_type enum ('FULL_TIME', 'PART_TIME', 'INTERNSHIP', 'SEASONAL', 'CONTRACT_FOR_SERVICE') not null,
     candidate_id integer,
     responsible_employee_id integer,
     client_id integer,

@@ -23,6 +23,7 @@ public class Communication {
     private LocalDateTime communicationDateTime = LocalDateTime.now();
 
     @NotNull(message = "Communication type should be not blank")
+    @Enumerated(EnumType.STRING)
     private CommunicationType communicationType;
 
     @ManyToOne(fetch = FetchType.EAGER)

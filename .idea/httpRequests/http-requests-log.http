@@ -1,3 +1,11 @@
+GET http://localhost:8080/api/interviews
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Cookie: JSESSIONID=FE53B7DECEDBA628FA337251724D6191
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
 GET http://localhost:8080/api/candidates/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY5NzIwODM2NiwiZXhwIjoxNjk3MjE0MzY2fQ.CWwJF4aYxeFJNxLTLU6zoYdpUVrHv_HErZFYXiTC4QA
 Connection: Keep-Alive
@@ -616,15 +624,6 @@ User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 <> 2023-10-06T160150.200.json
-
-###
-
-GET http://localhost:8080/api/communications/findAllByClient/2
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2023-10-06T160146.200.json
 
 ###
 
