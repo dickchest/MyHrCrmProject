@@ -1,5 +1,6 @@
 package com.myhrcrmproject.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -33,4 +34,8 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Vacancy> vacancyList;
+
+    @OneToOne(mappedBy = "employee")
+    @JsonIgnore
+    private UserDetails userDetails;
 }

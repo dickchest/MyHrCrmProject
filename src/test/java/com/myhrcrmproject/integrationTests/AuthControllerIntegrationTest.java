@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@Sql("/database/add_test_data.sql")
 //@TestPropertySource(locations = "classpath:application-test.properties")
 //@AutoConfigureTestEntityManager
-class AuthControllerTest {
+class AuthControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

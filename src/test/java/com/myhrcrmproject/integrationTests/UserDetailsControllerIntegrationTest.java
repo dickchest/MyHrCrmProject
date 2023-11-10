@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Transactional
-class UserDetailsControllerTest {
+class UserDetailsControllerIntegrationTest {
 
     @Value("/api/users")
     String basePath;
@@ -52,10 +52,11 @@ class UserDetailsControllerTest {
         mockMvc.perform(get("/api/users"))
                 .andExpect(status().isForbidden());
     }
+
     @Test
     @WithMockUser(roles = "ADMIN")
     void testFindById_shouldReturnStatus200() throws Exception {
-        mockMvc.perform(get(basePath+"/1"))
+        mockMvc.perform(get(basePath + "/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.userName").value("admin"));
@@ -64,7 +65,7 @@ class UserDetailsControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void testFindById_notExistingUser_shouldReturnStatus404() throws Exception {
-        mockMvc.perform(get(basePath+"/0"))
+        mockMvc.perform(get(basePath + "/0"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("User with id 0 not found")));
     }
@@ -75,7 +76,7 @@ class UserDetailsControllerTest {
         UserDetailsRequestDTO userDetailsRequestDTO = new UserDetailsRequestDTO();
         userDetailsRequestDTO.setUserName("TestAdmin");
 
-        mockMvc.perform(put(basePath+"/1").with(csrf())
+        mockMvc.perform(put(basePath + "/1").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDetailsRequestDTO)))
                 .andExpect(status().isAccepted())
@@ -86,12 +87,12 @@ class UserDetailsControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void deleteCandidate() throws Exception {
-        mockMvc.perform(delete(basePath+"/1").with(csrf()))
+        mockMvc.perform(delete(basePath + "/1").with(csrf()))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    @WithMockUser(roles="ADMIN")
+    @WithMockUser(roles = "ADMIN")
     void testSetRole_shouldReturnAccepted() throws Exception {
         mockMvc.perform(put("/api/users/setRole?id=2&role=manager")
                         .with(csrf()))
@@ -100,7 +101,7 @@ class UserDetailsControllerTest {
     }
 
     @Test
-    @WithMockUser(roles="ADMIN")
+    @WithMockUser(roles = "ADMIN")
     void testSetRole_notExistingRole_shouldReturn404() throws Exception {
         mockMvc.perform(put("/api/users/setRole?id=2&role=errorrole")
                         .with(csrf()))
