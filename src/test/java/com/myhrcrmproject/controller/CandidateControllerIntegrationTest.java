@@ -3,6 +3,7 @@ package com.myhrcrmproject.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myhrcrmproject.domain.enums.CandidateStatus;
 import com.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
+import com.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
 import com.myhrcrmproject.dto.contactDetailsDTO.ContactDetailsDTO;
 import com.myhrcrmproject.service.CandidateService;
 import jakarta.transaction.Transactional;
@@ -170,26 +171,26 @@ class CandidateControllerIntegrationTest {
 
     @Test
     @WithMockUser
+    void findAllByVacancyId() throws Exception {
+        mockMvc.perform(get(basePath + "/findAllByVacancy/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
     void findAllByStatusId() throws Exception {
-        // save new Candidate in repository with status ACTIVE
-        candidateRequestDTO.setStatus(CandidateStatus.ACTIVE);
+        //    save new Candidate in repository with status ACTIVE
+        candidateRequestDTO.setStatus(CandidateStatus.NOT_ACTIVE);
         ContactDetailsDTO contactDetails = new ContactDetailsDTO();
         contactDetails.setEmail("000testemail000@example.com");
         candidateRequestDTO.setContactDetails(contactDetails);
 
-        String existingCandidateId = String.valueOf(service.create(candidateRequestDTO).getId());
+        CandidateResponseDTO responseDTO = service.create(candidateRequestDTO);
 
-        mockMvc.perform(get(basePath + "/findAllByStatus/0"))
+        mockMvc.perform(get(basePath + "/findAllByStatus/1"))
                 .andDo(print())
-                .andExpect(status().isOk());
-//                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
-    }
-
-    @Test
-    void findAllByVacancyId() {
-    }
-
-    @Test
-    void getService() {
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
     }
 }

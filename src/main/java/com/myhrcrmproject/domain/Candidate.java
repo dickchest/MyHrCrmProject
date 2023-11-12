@@ -38,7 +38,7 @@ public class Candidate {
     @JoinColumn(name = "address_id")
     private AddressDetails addressDetails;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private ContactDetails contactDetails;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)

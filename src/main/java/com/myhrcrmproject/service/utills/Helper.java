@@ -1,5 +1,6 @@
 package com.myhrcrmproject.service.utills;
 
+import com.myhrcrmproject.domain.Candidate;
 import com.myhrcrmproject.service.validation.NotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -65,8 +66,9 @@ public class Helper {
         }
 
         List<E> list = taskMappingFunction.apply(enumValue);
+
         return list.stream()
-                .map(dtoMappingFunction)
+                .map(dtoMappingFunction::apply)
                 .toList();
     }
 

@@ -1,0 +1,12 @@
+spring.datasource.url=jdbc:h2:file:./testdb;AUTO_SERVER=TRUE
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=root
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.hibernate.ddl-auto=none
+spring.liquibase.enabled=false
+spring.sql.init.mode=never
+
+#Spring security
+#JWT Configuration
+jwt.secret = 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723ga
+jwt.lifetime = 6000000
