@@ -35,3 +35,4 @@ build/
 ### My temp folder ###
 !**/temp/
 !**/htmlReport/
+!**/logs/
