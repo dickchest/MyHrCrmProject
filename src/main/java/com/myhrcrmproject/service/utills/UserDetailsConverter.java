@@ -34,7 +34,6 @@ public class UserDetailsConverter {
 
     public UserDetails fromDTO(UserDetails entity, UserDetailsRequestDTO request) {
         Optional.ofNullable(request.getUserName()).ifPresent(entity::setUserName);
-//        Optional.ofNullable(request.getPassword()).ifPresent(entity::setPassword);
         Optional.ofNullable(request.getPassword()).ifPresent(
                 password -> entity.setPassword(
                         passwordEncoder.encode(password)

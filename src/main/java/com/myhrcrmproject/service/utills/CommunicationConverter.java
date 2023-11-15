@@ -1,5 +1,6 @@
 package com.myhrcrmproject.service.utills;
 
+import com.myhrcrmproject.domain.Candidate;
 import com.myhrcrmproject.domain.Communication;
 import com.myhrcrmproject.dto.communicationDTO.CommunicationRequestDTO;
 import com.myhrcrmproject.dto.communicationDTO.CommunicationResponseDTO;
@@ -8,6 +9,7 @@ import com.myhrcrmproject.repository.CandidateRepository;
 import com.myhrcrmproject.repository.ClientRepository;
 import com.myhrcrmproject.repository.EmployeeRepository;
 import com.myhrcrmproject.repository.VacancyRepository;
+import com.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
