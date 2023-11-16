@@ -1,10 +1,8 @@
 package com.myhrcrmproject.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.myhrcrmproject.domain.enums.CandidateStatus;
-import com.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
-import com.myhrcrmproject.dto.contactDetailsDTO.ContactDetailsDTO;
-import com.myhrcrmproject.service.CandidateService;
+import com.myhrcrmproject.dto.compensationDTO.CompensationRequestDTO;
+import com.myhrcrmproject.service.CompensationService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,12 +27,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Transactional
-class CandidateControllerIntegrationTest {
+class CompensationControllerIntegrationTest {
+    static CompensationRequestDTO requestDTO;
 
-    static CandidateRequestDTO requestDTO;
-
-    @Value("/api/candidates")
+    @Value("/api/compensations")
     private String basePath;
+
+    @Autowired
+    private CompensationService service;
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,15 +42,14 @@ class CandidateControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private CandidateService service;
-
     @BeforeAll
     public static void setUp() {
-        requestDTO = new CandidateRequestDTO();
-        requestDTO.setFirstName("TestName");
-        requestDTO.setLastName("TestLastName");
-        requestDTO.setDateOfBirth(LocalDate.of(1990, 10, 1));
+        requestDTO = new CompensationRequestDTO();
+        requestDTO.setSalary(2000.00);
+        requestDTO.setPaymentDate(LocalDate.of(2023, 10, 15));
+        requestDTO.setComments("Test comments");
+        requestDTO.setCandidateId(1);
+        requestDTO.setContractId(2);
     }
 
     @Test
@@ -65,7 +64,6 @@ class CandidateControllerIntegrationTest {
         mockMvc.perform(get(basePath))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value("1"))
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
     }
 
@@ -78,7 +76,7 @@ class CandidateControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.firstName").value("TestName"));
+                .andExpect(jsonPath("$.comments").value("Test comments"));
     }
 
     @Test
@@ -105,9 +103,10 @@ class CandidateControllerIntegrationTest {
     void authorisedUser_update_shouldReturnStatus202() throws Exception {
         // save new Candidate in repository
         String existingEntityId = String.valueOf(service.create(requestDTO).getId());
+
         // create request for update
-        var requestDTO = new CandidateRequestDTO();
-        requestDTO.setFirstName("ChangedTestName");
+        var requestDTO = new CompensationRequestDTO();
+        requestDTO.setComments("New Comments");
 
         mockMvc.perform(put(basePath + "/" + existingEntityId)
                         .with(csrf())
@@ -116,7 +115,7 @@ class CandidateControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.id").value(existingEntityId))
-                .andExpect(jsonPath("$.firstName").value("ChangedTestName"));
+                .andExpect(jsonPath("$.comments").value("New Comments"));
     }
 
     @Test
@@ -133,15 +132,15 @@ class CandidateControllerIntegrationTest {
     @Test
     @WithMockUser
     void authorisedUser_update_withoutBody_shouldReturnStatus400() throws Exception {
-        mockMvc.perform(put(basePath + "/0")
+        mockMvc.perform(put(basePath + "/1")
                         .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN")
-    void authorisedAdmin_deleteCandidate_shouldReturn204() throws Exception {
+    @WithMockUser(roles = "MANAGER")
+    void authorisedUser_deleteCandidate_shouldReturn204() throws Exception {
         // save new Candidate in repository
         String existingEntityId = String.valueOf(service.create(requestDTO).getId());
 
@@ -152,37 +151,31 @@ class CandidateControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authorisedUser_deleteCandidate_shouldReturn403() throws Exception {
+    void unAuthorisedUser_deleteCandidate_shouldReturn403() throws Exception {
         // save new Candidate in repository
-        String existingCandidateId = String.valueOf(service.create(requestDTO).getId());
+        String existingEntityId = String.valueOf(service.create(requestDTO).getId());
 
-        mockMvc.perform(delete(basePath + "/" + existingCandidateId))
+        mockMvc.perform(delete(basePath + "/" + existingEntityId))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
 
     @Test
     @WithMockUser
-    void authorisedUser_findAllByVacancyId() throws Exception {
+    void authorisedUser_findAllByCandidateId() throws Exception {
         service.create(requestDTO);
 
-        mockMvc.perform(get(basePath + "/findAllByVacancy/1"))
+        mockMvc.perform(get(basePath + "/findAllByCandidate/1"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
     }
 
     @Test
-    @WithMockUser
-    void authorisedUser_findAllByStatusId() throws Exception {
-        //    save new Candidate in repository with status ACTIVE
-        requestDTO.setStatus(CandidateStatus.NOT_ACTIVE);
-        ContactDetailsDTO contactDetails = new ContactDetailsDTO();
-        contactDetails.setEmail("000testemail000@example.com");
-        requestDTO.setContactDetails(contactDetails);
-
+    @WithMockUser(roles = "MANAGER")
+    void authorisedUser_findAllByContractId_shouldReturn200() throws Exception {
         service.create(requestDTO);
 
-        mockMvc.perform(get(basePath + "/findAllByStatus/1"))
+        mockMvc.perform(get(basePath + "/findAllByContract/2"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));

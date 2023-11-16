@@ -42,6 +42,7 @@ public class CompensationController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @IsManager
     public void deleteCandidate(@PathVariable("id") Integer id) {
         getService().delete(id);
     }
@@ -51,7 +52,6 @@ public class CompensationController {
         return new ResponseEntity<>(service.findAllByCandidateId(id), HttpStatus.OK);
     }
 
-    @IsManager
     @GetMapping("/findAllByContract/{id}")
     public ResponseEntity<List<CompensationShortResponseDTO>> findAllByContractId(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(service.findAllByContractId(id), HttpStatus.OK);

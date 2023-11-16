@@ -133,8 +133,8 @@ class CommunicationControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authorisedUser_update_shouldReturnStatus400() throws Exception {
-        mockMvc.perform(put(basePath + "/0")
+    void authorisedUser_update_withoutBody_shouldReturnStatus400() throws Exception {
+        mockMvc.perform(put(basePath + "/1")
                         .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -154,7 +154,6 @@ class CommunicationControllerIntegrationTest {
     @Test
     @WithMockUser
     void authorisedUser_findAllByStatusId() throws Exception {
-
         service.create(requestDTO);
 
         mockMvc.perform(get(basePath + "/findAllByCommunicationTypeId/0"))
@@ -170,6 +169,7 @@ class CommunicationControllerIntegrationTest {
 
         mockMvc.perform(get(basePath + "/findAllByEmployee/2"))
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
     }
 
@@ -180,6 +180,7 @@ class CommunicationControllerIntegrationTest {
 
         mockMvc.perform(get(basePath + "/findAllByClient/1"))
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
     }
 
@@ -190,6 +191,7 @@ class CommunicationControllerIntegrationTest {
 
         mockMvc.perform(get(basePath + "/findAllByCandidate/1"))
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
     }
 
@@ -200,6 +202,7 @@ class CommunicationControllerIntegrationTest {
 
         mockMvc.perform(get(basePath + "/findAllByVacancy/3"))
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
     }
 }
