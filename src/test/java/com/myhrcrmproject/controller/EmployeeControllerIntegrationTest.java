@@ -1,21 +1,22 @@
 package com.myhrcrmproject.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.myhrcrmproject.domain.enums.CommunicationType;
-import com.myhrcrmproject.dto.communicationDTO.CommunicationRequestDTO;
-import com.myhrcrmproject.service.CommunicationService;
+import com.myhrcrmproject.dto.contactDetailsDTO.ContactDetailsDTO;
+import com.myhrcrmproject.dto.employeeDTO.EmployeeRequestDTO;
+import com.myhrcrmproject.service.EmployeeService;
+import com.myhrcrmproject.service.auth.SecurityHelper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -28,11 +29,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Transactional
-class CommunicationControllerIntegrationTest {
+class EmployeeControllerIntegrationTest {
 
-    static CommunicationRequestDTO requestDTO;
+    static EmployeeRequestDTO requestDTO;
 
-    @Value("/api/communications")
+    @Value("/api/employees")
     private String basePath;
 
     @Autowired
@@ -42,28 +43,36 @@ class CommunicationControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private CommunicationService service;
+    private EmployeeService service;
+
+    @MockBean
+    private SecurityHelper helper;
 
     @BeforeAll
     public static void setUp() {
-        requestDTO = new CommunicationRequestDTO();
-        requestDTO.setCommunicationDateTime(LocalDateTime.of(2023, 11, 15, 12, 0));  // Пример для LocalDateTime
-        requestDTO.setCommunicationType(CommunicationType.EMAIL);  // Пример для CommunicationType
-        requestDTO.setClientId(1);  // Пример для целочисленного поля
-        requestDTO.setCandidateId(2);  // Пример для целочисленного поля
-        requestDTO.setVacancyId(3);  // Пример для целочисленного поля
-        requestDTO.setEmployeeId(2);  // Пример для целочисленного поля
+        requestDTO = new EmployeeRequestDTO();
+        requestDTO.setFirstName("Alex");
+        requestDTO.setLastName("Smith");
+        requestDTO.setPosition("Software Engineer");
+
+        // Инициализация вложенного объекта ContactDetailsDTO
+        ContactDetailsDTO contactDetails = new ContactDetailsDTO();
+        contactDetails.setEmail("alex.smith.example@example.com");
+        contactDetails.setMobilePhone("+123456789");
+
+        requestDTO.setContactDetails(contactDetails);
+
     }
 
     @Test
-    void unAuthorisedUser_findAll_shouldReturnStatus403() throws Exception {
+    void notAuthorisedUser_findAll_shouldReturnStatus403() throws Exception {
         mockMvc.perform(get(basePath))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     @WithMockUser
-    void authorisedUser_findAll_shouldReturnStatus200() throws Exception {
+    void authenticatedUser_findAll_shouldReturnStatus200() throws Exception {
         mockMvc.perform(get(basePath))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -79,7 +88,7 @@ class CommunicationControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.communicationDateTime").value("2023-11-15T12:00:00"));
+                .andExpect(jsonPath("$.firstName").value("Alex"));
     }
 
     @Test
@@ -91,7 +100,7 @@ class CommunicationControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "ADMIN")
     void authenticatedUser_createNew_shouldReturnStatus201() throws Exception {
         mockMvc.perform(post(basePath)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -103,21 +112,50 @@ class CommunicationControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authenticatedUser_update_shouldReturnStatus202() throws Exception {
+    void unAuthenticatedUser_createNew_shouldReturnStatus403() throws Exception {
+        mockMvc.perform(post(basePath)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDTO)))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser
+    void unAuthenticatedUser_update_shouldReturnStatus403() throws Exception {
         // save new Candidate in repository
         String existingEntityId = String.valueOf(service.create(requestDTO).getId());
+
         // create request for update
-        var requestDTO = new CommunicationRequestDTO();
-        requestDTO.setCommunicationType(CommunicationType.PHONE);
+        var requestDTO = new EmployeeRequestDTO();
+        requestDTO.setFirstName("John");
 
         mockMvc.perform(put(basePath + "/" + existingEntityId)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andDo(print())
-                .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.id").value(existingEntityId))
-                .andExpect(jsonPath("$.communicationType").value("PHONE"));
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser
+    void authenticatedUser_update_shouldReturnStatus403() throws Exception {
+        // check if user has access to the entry
+        Mockito.when(helper.isAuthUserEqualsEmployee(Mockito.any())).thenReturn(true);
+
+        // save new Candidate in repository
+        String existingEntityId = String.valueOf(service.create(requestDTO).getId());
+        // create request for update
+        var requestDTO = new EmployeeRequestDTO();
+        requestDTO.setFirstName("John");
+
+        mockMvc.perform(put(basePath + "/" + existingEntityId)
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDTO)))
+                .andDo(print())
+                .andExpect(status().isAccepted());
     }
 
     @Test
@@ -141,7 +179,7 @@ class CommunicationControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "ADMIN")
     void authenticatedUser_deleteCandidate_shouldReturn204() throws Exception {
         // save new Candidate in repository
         String existingEntityId = String.valueOf(service.create(requestDTO).getId());
@@ -149,60 +187,5 @@ class CommunicationControllerIntegrationTest {
         mockMvc.perform(delete(basePath + "/" + existingEntityId))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-    }
-
-    @Test
-    @WithMockUser
-    void authenticatedUser_findAllByStatusId() throws Exception {
-        service.create(requestDTO);
-
-        mockMvc.perform(get(basePath + "/findAllByCommunicationTypeId/0"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
-    }
-
-    @Test
-    @WithMockUser
-    void authenticatedUser_findAllByEmployeeId() throws Exception {
-        service.create(requestDTO);
-
-        mockMvc.perform(get(basePath + "/findAllByEmployee/2"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
-    }
-
-    @Test
-    @WithMockUser
-    void authenticatedUser_findAllByClientId() throws Exception {
-        service.create(requestDTO);
-
-        mockMvc.perform(get(basePath + "/findAllByClient/1"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
-    }
-
-    @Test
-    @WithMockUser
-    void authenticatedUser_findAllByCandidateId() throws Exception {
-        service.create(requestDTO);
-
-        mockMvc.perform(get(basePath + "/findAllByCandidate/1"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
-    }
-
-    @Test
-    @WithMockUser
-    void authenticatedUser_findAllByVacancyId() throws Exception {
-        service.create(requestDTO);
-
-        mockMvc.perform(get(basePath + "/findAllByVacancy/3"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
     }
 }

@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Transactional
-class ContractControllerTest {
+class ContractControllerIntegrationTest {
     private static ContractRequestDTO requestDTO;
 
     @Value("/api/contracts")

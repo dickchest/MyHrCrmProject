@@ -54,7 +54,7 @@ class CandidateControllerIntegrationTest {
     }
 
     @Test
-    void notAuthorisedUser_findAll_shouldReturnStatus403() throws Exception {
+    void  unAuthorisedUser_findAll_shouldReturnStatus403() throws Exception {
         mockMvc.perform(get(basePath))
                 .andExpect(status().isForbidden());
     }
@@ -71,7 +71,7 @@ class CandidateControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authorisedUser_findById_shouldReturnStatus200() throws Exception {
+    void authenticatedUser_findById_shouldReturnStatus200() throws Exception {
         String id = String.valueOf(service.create(requestDTO).getId());
 
         mockMvc.perform(get(basePath + "/" + id))
@@ -83,7 +83,7 @@ class CandidateControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authorisedUser_findById_shouldReturnStatus404() throws Exception {
+    void authenticatedUser_findById_shouldReturnStatus404() throws Exception {
         mockMvc.perform(get(basePath + "/0"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -91,7 +91,7 @@ class CandidateControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authorisedUser_createNew_shouldReturnStatus201() throws Exception {
+    void authenticatedUser_createNew_shouldReturnStatus201() throws Exception {
         mockMvc.perform(post(basePath)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
@@ -102,7 +102,7 @@ class CandidateControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authorisedUser_update_shouldReturnStatus202() throws Exception {
+    void authenticatedUser_update_shouldReturnStatus202() throws Exception {
         // save new Candidate in repository
         String existingEntityId = String.valueOf(service.create(requestDTO).getId());
         // create request for update
@@ -121,7 +121,7 @@ class CandidateControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authorisedUser_update_shouldReturnStatus404() throws Exception {
+    void authenticatedUser_update_shouldReturnStatus404() throws Exception {
         mockMvc.perform(put(basePath + "/0")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -132,7 +132,7 @@ class CandidateControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authorisedUser_update_withoutBody_shouldReturnStatus400() throws Exception {
+    void authenticatedUser_update_withoutBody_shouldReturnStatus400() throws Exception {
         mockMvc.perform(put(basePath + "/0")
                         .with(csrf()))
                 .andDo(print())
@@ -141,7 +141,7 @@ class CandidateControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void authorisedAdmin_deleteCandidate_shouldReturn204() throws Exception {
+    void authenticatedAdmin_deleteCandidate_shouldReturn204() throws Exception {
         // save new Candidate in repository
         String existingEntityId = String.valueOf(service.create(requestDTO).getId());
 
@@ -152,7 +152,7 @@ class CandidateControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authorisedUser_deleteCandidate_shouldReturn403() throws Exception {
+    void authenticatedUser_deleteCandidate_shouldReturn403() throws Exception {
         // save new Candidate in repository
         String existingCandidateId = String.valueOf(service.create(requestDTO).getId());
 
@@ -163,7 +163,7 @@ class CandidateControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authorisedUser_findAllByVacancyId() throws Exception {
+    void authenticatedUser_findAllByVacancyId() throws Exception {
         service.create(requestDTO);
 
         mockMvc.perform(get(basePath + "/findAllByVacancy/1"))
@@ -173,7 +173,7 @@ class CandidateControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authorisedUser_findAllByStatusId() throws Exception {
+    void authenticatedUser_findAllByStatusId() throws Exception {
         //    save new Candidate in repository with status ACTIVE
         requestDTO.setStatus(CandidateStatus.NOT_ACTIVE);
         ContactDetailsDTO contactDetails = new ContactDetailsDTO();
