@@ -62,12 +62,12 @@ public class ContractController {
     }
 
     @GetMapping("/findAllByCandidate/{id}")
-    public ResponseEntity<List<ContractResponseDTO>> findAllByCandidateId(@PathVariable("id") Integer id) {
+    public ResponseEntity<List<ContractResponseDTO>> findAllActiveContracts(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(service.findAllByCandidateId(id), HttpStatus.OK);
     }
 
     @GetMapping("/findAllActiveContracts")
-    public ResponseEntity<List<ContractResponseDTO>> findAllByCandidateId() {
+    public ResponseEntity<List<ContractResponseDTO>> findAllActiveContracts() {
         return new ResponseEntity<>(service.findAllActiveContracts(), HttpStatus.OK);
     }
 }
