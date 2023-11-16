@@ -63,7 +63,7 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
         // extra methods
         // set current auth user as employee
         if (entity.getEmployee() == null) {
-            Optional<Employee> employee = securityHelper.getCurrentAuthEmployeeId();
+            Optional<Employee> employee = securityHelper.getCurrentAuthEmployee();
             employee.ifPresent(entity::setEmployee);
         }
         entity.setCreateDate(LocalDateTime.now());

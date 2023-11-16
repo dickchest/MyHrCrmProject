@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<String> handlerDataIntegrityViolationException(DataIntegrityViolationException e) {
-        return new ResponseEntity<>("Entry already exists", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Entry already exists: " + e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -55,5 +55,4 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handlerNotAcceptableStatusException(NotAcceptableStatusException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
-
 }

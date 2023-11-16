@@ -32,7 +32,7 @@ public class SecurityHelper {
         return false;
     }
 
-    public Optional<Employee> getCurrentAuthEmployeeId() {
+    public Optional<Employee> getCurrentAuthEmployee() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = userDetailsRepository.findByUserName(authentication.getName()).orElse(null);
 

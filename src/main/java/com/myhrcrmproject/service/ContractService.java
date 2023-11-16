@@ -49,7 +49,7 @@ public class ContractService implements CommonService<ContractRequestDTO, Contra
 
         // extra methods
         // set current auth user as employee
-        Optional<Employee> employee = securityHelper.getCurrentAuthEmployeeId();
+        Optional<Employee> employee = securityHelper.getCurrentAuthEmployee();
         employee.ifPresent(entity::setEmployee);
 
 
@@ -74,7 +74,7 @@ public class ContractService implements CommonService<ContractRequestDTO, Contra
         // do extra procedures
         // remember employee who updated the entry
 
-        Optional<Employee> employee = securityHelper.getCurrentAuthEmployeeId();
+        Optional<Employee> employee = securityHelper.getCurrentAuthEmployee();
         employee.ifPresent(existingEntity::setEmployee);
 
         existingEntity.setUpdateDate(LocalDateTime.now());

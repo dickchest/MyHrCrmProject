@@ -1,10 +1,12 @@
 package com.myhrcrmproject.service;
 
 import com.myhrcrmproject.domain.Communication;
+import com.myhrcrmproject.domain.Employee;
 import com.myhrcrmproject.domain.enums.CommunicationType;
 import com.myhrcrmproject.dto.communicationDTO.CommunicationRequestDTO;
 import com.myhrcrmproject.dto.communicationDTO.CommunicationResponseDTO;
 import com.myhrcrmproject.repository.*;
+import com.myhrcrmproject.service.auth.SecurityHelper;
 import com.myhrcrmproject.service.utills.CommunicationConverter;
 import com.myhrcrmproject.service.utills.Helper;
 import com.myhrcrmproject.service.validation.NotFoundException;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +27,7 @@ public class CommunicationService implements CommonService<CommunicationRequestD
     private final ClientRepository clientRepository;
     private final CandidateRepository candidateRepository;
     private final VacancyRepository vacancyRepository;
+    private final SecurityHelper securityHelper;
 
     public List<CommunicationResponseDTO> findAll() {
         return repository.findAll().stream()
@@ -38,17 +42,20 @@ public class CommunicationService implements CommonService<CommunicationRequestD
     }
 
     public CommunicationResponseDTO create(CommunicationRequestDTO requestDTO) {
-        Communication newEntity = converter.newEntity();
-
-//        // if date&time haven't been adjusted, set current date&time
-//        if (requestDTO.getCommunicationDateTime() == null) {
-//            newEntity.setCommunicationDateTime(LocalDateTime.now());
-//        }
 
         Communication entity = converter.fromDTO(converter.newEntity(), requestDTO);
 
-        // extra methods
-        // todo доделать, что б автоматически заносился employee кто меняет эту запись
+        // if date&time haven't been adjusted, set current date&time
+        if (requestDTO.getCommunicationDateTime() == null) {
+            entity.setCommunicationDateTime(LocalDateTime.now());
+        }
+
+        // автоматически заносился employee кто меняет эту запись
+        if (requestDTO.getEmployeeId() == null) {
+            Optional<Employee> optionalEmployee = securityHelper.getCurrentAuthEmployee();
+            optionalEmployee.ifPresent(entity::setEmployee);
+        }
+
         entity.setCreateDate(LocalDateTime.now());
         entity.setUpdateDate(LocalDateTime.now());
 
