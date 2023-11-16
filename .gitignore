@@ -33,6 +33,7 @@ build/
 .vscode/
 
 ### My temp folder ###
-!**/temp/
-!**/htmlReport/
-!**/logs/
+temp/
+htmlReport/
+logs/
+*.log

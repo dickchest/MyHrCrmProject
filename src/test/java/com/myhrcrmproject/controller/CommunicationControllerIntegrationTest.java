@@ -55,11 +55,6 @@ class CommunicationControllerIntegrationTest {
         requestDTO.setEmployeeId(2);  // Пример для целочисленного поля
     }
 
-//    @BeforeEach
-//    void beforeEach() {
-//        service.create(requestDTO);
-//    }
-
     @Test
     void notAuthorisedUser_findAll_shouldReturnStatus403() throws Exception {
         mockMvc.perform(get(basePath))
@@ -79,7 +74,7 @@ class CommunicationControllerIntegrationTest {
     @WithMockUser
     void authorisedUser_findById_shouldReturnStatus200() throws Exception {
         String id = String.valueOf(service.create(requestDTO).getId());
-        System.out.println(service.findById(Integer.valueOf(id)));
+
         mockMvc.perform(get(basePath + "/" + id))
                 .andDo(print())
                 .andExpect(status().isOk())

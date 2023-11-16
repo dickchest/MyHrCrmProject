@@ -3,12 +3,10 @@ package com.myhrcrmproject.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myhrcrmproject.domain.enums.CandidateStatus;
 import com.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
-import com.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
 import com.myhrcrmproject.dto.contactDetailsDTO.ContactDetailsDTO;
 import com.myhrcrmproject.service.CandidateService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,11 +53,6 @@ class CandidateControllerIntegrationTest {
         requestDTO.setDateOfBirth(LocalDate.of(1990, 10, 1));
     }
 
-    @BeforeEach
-    void beforeEach() {
-        service.create(requestDTO);
-    }
-
     @Test
     void notAuthorisedUser_findAll_shouldReturnStatus403() throws Exception {
         mockMvc.perform(get(basePath))
@@ -80,6 +73,7 @@ class CandidateControllerIntegrationTest {
     @WithMockUser
     void authorisedUser_findById_shouldReturnStatus200() throws Exception {
         String id = String.valueOf(service.create(requestDTO).getId());
+
         mockMvc.perform(get(basePath + "/" + id))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -170,6 +164,8 @@ class CandidateControllerIntegrationTest {
     @Test
     @WithMockUser
     void authorisedUser_findAllByVacancyId() throws Exception {
+        service.create(requestDTO);
+
         mockMvc.perform(get(basePath + "/findAllByVacancy/1"))
                 .andDo(print())
                 .andExpect(status().isOk());
