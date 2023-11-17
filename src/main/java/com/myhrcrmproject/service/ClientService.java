@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class ClientService implements CommonService<ClientRequestDTO, ClientResponseDTO> {
     private final ClientRepository repository;
     private final ClientConverter converter;
-    private final CandidateConverter candidateConverter;
 
     @Override
     public List<ClientResponseDTO> findAll() {

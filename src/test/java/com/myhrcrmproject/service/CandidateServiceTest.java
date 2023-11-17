@@ -4,9 +4,9 @@ import com.myhrcrmproject.domain.Candidate;
 import com.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
 import com.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
 import com.myhrcrmproject.repository.CandidateRepository;
-import com.myhrcrmproject.repository.VacancyRepository;
 import com.myhrcrmproject.service.utills.CandidateConverter;
 
+import com.myhrcrmproject.service.validation.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -27,8 +28,6 @@ class CandidateServiceTest {
     private CandidateRepository repository;
     @Mock
     private CandidateConverter converter;
-    @Mock
-    private VacancyRepository vacancyRepository;
 
     @InjectMocks
     private CandidateService service;
@@ -71,7 +70,7 @@ class CandidateServiceTest {
     }
 
     @Test
-    void testFindByIdCandidate() {
+    void testFindByIdCandidate_success() {
         //given
         Candidate candidate1 = new Candidate();
         candidate1.setId(1);
@@ -93,6 +92,21 @@ class CandidateServiceTest {
         assertEquals(candidateResponseDTO1, result);
     }
 
+    @Test
+    void testFindByIdCandidate_throwNotFoundException() {
+        // Arrange
+        int id = 1;
+
+        // Mock repository to return an empty optional when findById is called
+        when(repository.findById(id)).thenReturn(Optional.empty());
+
+        // Act and assert
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> service.findById(id));
+        assertEquals("Candidate with id: " + id + " not found!", exception.getMessage());
+
+        // Verify
+        verify(repository, never()).delete(any(Candidate.class));
+    }
     @Test
     void testCreateCandidate() {
         // given
@@ -125,7 +139,7 @@ class CandidateServiceTest {
     }
 
     @Test
-    void testDeleteCandidate() {
+    void testDeleteCandidate_success() {
         // given
         // when
         when(repository.findById(1)).thenReturn(Optional.of(new Candidate()));
@@ -136,7 +150,23 @@ class CandidateServiceTest {
     }
 
     @Test
-    void testUpdateCandidate() {
+    void testDeleteCandidate_throwNotFoundException() {
+        // Arrange
+        int id = 1;
+
+        // Mock repository to return an empty optional when findById is called
+        when(repository.findById(id)).thenReturn(Optional.empty());
+
+        // Act and assert
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> service.delete(id));
+        assertEquals("Candidate with id: " + id + " not found!", exception.getMessage());
+
+        // Verify
+        verify(repository, never()).delete(any(Candidate.class));
+    }
+
+    @Test
+    void testUpdateCandidate_success() {
         // given
         Integer candidateId = 1;
 
@@ -166,16 +196,23 @@ class CandidateServiceTest {
         verify(repository).save(any(Candidate.class));
         verify(repository).findById(candidateId);
         assertEquals(responseDTO, result);
-
     }
 
     @Test
-    void testFindAllCandidatesByStatusId() {
+    void testUpdateCandidate_throwNotFoundException() {
+        // Arrange
+        int id = 1;
+        CandidateRequestDTO requestDTO = new CandidateRequestDTO();
+        requestDTO.setLastName("UpdatedTestName");
 
-    }
+        // Mock repository to return an empty optional when findById is called
+        when(repository.findById(id)).thenReturn(Optional.empty());
 
-    @Test
-    void testFindAllCandidatesByVacancyId() {
+        // Act and assert
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(id, requestDTO));
+        assertEquals("Candidate with id: " + id + " not found!", exception.getMessage());
 
+        // Verify
+        verify(repository, never()).delete(any(Candidate.class));
     }
 }

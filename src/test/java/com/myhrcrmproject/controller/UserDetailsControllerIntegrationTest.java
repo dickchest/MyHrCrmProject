@@ -68,7 +68,7 @@ class UserDetailsControllerIntegrationTest {
     void testFindById_notExistingUser_shouldReturnStatus404() throws Exception {
         mockMvc.perform(get(basePath + "/0"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(containsString("User with id 0 not found")));
+                .andExpect(content().string(containsString("User with id: 0 not found")));
     }
 
     @Test

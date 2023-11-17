@@ -37,7 +37,7 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
     public CandidateResponseDTO findById(Integer id) {
 //        LOGGER.info("Запрошен кандидат с идентификатором {}.", id);
         Candidate entity = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Candidate with id " + id + " not found!"));
+                .orElseThrow(() -> new NotFoundException("Candidate with id: " + id + " not found!"));
         return converter.toDTO(entity);
     }
 

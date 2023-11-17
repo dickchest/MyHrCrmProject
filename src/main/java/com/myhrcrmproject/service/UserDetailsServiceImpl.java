@@ -47,13 +47,12 @@ public class UserDetailsServiceImpl implements CommonService<UserDetailsRequestD
     public UserDetailsResponseDTO findById(Integer id) {
 //        LOGGER.log(Level.INFO, String.format("Вызван метод findById с параметром %d", id));
         UserDetails entity = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User with id " + id + " not found!"));
+                .orElseThrow(() -> new NotFoundException("User with id: " + id + " not found!"));
         return converter.toDTO(entity);
     }
 
     @Override
     public UserDetailsResponseDTO create(UserDetailsRequestDTO requestDTO) {
-//        LOGGER.info("Вызван метод create с параметром %d");
 
         if (repository.findByUserName(requestDTO.getUserName()).isEmpty()) {
             // todo добавить проверку, что такой емейл существует
