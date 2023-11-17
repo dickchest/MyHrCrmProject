@@ -237,11 +237,9 @@ class ContractControllerIntegrationTest {
 
         service.create(requestDTO);
 
-        mockMvc.perform(get(basePath + "/findAllByCandidate/1"))
+        mockMvc.perform(get(basePath + "/findAllActiveContracts"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
     }
-
-
 }
