@@ -1,7 +1,8 @@
-package com.myhrcrmproject.integrationTests;
+package com.myhrcrmproject.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myhrcrmproject.dto.userDetailsDTO.UserDetailsRequestDTO;
+import com.myhrcrmproject.service.UserDetailsServiceImpl;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,6 +109,4 @@ class UserDetailsControllerIntegrationTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("Role errorrole not found!")));
     }
-
-
 }

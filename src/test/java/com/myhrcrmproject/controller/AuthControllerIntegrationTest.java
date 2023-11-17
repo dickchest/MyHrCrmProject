@@ -1,4 +1,4 @@
-package com.myhrcrmproject.integrationTests;
+package com.myhrcrmproject.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myhrcrmproject.domain.UserDetails;
