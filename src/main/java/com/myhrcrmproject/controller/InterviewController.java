@@ -21,7 +21,6 @@ import java.util.List;
 public class InterviewController {
     private final InterviewService service;
 
-    @IsManager
     @GetMapping
     public ResponseEntity<List<InterviewResponseDTO>> findAll() {
         return new ResponseEntity<>(getService().findAll(), HttpStatus.OK);

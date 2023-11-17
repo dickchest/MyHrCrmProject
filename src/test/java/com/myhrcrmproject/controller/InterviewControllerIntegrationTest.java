@@ -1,21 +1,26 @@
 package com.myhrcrmproject.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.myhrcrmproject.domain.enums.CommunicationType;
-import com.myhrcrmproject.dto.communicationDTO.CommunicationRequestDTO;
-import com.myhrcrmproject.service.CommunicationService;
+import com.myhrcrmproject.domain.enums.InterviewStatus;
+import com.myhrcrmproject.dto.interviewDTO.InterviewDateRequestDTO;
+import com.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;
+import com.myhrcrmproject.service.InterviewService;
+import com.myhrcrmproject.service.auth.SecurityHelper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -28,11 +33,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Transactional
-class CommunicationControllerIntegrationTest {
+class InterviewControllerIntegrationTest {
+    static InterviewRequestDTO requestDTO;
 
-    static CommunicationRequestDTO requestDTO;
-
-    @Value("/api/communications")
+    @Value("/api/interviews")
     private String basePath;
 
     @Autowired
@@ -42,17 +46,20 @@ class CommunicationControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private CommunicationService service;
+    private InterviewService service;
+
+    @MockBean
+    private SecurityHelper helper;
 
     @BeforeAll
     public static void setUp() {
-        requestDTO = new CommunicationRequestDTO();
-        requestDTO.setCommunicationDateTime(LocalDateTime.of(2023, 11, 15, 12, 0));  // Пример для LocalDateTime
-        requestDTO.setCommunicationType(CommunicationType.EMAIL);  // Пример для CommunicationType
-        requestDTO.setClientId(1);  // Пример для целочисленного поля
-        requestDTO.setCandidateId(2);  // Пример для целочисленного поля
-        requestDTO.setVacancyId(3);  // Пример для целочисленного поля
-        requestDTO.setEmployeeId(2);  // Пример для целочисленного поля
+        requestDTO = new InterviewRequestDTO();
+        requestDTO.setDate(LocalDate.of(2023, 11, 15));
+        requestDTO.setTime(LocalTime.of(12, 0));
+        requestDTO.setLocation("Conference Room");
+        requestDTO.setComments("Interview comments");
+        requestDTO.setCandidateId(1);
+        requestDTO.setEmployeeId(2);
     }
 
     @Test
@@ -72,14 +79,27 @@ class CommunicationControllerIntegrationTest {
 
     @Test
     @WithMockUser
+    void unAuthenticatedUser_findById_shouldReturnStatus406() throws Exception {
+        String id = String.valueOf(service.create(requestDTO).getId());
+
+        mockMvc.perform(get(basePath + "/" + id))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser
     void authenticatedUser_findById_shouldReturnStatus200() throws Exception {
+        // check if user has access to the entry
+        Mockito.when(helper.isAuthUserEqualsEmployee(Mockito.any())).thenReturn(true);
+
         String id = String.valueOf(service.create(requestDTO).getId());
 
         mockMvc.perform(get(basePath + "/" + id))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.communicationDateTime").value("2023-11-15T12:00:00"));
+                .andExpect(jsonPath("$.status").value("SCHEDULED"));
     }
 
     @Test
@@ -106,9 +126,10 @@ class CommunicationControllerIntegrationTest {
     void authenticatedUser_update_shouldReturnStatus202() throws Exception {
         // save new Entity in repository
         String existingEntityId = String.valueOf(service.create(requestDTO).getId());
+
         // create request for update
-        var requestDTO = new CommunicationRequestDTO();
-        requestDTO.setCommunicationType(CommunicationType.PHONE);
+        var requestDTO = new InterviewRequestDTO();
+        requestDTO.setStatus(InterviewStatus.NO_SHOW);
 
         mockMvc.perform(put(basePath + "/" + existingEntityId)
                         .with(csrf())
@@ -117,7 +138,7 @@ class CommunicationControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.id").value(existingEntityId))
-                .andExpect(jsonPath("$.communicationType").value("PHONE"));
+                .andExpect(jsonPath("$.status").value("NO_SHOW"));
     }
 
     @Test
@@ -143,7 +164,7 @@ class CommunicationControllerIntegrationTest {
     @Test
     @WithMockUser
     void authenticatedUser_deleteCandidate_shouldReturn204() throws Exception {
-        // save new Entity in repository
+        // save new entity in repository
         String existingEntityId = String.valueOf(service.create(requestDTO).getId());
 
         mockMvc.perform(delete(basePath + "/" + existingEntityId))
@@ -156,7 +177,7 @@ class CommunicationControllerIntegrationTest {
     void authenticatedUser_findAllByStatusId() throws Exception {
         service.create(requestDTO);
 
-        mockMvc.perform(get(basePath + "/findAllByCommunicationTypeId/0"))
+        mockMvc.perform(get(basePath + "/findAllByStatus/0"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
@@ -165,6 +186,9 @@ class CommunicationControllerIntegrationTest {
     @Test
     @WithMockUser
     void authenticatedUser_findAllByEmployeeId() throws Exception {
+        // check if user has access to the entry
+        Mockito.when(helper.isAuthUserEqualsEmployee(Mockito.any())).thenReturn(true);
+
         service.create(requestDTO);
 
         mockMvc.perform(get(basePath + "/findAllByEmployee/2"))
@@ -175,10 +199,18 @@ class CommunicationControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authenticatedUser_findAllByClientId() throws Exception {
+    void authenticatedUser_findAllByDateAndEmployeeId() throws Exception {
+        // check if user has access to the entry
+        Mockito.when(helper.isAuthUserEqualsEmployee(Mockito.any())).thenReturn(true);
+
         service.create(requestDTO);
 
-        mockMvc.perform(get(basePath + "/findAllByClient/1"))
+        InterviewDateRequestDTO interviewDateRequestDTO = new InterviewDateRequestDTO(LocalDate.of(2023, 11, 15));
+
+        mockMvc.perform(put(basePath + "/findAllByDateAndEmployee/2")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(interviewDateRequestDTO)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
@@ -186,21 +218,18 @@ class CommunicationControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authenticatedUser_findAllByCandidateId() throws Exception {
+    void authenticatedUser_findAllByDate() throws Exception {
+        // check if user has access to the entry
+        Mockito.when(helper.isAuthUserEqualsEmployee(Mockito.any())).thenReturn(true);
+
         service.create(requestDTO);
 
-        mockMvc.perform(get(basePath + "/findAllByCandidate/1"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
-    }
+        InterviewDateRequestDTO interviewDateRequestDTO = new InterviewDateRequestDTO(LocalDate.of(2023, 11, 15));
 
-    @Test
-    @WithMockUser
-    void authenticatedUser_findAllByVacancyId() throws Exception {
-        service.create(requestDTO);
-
-        mockMvc.perform(get(basePath + "/findAllByVacancy/3"))
+        mockMvc.perform(put(basePath + "/findAllByDate")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(interviewDateRequestDTO)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
