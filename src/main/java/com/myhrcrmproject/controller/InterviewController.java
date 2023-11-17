@@ -4,7 +4,6 @@ import com.myhrcrmproject.dto.interviewDTO.InterviewDateRequestDTO;
 import com.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;
 import com.myhrcrmproject.dto.interviewDTO.InterviewResponseDTO;
 import com.myhrcrmproject.dto.interviewDTO.InterviewShortResponseDTO;
-import com.myhrcrmproject.domain.annotations.IsManager;
 import com.myhrcrmproject.service.InterviewService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

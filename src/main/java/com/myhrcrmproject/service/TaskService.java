@@ -4,7 +4,6 @@ import com.myhrcrmproject.domain.Candidate;
 import com.myhrcrmproject.domain.Employee;
 import com.myhrcrmproject.domain.Task;
 import com.myhrcrmproject.domain.Vacancy;
-import com.myhrcrmproject.domain.enums.CandidateStatus;
 import com.myhrcrmproject.domain.enums.TaskStatus;
 import com.myhrcrmproject.dto.taskDTO.TaskDateRequestDTO;
 import com.myhrcrmproject.dto.taskDTO.TaskRequestDTO;
@@ -200,7 +199,7 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
             throw new NotAcceptableStatusException("You have not permission to access this entity");
         }
 
-        CandidateStatus status = Optional.ofNullable(CandidateStatus.values()[statusId]).
+        TaskStatus status = Optional.ofNullable(TaskStatus.values()[statusId]).
                 orElseThrow(() -> new NotFoundException("No enum found with id: " + statusId));
         List<Task> list = repository.findAllByStatusAndEmployee(status, employee);
         return list.stream()

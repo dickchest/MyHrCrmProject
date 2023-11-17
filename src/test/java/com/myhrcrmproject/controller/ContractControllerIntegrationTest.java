@@ -72,7 +72,7 @@ class ContractControllerIntegrationTest {
     @BeforeEach
     public void beforeEach() {
         Employee currentEmployee = employeeRepository.findById(1)
-                .orElseThrow(() -> new NotFoundException("Compensation with id: 1 not found!"));
+                .orElseThrow(() -> new NotFoundException("Entity with id: 1 not found!"));
         when(helper.getCurrentAuthEmployee()).thenReturn(Optional.of(currentEmployee));
     }
 

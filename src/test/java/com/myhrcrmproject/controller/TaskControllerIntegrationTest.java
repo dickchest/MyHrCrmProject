@@ -1,17 +1,14 @@
 package com.myhrcrmproject.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.myhrcrmproject.domain.Employee;
-import com.myhrcrmproject.domain.enums.InterviewStatus;
+import com.myhrcrmproject.domain.enums.TaskStatus;
 import com.myhrcrmproject.dto.interviewDTO.InterviewDateRequestDTO;
-import com.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;
-import com.myhrcrmproject.repository.EmployeeRepository;
-import com.myhrcrmproject.service.InterviewService;
+import com.myhrcrmproject.dto.taskDTO.TaskDateRequestDTO;
+import com.myhrcrmproject.dto.taskDTO.TaskRequestDTO;
+import com.myhrcrmproject.service.TaskService;
 import com.myhrcrmproject.service.auth.SecurityHelper;
-import com.myhrcrmproject.service.validation.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +21,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Optional;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -39,10 +33,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Transactional
-class InterviewControllerIntegrationTest {
-    static InterviewRequestDTO requestDTO;
+class TaskControllerIntegrationTest {
 
-    @Value("/api/interviews")
+    static TaskRequestDTO requestDTO;
+
+    @Value("/api/tasks")
     private String basePath;
 
     @Autowired
@@ -52,31 +47,24 @@ class InterviewControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private InterviewService service;
+    private TaskService service;
 
     @MockBean
     private SecurityHelper helper;
 
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
     @BeforeAll
     public static void setUp() {
-        requestDTO = new InterviewRequestDTO();
-        requestDTO.setDate(LocalDate.of(2023, 11, 15));
-        requestDTO.setTime(LocalTime.of(12, 0));
-        requestDTO.setLocation("Conference Room");
-        requestDTO.setComments("Interview comments");
+        requestDTO = new TaskRequestDTO();
+        requestDTO.setTitle("Task Title");
+        requestDTO.setDescription("Task Description");
+        requestDTO.setStartDate(LocalDate.of(2023, 11, 15));
+        requestDTO.setEndDate(LocalDate.of(2023, 11, 20));
+        requestDTO.setStatus(TaskStatus.IN_PROCESS);
         requestDTO.setCandidateId(1);
         requestDTO.setEmployeeId(2);
+        requestDTO.setVacancyId(3);
     }
 
-    @BeforeEach
-    public void beforeEach() {
-        Employee currentEmployee = employeeRepository.findById(1)
-                .orElseThrow(() -> new NotFoundException("Entity with id: 1 not found!"));
-        when(helper.getCurrentAuthEmployee()).thenReturn(Optional.of(currentEmployee));
-    }
     @Test
     void unAuthorisedUser_findAll_shouldReturnStatus403() throws Exception {
         mockMvc.perform(get(basePath))
@@ -84,7 +72,7 @@ class InterviewControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "MANAGER")
     void authenticatedUser_findAll_shouldReturnStatus200() throws Exception {
         mockMvc.perform(get(basePath))
                 .andDo(print())
@@ -94,7 +82,7 @@ class InterviewControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void unAuthenticatedUser_findById_shouldReturnStatus406() throws Exception {
+    void unAuthenticatedUser_findById_shouldReturnStatus403() throws Exception {
         String id = String.valueOf(service.create(requestDTO).getId());
 
         mockMvc.perform(get(basePath + "/" + id))
@@ -114,7 +102,7 @@ class InterviewControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.status").value("SCHEDULED"));
+                .andExpect(jsonPath("$.status").value("IN_PROCESS"));
     }
 
     @Test
@@ -139,12 +127,15 @@ class InterviewControllerIntegrationTest {
     @Test
     @WithMockUser
     void authenticatedUser_update_shouldReturnStatus202() throws Exception {
+        // check if user has access to the entry
+        Mockito.when(helper.isAuthUserEqualsEmployee(Mockito.any())).thenReturn(true);
+
         // save new Entity in repository
         String existingEntityId = String.valueOf(service.create(requestDTO).getId());
 
         // create request for update
-        var requestDTO = new InterviewRequestDTO();
-        requestDTO.setStatus(InterviewStatus.NO_SHOW);
+        var requestDTO = new TaskRequestDTO();
+        requestDTO.setStatus(TaskStatus.DONE);
 
         mockMvc.perform(put(basePath + "/" + existingEntityId)
                         .with(csrf())
@@ -153,7 +144,7 @@ class InterviewControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.id").value(existingEntityId))
-                .andExpect(jsonPath("$.status").value("NO_SHOW"));
+                .andExpect(jsonPath("$.status").value("DONE"));
     }
 
     @Test
@@ -178,7 +169,21 @@ class InterviewControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authenticatedUser_deleteCandidate_shouldReturn204() throws Exception {
+    void unAuthenticatedUser_delete_shouldReturn403() throws Exception {
+        // save new entity in repository
+        String existingEntityId = String.valueOf(service.create(requestDTO).getId());
+
+        mockMvc.perform(delete(basePath + "/" + existingEntityId))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser
+    void authenticatedUser_delete_shouldReturn204() throws Exception {
+        // check if user has access to the entry
+        Mockito.when(helper.isAuthUserEqualsEmployee(Mockito.any())).thenReturn(true);
+
         // save new entity in repository
         String existingEntityId = String.valueOf(service.create(requestDTO).getId());
 
@@ -189,10 +194,23 @@ class InterviewControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authenticatedUser_findAllByStatusId() throws Exception {
+    void unAuthenticatedUser_findAllByStatusId() throws Exception {
         service.create(requestDTO);
 
-        mockMvc.perform(get(basePath + "/findAllByStatus/0"))
+        mockMvc.perform(get(basePath + "/findAllByTaskStatusId/1"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "MANAGER")
+    void authenticatedUser_findAllByStatusId() throws Exception {
+        // check if user has access to the entry
+        Mockito.when(helper.isAuthUserEqualsEmployee(Mockito.any())).thenReturn(true);
+
+        service.create(requestDTO);
+
+        mockMvc.perform(get(basePath + "/findAllByTaskStatusId/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
@@ -213,16 +231,35 @@ class InterviewControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser
-    void authenticatedUser_findAllByDateAndEmployeeId() throws Exception {
-        // check if user has access to the entry
-        Mockito.when(helper.isAuthUserEqualsEmployee(Mockito.any())).thenReturn(true);
-
+    @WithMockUser(roles = "MANAGER")
+    void authenticatedUser_findAllByCandidateId() throws Exception {
         service.create(requestDTO);
 
-        InterviewDateRequestDTO interviewDateRequestDTO = new InterviewDateRequestDTO(LocalDate.of(2023, 11, 15));
+        mockMvc.perform(get(basePath + "/findAllByCandidate/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
+    }
 
-        mockMvc.perform(put(basePath + "/findAllByDateAndEmployee/2")
+    @Test
+    @WithMockUser(roles = "MANAGER")
+    void authenticatedUser_findAllByVacancyId() throws Exception {
+        service.create(requestDTO);
+
+        mockMvc.perform(get(basePath + "/findAllByVacancy/3"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
+    }
+
+    @Test
+    @WithMockUser(roles = "MANAGER")
+    void authenticatedUser_findAllByStartDate() throws Exception {
+        service.create(requestDTO);
+
+        TaskDateRequestDTO interviewDateRequestDTO = new TaskDateRequestDTO(LocalDate.of(2023, 11, 15));
+
+        mockMvc.perform(put(basePath + "/findAllByStartDate")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(interviewDateRequestDTO)))
@@ -233,7 +270,7 @@ class InterviewControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authenticatedUser_findAllByDate() throws Exception {
+    void authenticatedUser_findAllByStartDateAndEmployeed() throws Exception {
         // check if user has access to the entry
         Mockito.when(helper.isAuthUserEqualsEmployee(Mockito.any())).thenReturn(true);
 
@@ -241,7 +278,7 @@ class InterviewControllerIntegrationTest {
 
         InterviewDateRequestDTO interviewDateRequestDTO = new InterviewDateRequestDTO(LocalDate.of(2023, 11, 15));
 
-        mockMvc.perform(put(basePath + "/findAllByDate")
+        mockMvc.perform(put(basePath + "/findAllByStartDateAndEmployee/2")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(interviewDateRequestDTO)))
@@ -249,4 +286,47 @@ class InterviewControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
     }
+
+    @Test
+    @WithMockUser
+    void authenticatedUser_findAllByCandidateAndEmployee() throws Exception {
+        // check if user has access to the entry
+        Mockito.when(helper.isAuthUserEqualsEmployee(Mockito.any())).thenReturn(true);
+
+        service.create(requestDTO);
+
+        mockMvc.perform(get(basePath + "/findAllByCandidateAndEmployee/1/2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
+    }
+
+    @Test
+    @WithMockUser
+    void authenticatedUser_findAllByStatusAndEmployee() throws Exception {
+        // check if user has access to the entry
+        Mockito.when(helper.isAuthUserEqualsEmployee(Mockito.any())).thenReturn(true);
+
+        service.create(requestDTO);
+
+        mockMvc.perform(get(basePath + "/findAllByStatusAndEmployee/1/2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
+    }
+
+    @Test
+    @WithMockUser
+    void authenticatedUser_findAllByVacancyAndEmployee() throws Exception {
+        // check if user has access to the entry
+        Mockito.when(helper.isAuthUserEqualsEmployee(Mockito.any())).thenReturn(true);
+
+        service.create(requestDTO);
+
+        mockMvc.perform(get(basePath + "/findAllByVacancyAndEmployee/3/2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
+    }
+
 }

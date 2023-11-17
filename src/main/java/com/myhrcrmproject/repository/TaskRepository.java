@@ -4,7 +4,6 @@ import com.myhrcrmproject.domain.Candidate;
 import com.myhrcrmproject.domain.Employee;
 import com.myhrcrmproject.domain.Task;
 import com.myhrcrmproject.domain.Vacancy;
-import com.myhrcrmproject.domain.enums.CandidateStatus;
 import com.myhrcrmproject.domain.enums.TaskStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -28,7 +27,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     List<Task> findAllByCandidateAndEmployee(Candidate candidate, Employee employee);
 
-    List<Task> findAllByStatusAndEmployee(CandidateStatus status, Employee employee);
+    List<Task> findAllByStatusAndEmployee(TaskStatus status, Employee employee);
 
     List<Task> findAllByVacancyAndEmployee(Vacancy vacancy, Employee employee);
 }

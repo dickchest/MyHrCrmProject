@@ -142,7 +142,7 @@ class CommunicationControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void authenticatedUser_deleteCandidate_shouldReturn204() throws Exception {
+    void authenticatedUser_delete_shouldReturn204() throws Exception {
         // save new Entity in repository
         String existingEntityId = String.valueOf(service.create(requestDTO).getId());
 
