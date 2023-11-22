@@ -64,11 +64,10 @@ class CommunicationServiceTest {
         NotFoundException exception = assertThrows(NotFoundException.class, () -> service.delete(id));
         assertEquals("Communication with id: " + id + " not found!", exception.getMessage());
     }
+
     @Test
     void testCreateCommunication_shouldSetCurrentDateAndTime() {
         // given
-        LocalDateTime dateTime = LocalDateTime.of(2023, 11, 15, 12, 0);
-
         CommunicationRequestDTO requestDTO = new CommunicationRequestDTO();
         requestDTO.setCommunicationType(CommunicationType.EMAIL);
 
