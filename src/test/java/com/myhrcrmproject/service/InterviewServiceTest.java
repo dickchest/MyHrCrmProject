@@ -3,6 +3,7 @@ package com.myhrcrmproject.service;
 import com.myhrcrmproject.domain.Candidate;
 import com.myhrcrmproject.domain.Employee;
 import com.myhrcrmproject.domain.Interview;
+import com.myhrcrmproject.domain.enums.InterviewStatus;
 import com.myhrcrmproject.dto.interviewDTO.InterviewDateRequestDTO;
 import com.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;
 import com.myhrcrmproject.dto.interviewDTO.InterviewResponseDTO;
@@ -56,6 +57,7 @@ class InterviewServiceTest {
         requestDTO.setTime(LocalTime.of(12, 0));
         requestDTO.setLocation("Test Location");
         requestDTO.setCandidateId(1);
+        requestDTO.setStatus(InterviewStatus.NO_SHOW);
 
         Candidate candidate = new Candidate();
         candidate.setId(1);
@@ -68,6 +70,7 @@ class InterviewServiceTest {
         entity.setTime(requestDTO.getTime());
         entity.setLocation(requestDTO.getLocation());
         entity.setCandidate(candidate);
+        entity.setStatus(InterviewStatus.NO_SHOW);
 
         InterviewResponseDTO responseDTO = new InterviewResponseDTO();
         responseDTO.setId(1);
