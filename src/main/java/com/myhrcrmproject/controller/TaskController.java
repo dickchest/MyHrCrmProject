@@ -1,6 +1,7 @@
 package com.myhrcrmproject.controller;
 
 import com.myhrcrmproject.domain.annotations.IsManager;
+import com.myhrcrmproject.domain.annotations.IsUser;
 import com.myhrcrmproject.dto.taskDTO.TaskDateRequestDTO;
 import com.myhrcrmproject.dto.taskDTO.TaskRequestDTO;
 import com.myhrcrmproject.dto.taskDTO.TaskResponseDTO;
@@ -51,6 +52,7 @@ public class TaskController {
     @IsManager
     @GetMapping("/findAllByTaskStatusId/{id}")
     public ResponseEntity<List<TaskResponseDTO>> findAllByTaskStatusId(@PathVariable("id") Integer id) {
+        System.out.println("received by status id request");
         return new ResponseEntity<>(service.findAllByTaskStatusId(id), HttpStatus.OK);
     }
 

@@ -198,9 +198,14 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
         if (!securityHelper.isAuthUserEqualsEmployee(employee)) {
             throw new NotAcceptableStatusException("You have not permission to access this entity");
         }
+        TaskStatus status;
 
-        TaskStatus status = Optional.ofNullable(TaskStatus.values()[statusId]).
-                orElseThrow(() -> new NotFoundException("No enum found with id: " + statusId));
+        try {
+            status = TaskStatus.values()[statusId];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new NotFoundException("No enum found with id: " + statusId);
+        }
+
         List<Task> list = repository.findAllByStatusAndEmployee(status, employee);
         return list.stream()
                 .map(converter::toShortDTO)

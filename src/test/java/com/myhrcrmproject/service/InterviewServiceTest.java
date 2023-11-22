@@ -51,7 +51,6 @@ class InterviewServiceTest {
     @Test
     void testCreate_success() {
         // Arrange
-        int id = 1;
         InterviewRequestDTO requestDTO = new InterviewRequestDTO();
         requestDTO.setDate(LocalDate.of(2013, 10, 15));
         requestDTO.setTime(LocalTime.of(12, 0));
