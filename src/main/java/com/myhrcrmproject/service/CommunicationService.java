@@ -37,7 +37,7 @@ public class CommunicationService implements CommonService<CommunicationRequestD
 
     public CommunicationResponseDTO findById(Integer id) {
         Communication entity = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Communication with id " + id + " not found!"));
+                .orElseThrow(() -> new NotFoundException("Communication with id: " + id + " not found!"));
         return converter.toDTO(entity);
     }
 
