@@ -26,7 +26,7 @@ public class ContactDetailsConverter {
         return entity;
     }
 
-    public AddressDetails newEntity() {
-        return new AddressDetails();
+    public ContactDetails newEntity() {
+        return new ContactDetails();
     }
 }

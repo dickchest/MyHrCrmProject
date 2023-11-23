@@ -93,18 +93,17 @@ public class CandidateConverter {
 
         // if candidate just have been applied for vacancy set status IN_PROGRESS
         if (request.getVacancyId() != null) {
-            Optional<Vacancy> vacancy = vacancyRepository.findById(request.getVacancyId());
-            if (vacancy.isPresent()) {
-                entity.setVacancy(vacancy.get());
-                entity.setStatus(CandidateStatus.IN_PROCESS);
-            } else {
-                throw new NotFoundException
-                        ("Vacancy with id " + request.getVacancyId() + " not found");
-            }
+            Vacancy vacancy = vacancyRepository.findById(request.getVacancyId())
+                    .orElseThrow(() -> new NotFoundException
+                            ("Vacancy with id " + request.getVacancyId() + " not found"));
+            entity.setVacancy(vacancy);
+            entity.setStatus(CandidateStatus.IN_PROCESS);
+            System.out.println(entity.getStatus());
         }
 
         // if status was provided, set status
-        Optional.ofNullable(request.getStatus()).ifPresent(entity::setStatus);
+        Optional.ofNullable(request.getStatus()).
+                ifPresent(entity::setStatus);
         return entity;
     }
 

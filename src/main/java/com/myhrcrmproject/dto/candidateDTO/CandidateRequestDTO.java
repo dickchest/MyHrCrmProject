@@ -4,6 +4,7 @@ import com.myhrcrmproject.dto.addressDetailsDTO.AddressDetailsDTO;
 import com.myhrcrmproject.dto.contactDetailsDTO.ContactDetailsDTO;
 import com.myhrcrmproject.domain.enums.CandidateStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class CandidateRequestDTO{
 
     private String firstName;
