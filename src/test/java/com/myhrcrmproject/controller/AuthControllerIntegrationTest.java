@@ -29,9 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-//@Sql("/database/add_test_data.sql")
-//@TestPropertySource(locations = "classpath:application-test.properties")
-//@AutoConfigureTestEntityManager
 class AuthControllerIntegrationTest {
 
     @Autowired
