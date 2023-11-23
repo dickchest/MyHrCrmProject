@@ -66,13 +66,65 @@ class CandidateConverterTest {
                 .status(CandidateStatus.ACTIVE)
                 .build();
 
+        Candidate candidate = new Candidate();
+        candidate.setFirstName("TestName");
+        candidate.setContactDetails(contactDetails);
+
         // Mocking behavior of the repository and converters
         when(contactDetailsConverter.fromDTO(any(), any())).thenReturn(contactDetails);
         when(addressDetailsConverter.fromDTO(any(), any())).thenReturn(addressDetails);
         when(vacancyRepository.findById(eq(1))).thenReturn(Optional.of(vacancy));
 
         // Testing the method
-        Candidate result = converter.fromDTO(converter.newEntity(), requestDTO);
+        Candidate result = converter.fromDTO(candidate, requestDTO);
+
+        // Assertions
+        assertEquals("TestName", result.getFirstName());
+        assertEquals("LastName", result.getLastName());
+        assertEquals(LocalDate.of(2015, 5, 15), result.getDateOfBirth());
+        assertEquals(contactDetails, result.getContactDetails());
+        assertEquals(addressDetails, result.getAddressDetails());
+        assertEquals(vacancy, result.getVacancy());
+        assertEquals(CandidateStatus.ACTIVE, result.getStatus());
+    }
+
+    @Test
+    void testFromDTO_existAdressDetails() {
+        // Mock data for the test
+
+        ContactDetails contactDetails = new ContactDetails();
+        contactDetails.setId(1);
+        contactDetails.setEmail("test@email.com");
+
+        AddressDetails addressDetails = new AddressDetails();
+        addressDetails.setCountry("Test Country");
+
+        Vacancy vacancy = new Vacancy();
+        vacancy.setId(1);
+        vacancy.setJobTitle("Test JobTitle");
+
+        CandidateRequestDTO requestDTO = CandidateRequestDTO.builder()
+                .firstName("TestName")
+                .lastName("LastName")
+                .dateOfBirth(LocalDate.of(2015, 5, 15))
+                .contactDetails(new ContactDetailsDTO())
+                .addressDetails(new AddressDetailsDTO())
+                .vacancyId(1)
+                .status(CandidateStatus.ACTIVE)
+                .build();
+
+        Candidate candidate = new Candidate();
+        candidate.setFirstName("TestName");
+        candidate.setContactDetails(contactDetails);
+        candidate.setAddressDetails(addressDetails);
+
+        // Mocking behavior of the repository and converters
+        when(contactDetailsConverter.fromDTO(any(), any())).thenReturn(contactDetails);
+        when(addressDetailsConverter.fromDTO(any(), any())).thenReturn(addressDetails);
+        when(vacancyRepository.findById(eq(1))).thenReturn(Optional.of(vacancy));
+
+        // Testing the method
+        Candidate result = converter.fromDTO(candidate, requestDTO);
 
         // Assertions
         assertEquals("TestName", result.getFirstName());

@@ -98,7 +98,6 @@ public class CandidateConverter {
                             ("Vacancy with id " + request.getVacancyId() + " not found"));
             entity.setVacancy(vacancy);
             entity.setStatus(CandidateStatus.IN_PROCESS);
-            System.out.println(entity.getStatus());
         }
 
         // if status was provided, set status
