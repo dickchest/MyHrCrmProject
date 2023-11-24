@@ -1,9 +1,6 @@
 package com.myhrcrmproject.service.utills;
 
-import com.myhrcrmproject.domain.Interview;
 import com.myhrcrmproject.domain.Task;
-import com.myhrcrmproject.dto.interviewDTO.InterviewResponseDTO;
-import com.myhrcrmproject.dto.interviewDTO.InterviewShortResponseDTO;
 import com.myhrcrmproject.dto.taskDTO.TaskResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
