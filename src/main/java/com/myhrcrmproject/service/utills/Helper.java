@@ -62,11 +62,4 @@ public class Helper {
                 .map(dtoMappingFunction::apply)
                 .toList();
     }
-
-//    public static <T extends Enum<T>> T getEnumFromString(Class<T> enumType, String value) {
-//        try {
-//            return Enum.valueOf(enumType, value.toUpperCase());
-//        } catch (IllegalArgumentException e) {
-//            throw new NotFoundException("Invalid enum value: " + value);
-//        }
 }
