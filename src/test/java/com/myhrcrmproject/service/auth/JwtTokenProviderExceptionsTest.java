@@ -3,7 +3,6 @@ package com.myhrcrmproject.service.auth;
 import com.myhrcrmproject.service.validation.InvalidJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,7 +51,7 @@ public class JwtTokenProviderExceptionsTest {
     void validateTokenException_shouldThroughExpiredJwtException() {
         String token = Jwts.builder()
                 .setSubject("TestName")
-                .setIssuedAt(new Date(2022,11, 11))
+                .setIssuedAt(new Date(2022, 11, 11))
                 .setExpiration(new Date(System.currentTimeMillis()))
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)
                 .compact();

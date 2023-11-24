@@ -1,12 +1,11 @@
 package com.myhrcrmproject.service.auth;
 
 import com.myhrcrmproject.service.validation.InvalidJwtException;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.security.SignatureException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

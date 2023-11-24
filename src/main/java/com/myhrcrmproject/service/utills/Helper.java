@@ -1,6 +1,5 @@
 package com.myhrcrmproject.service.utills;
 
-import com.myhrcrmproject.domain.Candidate;
 import com.myhrcrmproject.service.validation.NotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -28,14 +27,6 @@ public class Helper {
             );
         }
     }
-
-//    public static <T> T findByIdOrThrow(
-//            JpaRepository<T, Integer> repository,
-//            Integer id,
-//            String entityName) {
-//        return repository.findById(id)
-//                .orElseThrow(() -> new NotFoundException(entityName + " with id " + id + " not found"));
-//    }
 
     public static <E, T, R> List<R> findAllByEntityId(
             Integer id,
