@@ -20,8 +20,7 @@ import java.util.List;
 @RequestMapping("api/candidates")
 @AllArgsConstructor
 @Getter
-@Tag(name = "Candidate Controller", description = "Operations related to candidates")
-
+@Tag(name = "Candidate Controller", description = "APIs for managing candidates")
 public class CandidateController {
     private final CandidateService service;
 
@@ -39,7 +38,10 @@ public class CandidateController {
             summary = "Get candidate by ID",
             description = "Retrieve a candidate by their ID."
     )
-    public ResponseEntity<CandidateResponseDTO> findById(@PathVariable("id") @Parameter(description = "ID of the candidate") Integer id) {
+    public ResponseEntity<CandidateResponseDTO> findById(
+            @PathVariable("id")
+            @Parameter(description = "ID of the candidate", example = "1")
+            Integer id) {
         return new ResponseEntity<>(getService().findById(id), HttpStatus.OK);
     }
 
@@ -50,7 +52,8 @@ public class CandidateController {
     )
     public ResponseEntity<CandidateResponseDTO> createNew(
             @RequestBody
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request body containing candidate details")
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Request body containing candidate details")
             CandidateRequestDTO requestDTO) {
         return new ResponseEntity<>(getService().create(requestDTO), HttpStatus.CREATED);
     }
@@ -61,9 +64,12 @@ public class CandidateController {
             description = "Update an existing candidate with the provided details."
     )
     public ResponseEntity<CandidateResponseDTO> update(
-            @PathVariable("id") @Parameter(description = "ID of the candidate to update") Integer id,
+            @PathVariable("id")
+            @Parameter(description = "ID of the candidate to update", example = "1")
+            Integer id,
             @RequestBody
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Request body containing updated candidate details")
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Request body containing updated candidate details")
             CandidateRequestDTO requestDTO) {
         return new ResponseEntity<>(getService().update(id, requestDTO), HttpStatus.ACCEPTED);
     }
@@ -75,7 +81,10 @@ public class CandidateController {
             summary = "Delete a candidate",
             description = "Delete a candidate by their ID. Requires manager role."
     )
-    public void deleteCandidate(@PathVariable("id") @Parameter(description = "ID of the candidate to delete") Integer id) {
+    public void delete(
+            @PathVariable("id")
+            @Parameter(description = "ID of the candidate to delete", example = "1")
+            Integer id) {
         getService().delete(id);
     }
 
@@ -85,7 +94,10 @@ public class CandidateController {
             summary = "Get candidates by status ID",
             description = "Retrieve a list of candidates by status ID."
     )
-    public ResponseEntity<List<CandidateShortResponseDTO>> findAllByStatusId(@PathVariable("id") @Parameter(description = "ID of the status") Integer statusID) {
+    public ResponseEntity<List<CandidateShortResponseDTO>> findAllByStatusId(
+            @PathVariable("id")
+            @Parameter(description = "ID of the status",example = "1")
+            Integer statusID) {
         return new ResponseEntity<>(service.findAllByStatusId(statusID), HttpStatus.OK);
     }
 
@@ -94,7 +106,10 @@ public class CandidateController {
             summary = "Get candidates by vacancy ID",
             description = "Retrieve a list of candidates by vacancy ID."
     )
-    public ResponseEntity<List<CandidateShortResponseDTO>> findAllByVacancyId(@PathVariable("id") @Parameter(description = "ID of the vacancy") Integer id) {
+    public ResponseEntity<List<CandidateShortResponseDTO>> findAllByVacancyId(
+            @PathVariable("id")
+            @Parameter(description = "ID of the vacancy", example = "1")
+            Integer id) {
         return new ResponseEntity<>(service.findAllByVacancyId(id), HttpStatus.OK);
     }
 }

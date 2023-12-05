@@ -28,8 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
 
-            if(request.getRequestURI().startsWith("/swagger-vi") || request.getRequestURI().startsWith("/v3/api-docs")) {
-                System.out.println("SWAGGER");
+            if(request.getRequestURI().startsWith("/swagger-ui") || request.getRequestURI().startsWith("/v3/api-docs")) {
                 filterChain.doFilter(request, response);
             }
 
@@ -43,7 +42,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             logger.error("Could not set user authentication in security context: " + e.getMessage(), e);
-//            throw new InvalidJwtException(e.getMessage());
         }
 
         filterChain.doFilter(request, response);
