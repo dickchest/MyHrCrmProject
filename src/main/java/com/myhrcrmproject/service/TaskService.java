@@ -26,7 +26,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+/**
+ * Service class that handles CRUD (Create, Read, Update, Delete) operations for task entities.
+ *
+ * <p>This service provides methods to perform operations on task entities, such as retrieving,
+ * creating, updating, and deleting task records. It also includes additional methods for finding
+ * task records based on different criteria.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDTO> {
@@ -37,12 +46,24 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
     private final VacancyRepository vacancyRepository;
     private final SecurityHelper securityHelper;
 
+    /**
+     * Retrieves a list of all task records.
+     *
+     * @return A list of response DTOs representing all task records.
+     */
     public List<TaskResponseDTO> findAll() {
         return repository.findAll().stream()
                 .map(converter::toDTO)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves a task record by its unique identifier.
+     *
+     * @param id The identifier of the task record to retrieve.
+     * @return The response DTO representing the retrieved task record.
+     * @throws NotFoundException if the task record with the specified id is not found.
+     */
     public TaskResponseDTO findById(Integer id) {
         Task entity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task with id " + id + " not found!"));
@@ -55,6 +76,12 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
         return converter.toDTO(entity);
     }
 
+    /**
+     * Creates a new task record based on the provided data.
+     *
+     * @param requestDTO The request DTO containing data for the new task record.
+     * @return The response DTO representing the newly created task record.
+     */
     public TaskResponseDTO create(TaskRequestDTO requestDTO) {
 
         Task entity = converter.fromDTO(converter.newEntity(), requestDTO);
@@ -71,17 +98,15 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
         return converter.toDTO(repository.save(entity));
     }
 
-    public void delete(Integer id) {
-        Task entity = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Task with id: " + id + " not found!"));
-
-        // check if user has access to this entity
-        if (!securityHelper.isAuthUserEqualsEmployee(entity.getEmployee())) {
-            throw new NotAcceptableStatusException("You have not permission to access this entity");
-        }
-        repository.delete(entity);
-    }
-
+    /**
+     * Updates an existing task record with new data.
+     *
+     * @param id         The identifier of the task record to update.
+     * @param requestDTO The request DTO containing updated data for the task record.
+     * @return The response DTO representing the updated task record.
+     * @throws NotFoundException if the task record with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
     public TaskResponseDTO update(Integer id, TaskRequestDTO requestDTO) {
         Task existingEntity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task with id: " + id + " not found!"));
@@ -102,7 +127,30 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
         return converter.toDTO(existingEntity);
     }
 
-    // find All by TaskStatusId
+    /**
+     * Deletes a task record by its unique identifier.
+     *
+     * @param id The identifier of the task record to delete.
+     * @throws NotFoundException if the task record with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
+    public void delete(Integer id) {
+        Task entity = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Task with id: " + id + " not found!"));
+
+        // check if user has access to this entity
+        if (!securityHelper.isAuthUserEqualsEmployee(entity.getEmployee())) {
+            throw new NotAcceptableStatusException("You have not permission to access this entity");
+        }
+        repository.delete(entity);
+    }
+
+    /**
+     * Retrieves a list of task records based on the task status.
+     *
+     * @param id The identifier of the task status.
+     * @return A list of response DTOs representing task records with the specified status.
+     */
     public List<TaskResponseDTO> findAllByTaskStatusId(Integer id) {
         return Helper.findAllByEnumId(
                 id,
@@ -112,7 +160,14 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
         );
     }
 
-    // find All by Employee id
+    /**
+     * Retrieves a list of task records associated with a specific employee.
+     *
+     * @param id The identifier of the employee to filter by.
+     * @return A list of response DTOs representing task records associated with the specified employee.
+     * @throws NotFoundException if the employee with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
     public List<TaskResponseDTO> findAllByEmployeeId(Integer id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Employee with id " + id + " not found!"));
@@ -127,7 +182,12 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
                 .toList();
     }
 
-    // find All by Candidate id
+    /**
+     * Retrieves a list of task records associated with a specific candidate.
+     *
+     * @param id The identifier of the candidate to filter by.
+     * @return A list of response DTOs representing task records associated with the specified candidate.
+     */
     public List<TaskResponseDTO> findAllByCandidateId(Integer id) {
         return Helper.findAllByEntityId(
                 id, candidateRepository,
@@ -136,7 +196,12 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
         );
     }
 
-    // find All by Vacancy id
+    /**
+     * Retrieves a list of task records associated with a specific vacancy.
+     *
+     * @param id The identifier of the vacancy to filter by.
+     * @return A list of response DTOs representing task records associated with the specified vacancy.
+     */
     public List<TaskResponseDTO> findAllByVacancyId(Integer id) {
         return Helper.findAllByEntityId(
                 id,
@@ -146,7 +211,12 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
         );
     }
 
-    // find All by Date
+    /**
+     * Retrieves a list of task records based on the start date.
+     *
+     * @param requestDTO The request DTO containing the start date.
+     * @return A list of response DTOs representing task records with the specified start date.
+     */
     public List<TaskResponseDTO> findAllByStartDate(TaskDateRequestDTO requestDTO) {
         LocalDate date = requestDTO.getDate();
         List<Task> list = repository.findAllByStartDate(date);
@@ -155,7 +225,15 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
                 .toList();
     }
 
-    // find All By Date And Employee Id
+    /**
+     * Retrieves a list of short task records based on the date and employee id.
+     *
+     * @param id The identifier of the employee to filter by.
+     * @param requestDTO The request DTO containing the date.
+     * @return A list of short response DTOs representing task records with the specified date and associated with the employee.
+     * @throws NotFoundException if the employee with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
     public List<TaskShortResponseDTO> findAllByDateAndEmployeeId(Integer id, TaskDateRequestDTO requestDTO) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Employee with id " + id + " not found!"));
@@ -171,7 +249,15 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
                 .toList();
     }
 
-    // find All By Candidate Id And Employee Id
+    /**
+     * Retrieves a list of short task records based on the candidate id and employee id.
+     *
+     * @param candidateId The identifier of the candidate to filter by.
+     * @param employeeId The identifier of the employee to filter by.
+     * @return A list of short response DTOs representing task records associated with the specified candidate and employee.
+     * @throws NotFoundException if the employee or candidate with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
     public List<TaskShortResponseDTO> findAllByCandidateIdAndEmployeeId(Integer candidateId, Integer employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee with id " + employeeId + " not found!"));
@@ -189,7 +275,15 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
                 .toList();
     }
 
-    // find All By Status Id and Employee Id
+    /**
+     * Retrieves a list of short task records based on the status id and employee id.
+     *
+     * @param statusId The identifier of the task status.
+     * @param employeeId The identifier of the employee to filter by.
+     * @return A list of short response DTOs representing task records with the specified status and associated with the employee.
+     * @throws NotFoundException if the employee with the specified id is not found or if no enum is found with the given id.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
     public List<TaskShortResponseDTO> findAllByStatusIdAndEmployeeId(Integer statusId, Integer employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee with id " + employeeId + " not found!"));
@@ -212,7 +306,15 @@ public class TaskService implements CommonService<TaskRequestDTO, TaskResponseDT
                 .toList();
     }
 
-    // find All By Vacancy Id And Employee Id
+    /**
+     * Retrieves a list of short task records based on the vacancy id and employee id.
+     *
+     * @param vacancyId The identifier of the vacancy to filter by.
+     * @param employeeId The identifier of the employee to filter by.
+     * @return A list of short response DTOs representing task records associated with the specified vacancy and employee.
+     * @throws NotFoundException if the employee or vacancy with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
     public List<TaskShortResponseDTO> findAllByVacancyIdAndEmployeeId(Integer vacancyId, Integer employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee with id " + employeeId + " not found!"));

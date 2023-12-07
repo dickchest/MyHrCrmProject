@@ -18,6 +18,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Service class that handles CRUD (Create, Read, Update, Delete) operations for communication entities.
+ *
+ * <p>This service provides methods to perform operations on communication entities, such as retrieving,
+ * creating, updating, and deleting communication records. It also includes additional methods for finding
+ * communication records based on different criteria.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class CommunicationService implements CommonService<CommunicationRequestDTO, CommunicationResponseDTO> {
@@ -29,18 +39,36 @@ public class CommunicationService implements CommonService<CommunicationRequestD
     private final VacancyRepository vacancyRepository;
     private final SecurityHelper securityHelper;
 
+    /**
+     * Retrieves a list of all communication records.
+     *
+     * @return A list of response DTOs representing all communication records.
+     */
     public List<CommunicationResponseDTO> findAll() {
         return repository.findAll().stream()
                 .map(converter::toDTO)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves a communication record by its unique identifier.
+     *
+     * @param id The identifier of the communication record to retrieve.
+     * @return The response DTO representing the retrieved communication record.
+     * @throws NotFoundException if the communication record with the specified id is not found.
+     */
     public CommunicationResponseDTO findById(Integer id) {
         Communication entity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Communication with id: " + id + " not found!"));
         return converter.toDTO(entity);
     }
 
+    /**
+     * Creates a new communication record based on the provided data.
+     *
+     * @param requestDTO The request DTO containing data for the new communication record.
+     * @return The response DTO representing the newly created communication record.
+     */
     public CommunicationResponseDTO create(CommunicationRequestDTO requestDTO) {
 
         Communication entity = converter.fromDTO(converter.newEntity(), requestDTO);
@@ -62,12 +90,14 @@ public class CommunicationService implements CommonService<CommunicationRequestD
         return converter.toDTO(repository.save(entity));
     }
 
-    public void delete(Integer id) {
-        Communication entity = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Communication with id: " + id + " not found!"));
-        repository.delete(entity);
-    }
-
+    /**
+     * Updates an existing communication record with new data.
+     *
+     * @param id         The identifier of the communication record to update.
+     * @param requestDTO The request DTO containing updated data for the communication record.
+     * @return The response DTO representing the updated communication record.
+     * @throws NotFoundException if the communication record with the specified id is not found.
+     */
     public CommunicationResponseDTO update(Integer id, CommunicationRequestDTO requestDTO) {
         Communication existingEntity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Communication with id: " + id + " not found!"));
@@ -83,7 +113,24 @@ public class CommunicationService implements CommonService<CommunicationRequestD
         return converter.toDTO(existingEntity);
     }
 
-    // find All by CommunicationTypeId
+    /**
+     * Deletes a communication record by its unique identifier.
+     *
+     * @param id The identifier of the communication record to delete.
+     * @throws NotFoundException if the communication record with the specified id is not found.
+     */
+    public void delete(Integer id) {
+        Communication entity = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Communication with id: " + id + " not found!"));
+        repository.delete(entity);
+    }
+
+    /**
+     * Retrieves a list of communication records based on the type of communication.
+     *
+     * @param id The identifier of the communication type.
+     * @return A list of response DTOs representing communication records of the specified type.
+     */
     public List<CommunicationResponseDTO> findAllByCommunicationTypeId(Integer id) {
         return Helper.findAllByEnumId(
                 id,
@@ -92,7 +139,13 @@ public class CommunicationService implements CommonService<CommunicationRequestD
                 converter::toDTO
         );
     }
-    
+
+    /**
+     * Retrieves a list of communications associated with a specific employee.
+     *
+     * @param id The identifier of the employee to filter by.
+     * @return A list of {@code CommunicationResponseDTO} representing communications associated with the specified employee.
+     */
     // find All by Employee id
     public List<CommunicationResponseDTO> findAllByEmployeeId(Integer id) {
         return Helper.findAllByEntityId(
@@ -103,7 +156,12 @@ public class CommunicationService implements CommonService<CommunicationRequestD
         );
     }
 
-    // find All by Client id
+    /**
+     * Retrieves a list of communications associated with a specific client.
+     *
+     * @param id The identifier of the client to filter by.
+     * @return A list of {@code CommunicationResponseDTO} representing communications associated with the specified client.
+     */
     public List<CommunicationResponseDTO> findAllByClientId(Integer id) {
         return Helper.findAllByEntityId(
                 id,
@@ -113,7 +171,12 @@ public class CommunicationService implements CommonService<CommunicationRequestD
         );
     }
 
-    // find All by Candidate id
+    /**
+     * Retrieves a list of communications associated with a specific candidate.
+     *
+     * @param id The identifier of the candidate to filter by.
+     * @return A list of {@code CommunicationResponseDTO} representing communications associated with the specified candidate.
+     */
     public List<CommunicationResponseDTO> findAllByCandidateId(Integer id) {
         return Helper.findAllByEntityId(
                 id,
@@ -123,6 +186,12 @@ public class CommunicationService implements CommonService<CommunicationRequestD
         );
     }
 
+    /**
+     * Retrieves a list of communications associated with a specific vacancy.
+     *
+     * @param id The identifier of the vacancy to filter by.
+     * @return A list of {@code CandidateShortResponseDTO} representing communications associated with the specified vacancy.
+     */
     public List<CommunicationResponseDTO> findAllByVacancyId(Integer id) {
         return Helper.findAllByEntityId(
                 id,
@@ -131,5 +200,4 @@ public class CommunicationService implements CommonService<CommunicationRequestD
                 converter::toDTO
         );
     }
-
 }

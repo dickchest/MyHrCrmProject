@@ -14,7 +14,15 @@ import org.springframework.web.server.NotAcceptableStatusException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+/**
+ * Service class that handles CRUD (Create, Read, Update, Delete) operations for employee entities.
+ *
+ * <p>This service provides methods to perform operations on employee entities, such as retrieving,
+ * creating, updating, and deleting employee records.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class EmployeeService implements CommonService<EmployeeRequestDTO, EmployeeResponseDTO> {
@@ -22,6 +30,11 @@ public class EmployeeService implements CommonService<EmployeeRequestDTO, Employ
     private final EmployeeConverter converter;
     private final SecurityHelper securityHelper;
 
+    /**
+     * Retrieves a list of all employee records.
+     *
+     * @return A list of response DTOs representing all employee records.
+     */
     @Override
     public List<EmployeeResponseDTO> findAll() {
         return repository.findAll().stream()
@@ -29,6 +42,13 @@ public class EmployeeService implements CommonService<EmployeeRequestDTO, Employ
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves an employee record by its unique identifier.
+     *
+     * @param id The identifier of the employee record to retrieve.
+     * @return The response DTO representing the retrieved employee record.
+     * @throws NotFoundException if the employee record with the specified id is not found.
+     */
     @Override
     public EmployeeResponseDTO findById(Integer id) {
         Employee entity = repository.findById(id)
@@ -37,6 +57,12 @@ public class EmployeeService implements CommonService<EmployeeRequestDTO, Employ
         return converter.toDTO(entity);
     }
 
+    /**
+     * Creates a new employee record based on the provided data.
+     *
+     * @param requestDTO The request DTO containing data for the new employee record.
+     * @return The response DTO representing the newly created employee record.
+     */
     @Override
     public EmployeeResponseDTO create(EmployeeRequestDTO requestDTO) {
         Employee entity = converter.fromDTO(converter.newEntity(), requestDTO);
@@ -44,6 +70,14 @@ public class EmployeeService implements CommonService<EmployeeRequestDTO, Employ
         return converter.toDTO(repository.save(entity));
     }
 
+    /**
+     * Updates an existing employee record with new data.
+     *
+     * @param id         The identifier of the employee record to update.
+     * @param requestDTO The request DTO containing updated data for the employee record.
+     * @return The response DTO representing the updated employee record.
+     * @throws NotFoundException if the employee record with the specified id is not found.
+     */
     @Override
     public EmployeeResponseDTO update(Integer id, EmployeeRequestDTO requestDTO) {
         Employee existingEntity = repository.findById(id)
@@ -61,6 +95,12 @@ public class EmployeeService implements CommonService<EmployeeRequestDTO, Employ
         return converter.toDTO(existingEntity);
     }
 
+    /**
+     * Deletes an employee record by its unique identifier.
+     *
+     * @param id The identifier of the employee record to delete.
+     * @throws NotFoundException if the employee record with the specified id is not found.
+     */
     @Override
     public void delete(Integer id) {
         Employee entity = repository.findById(id)

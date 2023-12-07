@@ -23,6 +23,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Service class that handles CRUD (Create, Read, Update, Delete) operations for interview entities.
+ *
+ * <p>This service provides methods to perform operations on interview entities, such as retrieving,
+ * creating, updating, and deleting interview records. It also includes additional methods for finding
+ * interview records based on different criteria.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class InterviewService implements CommonService<InterviewRequestDTO, InterviewResponseDTO> {
@@ -31,12 +41,24 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
     private final EmployeeRepository employeeRepository;
     private final SecurityHelper securityHelper;
 
+    /**
+     * Retrieves a list of all interview records.
+     *
+     * @return A list of response DTOs representing all interview records.
+     */
     public List<InterviewResponseDTO> findAll() {
         return repository.findAll().stream()
                 .map(converter::toDTO)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves an interview record by its unique identifier.
+     *
+     * @param id The identifier of the interview record to retrieve.
+     * @return The response DTO representing the retrieved interview record.
+     * @throws NotFoundException if the interview record with the specified id is not found.
+     */
     public InterviewResponseDTO findById(Integer id) {
         Interview entity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Interview with id " + id + " not found!"));
@@ -48,6 +70,12 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
         return converter.toDTO(entity);
     }
 
+    /**
+     * Creates a new interview record based on the provided data.
+     *
+     * @param requestDTO The request DTO containing data for the new interview record.
+     * @return The response DTO representing the newly created interview record.
+     */
     public InterviewResponseDTO create(InterviewRequestDTO requestDTO) {
         Interview entity = converter.fromDTO(converter.newEntity(), requestDTO);
 
@@ -62,12 +90,15 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
         return converter.toDTO(entity);
     }
 
-    public void delete(Integer id) {
-        Interview entity = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Interview with id: " + id + " not found!"));
-        repository.delete(entity);
-    }
-
+    /**
+     * Updates an existing interview record with new data.
+     *
+     * @param id         The identifier of the interview record to update.
+     * @param requestDTO The request DTO containing updated data for the interview record.
+     * @return The response DTO representing the updated interview record.
+     * @throws NotFoundException if the interview record with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to update this entity.
+     */
     public InterviewResponseDTO update(Integer id, InterviewRequestDTO requestDTO) {
         Interview existingEntity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Interview with id: " + id + " not found!"));
@@ -82,7 +113,24 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
         return converter.toDTO(existingEntity);
     }
 
-    // find All by Status(status)
+    /**
+     * Deletes an interview record by its unique identifier.
+     *
+     * @param id The identifier of the interview record to delete.
+     * @throws NotFoundException if the interview record with the specified id is not found.
+     */
+    public void delete(Integer id) {
+        Interview entity = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Interview with id: " + id + " not found!"));
+        repository.delete(entity);
+    }
+
+    /**
+     * Retrieves a list of interview records based on the status.
+     *
+     * @param id The identifier of the interview status.
+     * @return A list of response DTOs representing interview records with the specified status.
+     */
     public List<InterviewShortResponseDTO> findAllByStatusId(Integer id) {
         return Helper.findAllByEnumId(
                 id,
@@ -92,7 +140,14 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
         );
     }
 
-    // find All by Employee id
+    /**
+     * Retrieves a list of interview records associated with a specific employee.
+     *
+     * @param id The identifier of the employee to filter by.
+     * @return A list of response DTOs representing interview records associated with the specified employee.
+     * @throws NotFoundException if the employee with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
     public List<InterviewShortResponseDTO> findAllByEmployeeId(Integer id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
@@ -107,7 +162,15 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
                 .toList();
     }
 
-    // find All by Date and Employee id
+    /**
+     * Retrieves a list of interview records based on a specific date and associated with a specific employee.
+     *
+     * @param requestDTO The request DTO containing the date.
+     * @param id         The identifier of the employee to filter by.
+     * @return A list of response DTOs representing interview records with the specified date and associated with the specified employee.
+     * @throws NotFoundException if the employee with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
     public List<InterviewShortResponseDTO> findAllByDateAndEmployeeId(InterviewDateRequestDTO requestDTO, Integer id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entity with id " + id + " not found!"));
@@ -124,6 +187,12 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
                 .toList();
     }
 
+    /**
+     * Retrieves a list of interview records based on a specific date.
+     *
+     * @param requestDTO The request DTO containing the date.
+     * @return A list of response DTOs representing interview records with the specified date.
+     */
     public List<InterviewShortResponseDTO> findAllByDate(InterviewDateRequestDTO requestDTO) {
         LocalDate date = requestDTO.getDate();
         List<Interview> list = repository.findByDate(date);
