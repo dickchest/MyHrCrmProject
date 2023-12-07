@@ -9,6 +9,7 @@ import com.myhrcrmproject.dto.employeeDTO.EmployeeResponseDTO;
 import com.myhrcrmproject.dto.userDetailsDTO.UserDetailsRequestDTO;
 import com.myhrcrmproject.dto.userDetailsDTO.UserDetailsResponseDTO;
 import com.myhrcrmproject.dto.userDetailsDTO.UserDetailsShortResponseDTO;
+import com.myhrcrmproject.repository.ContactDetailsRepository;
 import com.myhrcrmproject.repository.EmployeeRepository;
 import com.myhrcrmproject.repository.RoleRepository;
 import com.myhrcrmproject.repository.UserDetailsRepository;
@@ -44,6 +45,7 @@ public class UserDetailsServiceImpl implements CommonService<UserDetailsRequestD
     private final EmployeeService employeeService;
     private final EmployeeRepository employeeRepository;
     private final RoleRepository roleRepository;
+    private final ContactDetailsRepository contactDetailsRepository;
     private static final Logger LOGGER = LogManager.getLogger(UserDetailsServiceImpl.class);
 
     /**
@@ -85,12 +87,17 @@ public class UserDetailsServiceImpl implements CommonService<UserDetailsRequestD
     public UserDetailsResponseDTO create(UserDetailsRequestDTO requestDTO) {
 
         if (repository.findByUserName(requestDTO.getUserName()).isEmpty()) {
-            // todo добавить проверку, что такой емейл существует
+
+            // check if email already exists
+            if (contactDetailsRepository.findByEmail(requestDTO.getEmail()).isPresent()) {
+                throw new AlreadyExistsException("Email " + requestDTO.getEmail() + " already exists");
+            }
+
 
             UserDetails entity = converter.fromDTO(converter.newEntity(), requestDTO);
 
 
-            // обновляем даты
+            // update dates
             entity.setCreatedDate(LocalDateTime.now());
             entity.setUpdatedDate(LocalDateTime.now());
 

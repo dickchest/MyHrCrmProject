@@ -14,6 +14,5 @@ import java.util.Optional;
 public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
     List<Candidate> findByStatus(CandidateStatus status);
     List<Candidate> findByVacancy(Vacancy vacancy);
-//    Optional<Candidate> findByEmail(String email);
     Optional<Candidate> findByContactDetails(ContactDetails contactDetails);
 }

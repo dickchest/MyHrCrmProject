@@ -7,6 +7,7 @@ import com.myhrcrmproject.dto.employeeDTO.EmployeeRequestDTO;
 import com.myhrcrmproject.dto.employeeDTO.EmployeeResponseDTO;
 import com.myhrcrmproject.dto.userDetailsDTO.UserDetailsRequestDTO;
 import com.myhrcrmproject.dto.userDetailsDTO.UserDetailsResponseDTO;
+import com.myhrcrmproject.repository.ContactDetailsRepository;
 import com.myhrcrmproject.repository.EmployeeRepository;
 import com.myhrcrmproject.repository.RoleRepository;
 import com.myhrcrmproject.repository.UserDetailsRepository;
@@ -47,6 +48,9 @@ class UserDetailsServiceImplTest {
 
     @Mock
     private EmployeeResponseDTO employeeResponseDTO;
+
+    @Mock
+    private ContactDetailsRepository contactDetailsRepository;
 
 
     @BeforeEach
@@ -117,6 +121,7 @@ class UserDetailsServiceImplTest {
         when(employeeService.create(any(EmployeeRequestDTO.class))).thenReturn(employeeResponseDTO);
 
         when(employeeRepository.findById(anyInt())).thenReturn(Optional.of(new Employee()));
+        when(contactDetailsRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
         userDetailsService.create(userDetailsRequestDTO);
         verify(userDetailsRepository, times(1)).save(any(UserDetails.class));

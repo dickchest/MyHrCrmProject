@@ -1,10 +1,13 @@
 package com.myhrcrmproject.service;
 
 import com.myhrcrmproject.domain.Candidate;
+import com.myhrcrmproject.domain.ContactDetails;
 import com.myhrcrmproject.repository.CandidateRepository;
+import com.myhrcrmproject.repository.ContactDetailsRepository;
 import com.myhrcrmproject.repository.VacancyRepository;
 import com.myhrcrmproject.service.utills.CandidateConverter;
 import com.myhrcrmproject.service.utills.Helper;
+import com.myhrcrmproject.service.validation.AlreadyExistsException;
 import com.myhrcrmproject.service.validation.NotFoundException;
 import com.myhrcrmproject.domain.enums.CandidateStatus;
 import com.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
@@ -17,7 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
 /**
  * Service class for managing candidate-related operations in the HR CRM system.
  *
@@ -40,6 +45,7 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
     private final CandidateRepository repository;
     private final CandidateConverter converter;
     private final VacancyRepository vacancyRepository;
+    private final ContactDetailsRepository contactDetailsRepository;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CandidateService.class);
 
@@ -73,8 +79,20 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
      *
      * @param requestDTO The {@code CandidateRequestDTO} containing data for the new candidate.
      * @return The {@code CandidateResponseDTO} representing the newly created candidate.
+     * @throws AlreadyExistsException if the specified email already exists.
      */
     public CandidateResponseDTO create(CandidateRequestDTO requestDTO) {
+
+        // check if email already exists
+        if (requestDTO.getContactDetails() != null) {
+            Optional<String> email = Optional.ofNullable(requestDTO.getContactDetails().getEmail());
+            if (email.isPresent()) {
+                if (contactDetailsRepository.findByEmail(email.get()).isPresent()) {
+                    throw new AlreadyExistsException("Email " + email.get() + " already exists");
+                }
+            }
+        }
+
         Candidate entity = converter.fromDTO(converter.newEntity(), requestDTO);
 
         entityAfterCreateProcedures(entity);
