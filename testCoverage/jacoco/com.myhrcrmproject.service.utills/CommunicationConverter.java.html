@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommunicationConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service.utills</a> &gt; <span class="el_source">CommunicationConverter.java</span></div><h1>CommunicationConverter.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service.utills;
+
+import com.myhrcrmproject.domain.Candidate;
+import com.myhrcrmproject.domain.Communication;
+import com.myhrcrmproject.dto.communicationDTO.CommunicationRequestDTO;
+import com.myhrcrmproject.dto.communicationDTO.CommunicationResponseDTO;
+import com.myhrcrmproject.dto.communicationDTO.CommunicationShortResponseDTO;
+import com.myhrcrmproject.repository.CandidateRepository;
+import com.myhrcrmproject.repository.ClientRepository;
+import com.myhrcrmproject.repository.EmployeeRepository;
+import com.myhrcrmproject.repository.VacancyRepository;
+import com.myhrcrmproject.service.validation.NotFoundException;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L19">@AllArgsConstructor</span>
+public class CommunicationConverter {
+    private final CandidateConverter candidateConverter;
+    private final EmployeeConverter employeeConverter;
+    private final CandidateRepository candidateRepository;
+    private final EmployeeRepository employeeRepository;
+    private final ClientConverter clientConverter;
+    private final ClientRepository clientRepository;
+    private final VacancyConverter vacancyConverter;
+    private final VacancyRepository vacancyRepository;
+
+    public CommunicationResponseDTO toDTO(Communication entity) {
+<span class="fc" id="L31">        return CommunicationResponseDTO.builder()</span>
+<span class="fc" id="L32">                .id(entity.getId())</span>
+<span class="fc" id="L33">                .communicationDateTime(entity.getCommunicationDateTime())</span>
+<span class="fc" id="L34">                .communicationType(entity.getCommunicationType())</span>
+<span class="fc" id="L35">                .createDate(entity.getCreateDate())</span>
+<span class="fc" id="L36">                .updateDate(entity.getUpdateDate())</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">                .candidate(entity.getCandidate() != null ?</span>
+<span class="fc" id="L38">                        candidateConverter.toShortDTO(entity.getCandidate()) : null)</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">                .employee(entity.getEmployee() != null ?</span>
+<span class="fc" id="L40">                        employeeConverter.toShortDTO(entity.getEmployee()) : null)</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">                .client(entity.getClient() != null ?</span>
+<span class="fc" id="L42">                        clientConverter.toShortDTO(entity.getClient()) : null)</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">                .vacancy(entity.getVacancy() != null ?</span>
+<span class="fc" id="L44">                        vacancyConverter.toShortDTO(entity.getVacancy()) : null)</span>
+<span class="fc" id="L45">                .build();</span>
+    }
+
+    public Communication fromDTO(Communication entity, CommunicationRequestDTO request) {
+<span class="fc" id="L49">        Optional.ofNullable(request.getCommunicationDateTime()).ifPresent(entity::setCommunicationDateTime);</span>
+<span class="fc" id="L50">        Optional.ofNullable(request.getCommunicationType()).ifPresent(entity::setCommunicationType);</span>
+<span class="fc" id="L51">        Helper.setEntityById(</span>
+<span class="fc" id="L52">                request::getClientId, entity::setClient, clientRepository, &quot;Client&quot;);</span>
+<span class="fc" id="L53">        Helper.setEntityById(</span>
+<span class="fc" id="L54">                request::getCandidateId, entity::setCandidate, candidateRepository, &quot;Candidate&quot;);</span>
+<span class="fc" id="L55">        Helper.setEntityById(</span>
+<span class="fc" id="L56">                request::getVacancyId, entity::setVacancy, vacancyRepository, &quot;Vacancy&quot;);</span>
+<span class="fc" id="L57">        Helper.setEntityById(</span>
+<span class="fc" id="L58">                request::getEmployeeId, entity::setEmployee, employeeRepository, &quot;Employee&quot;);</span>
+<span class="fc" id="L59">        return entity;</span>
+    }
+
+    public Communication newEntity() {
+<span class="fc" id="L63">        return new Communication();</span>
+    }
+
+    public CommunicationShortResponseDTO toShortDTO(Communication entity) {
+<span class="fc" id="L67">        return CommunicationShortResponseDTO.builder()</span>
+<span class="fc" id="L68">                .id(entity.getId())</span>
+<span class="fc" id="L69">                .communicationDateTime(entity.getCommunicationDateTime())</span>
+<span class="fc" id="L70">                .communicationType(entity.getCommunicationType())</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">                .candidate(entity.getCandidate() != null ?</span>
+<span class="fc" id="L72">                        candidateConverter.toShortDTO(entity.getCandidate()) : null)</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">                .employee(entity.getEmployee() != null ?</span>
+<span class="fc" id="L74">                        employeeConverter.toShortDTO(entity.getEmployee()) : null)</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">                .client(entity.getClient() != null ?</span>
+<span class="fc" id="L76">                        clientConverter.toShortDTO(entity.getClient()) : null)</span>
+<span class="fc" id="L77">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

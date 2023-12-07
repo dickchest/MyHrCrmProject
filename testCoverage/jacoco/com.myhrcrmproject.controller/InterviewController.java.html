@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InterviewController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.controller</a> &gt; <span class="el_source">InterviewController.java</span></div><h1>InterviewController.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.controller;
+
+import com.myhrcrmproject.dto.interviewDTO.InterviewDateRequestDTO;
+import com.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;
+import com.myhrcrmproject.dto.interviewDTO.InterviewResponseDTO;
+import com.myhrcrmproject.dto.interviewDTO.InterviewShortResponseDTO;
+import com.myhrcrmproject.service.InterviewService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+/**
+ * Controller class for managing interview-related operations in the HR CRM system.
+ *
+ * &lt;p&gt;This class defines RESTful APIs for various interview actions, including
+ * retrieving all interviews, finding interviews by ID, creating new interviews,
+ * updating existing interviews, and deleting interviews.
+ *
+ * &lt;p&gt;Additionally, it provides endpoints to retrieve interviews based on different
+ * criteria such as status ID, employee ID, date, etc.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
+@RestController
+@RequestMapping(&quot;api/interviews&quot;)
+<span class="fc" id="L33">@AllArgsConstructor</span>
+@Getter
+@Tag(
+        name = &quot;Interview Controller&quot;,
+        description = &quot;APIs for managing interviews&quot;
+)
+public class InterviewController {
+<span class="fc" id="L40">    private final InterviewService service;</span>
+
+    /**
+     * Endpoint to retrieve a list of all interviews.
+     *
+     * @return A {@code ResponseEntity} with a list of {@code InterviewResponseDTO} representing all interviews.
+     */
+    @GetMapping
+    @Operation(
+            summary = &quot;Get all interviews&quot;,
+            description = &quot;Retrieve a list of all interviews.&quot;
+    )
+    public ResponseEntity&lt;List&lt;InterviewResponseDTO&gt;&gt; findAll() {
+<span class="fc" id="L53">        return new ResponseEntity&lt;&gt;(getService().findAll(), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Endpoint to retrieve a interview by its ID.
+     *
+     * @param id The ID of the interview to retrieve.
+     * @return A {@code ResponseEntity} with the {@code InterviewResponseDTO} representing the retrieved interview.
+     */
+    @GetMapping(&quot;/{id}&quot;)
+    @Operation(
+            summary = &quot;Get interview by ID&quot;,
+            description = &quot;Retrieve a interview by their ID.&quot;
+    )
+    public ResponseEntity&lt;InterviewResponseDTO&gt; findById(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the interview&quot;, example = &quot;1&quot;)
+            Integer id) {
+<span class="fc" id="L71">        return new ResponseEntity&lt;&gt;(getService().findById(id), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Endpoint to create a new interview.
+     *
+     * @param requestDTO The request body containing interview details.
+     * @return A {@code ResponseEntity} with the {@code InterviewResponseDTO} representing the newly created interview.
+     */
+    @PostMapping
+    @Operation(
+            summary = &quot;Create a new interview&quot;,
+            description = &quot;Create a new interview with the provided details.&quot;
+    )
+    public ResponseEntity&lt;InterviewResponseDTO&gt; createNew(
+            @RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = &quot;Request body containing interview details&quot;)
+            InterviewRequestDTO requestDTO) {
+<span class="fc" id="L90">        return new ResponseEntity&lt;&gt;(getService().create(requestDTO), HttpStatus.CREATED);</span>
+    }
+
+    /**
+     * Endpoint to update an existing interview.
+     *
+     * @param id         The ID of the interview to update.
+     * @param requestDTO The request body containing updated interview details.
+     * @return A {@code ResponseEntity} with the {@code InterviewResponseDTO} representing the updated interview.
+     */
+    @PutMapping(&quot;/{id}&quot;)
+    @Operation(
+            summary = &quot;Update an interview&quot;,
+            description = &quot;Update an existing interview with the provided details.&quot;
+    )
+    public ResponseEntity&lt;InterviewResponseDTO&gt; update(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the interview&quot;, example = &quot;1&quot;)
+            Integer id,
+            @RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = &quot;Request body containing updated interview details&quot;)
+            InterviewRequestDTO requestDTO) {
+<span class="fc" id="L113">        return new ResponseEntity&lt;&gt;(getService().update(id, requestDTO), HttpStatus.ACCEPTED);</span>
+    }
+
+    /**
+     * Endpoint to delete a interview.
+     *
+     * @param id The ID of the interview to delete.
+     */
+    @DeleteMapping(&quot;/{id}&quot;)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(
+            summary = &quot;Delete an interview&quot;,
+            description = &quot;Delete an interview by their ID.&quot;
+    )
+    public void deleteCandidate(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the interview to delete&quot;, example = &quot;1&quot;)
+            Integer id) {
+<span class="fc" id="L131">        getService().delete(id);</span>
+<span class="fc" id="L132">    }</span>
+
+    /**
+     * Retrieves a list of interviews by status ID.
+     *
+     * @param statusId The ID of the status.
+     * @return A {@code ResponseEntity} with the list of interviews and HTTP status code 200 (OK).
+     */
+    @GetMapping(&quot;/findAllByStatus/{id}&quot;)
+    @Operation(
+            summary = &quot;Get interviews by status ID&quot;,
+            description = &quot;Retrieve a list of interviews by status ID.&quot;
+    )
+    public ResponseEntity&lt;List&lt;InterviewShortResponseDTO&gt;&gt; findAllByStatusId(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the status&quot;, example = &quot;1&quot;)
+            Integer statusId) {
+<span class="fc" id="L149">        return new ResponseEntity&lt;&gt;(service.findAllByStatusId(statusId), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Endpoint to retrieve a list of interviews by employee ID.
+     *
+     * @param id The ID of the employee.
+     * @return A {@code ResponseEntity} with a list of {@code InterviewResponseDTO} representing interviews by employee ID.
+     */
+    @GetMapping(&quot;/findAllByEmployee/{id}&quot;)
+    @Operation(
+            summary = &quot;Get interviews by employee ID&quot;,
+            description = &quot;Retrieve a list of interviews by employee ID.&quot;
+    )
+    public ResponseEntity&lt;List&lt;InterviewShortResponseDTO&gt;&gt; findAllByEmployeeId(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the employee&quot;, example = &quot;1&quot;)
+            Integer id) {
+<span class="fc" id="L167">        return new ResponseEntity&lt;&gt;(service.findAllByEmployeeId(id), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Retrieves a list of interviews by date and employee ID.
+     *
+     * @param id         The ID of the employee.
+     * @param requestDTO The request body containing the date.
+     * @return A {@code ResponseEntity} with the list of interviews and HTTP status code 200 (OK).
+     */
+    @PutMapping(&quot;/findAllByDateAndEmployee/{id}&quot;)
+    @Operation(
+            summary = &quot;Get interviews by date and employee ID&quot;,
+            description = &quot;Retrieve a list of interviews by date and employee ID.&quot;
+    )
+    public ResponseEntity&lt;List&lt;InterviewShortResponseDTO&gt;&gt; findAllByEmployeeId(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the employee&quot;, example = &quot;1&quot;)
+            Integer id,
+            @RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = &quot;Request body containing date&quot;)
+            InterviewDateRequestDTO requestDTO) {
+<span class="fc" id="L190">        return new ResponseEntity&lt;&gt;(service.findAllByDateAndEmployeeId(requestDTO, id), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Retrieves a list of interviews by date.
+     *
+     * @param requestDTO The request body containing the date.
+     * @return A {@code ResponseEntity} with the list of interviews and HTTP status code 200 (OK).
+     */
+    @PutMapping(&quot;/findAllByDate&quot;)
+    @Operation(
+            summary = &quot;Get interviews by date&quot;,
+            description = &quot;Retrieve a list of interviews by date.&quot;
+    )
+    public ResponseEntity&lt;List&lt;InterviewShortResponseDTO&gt;&gt; findAllByDate(
+            @RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = &quot;Request body containing date&quot;)
+            InterviewDateRequestDTO requestDTO) {
+<span class="fc" id="L209">        return new ResponseEntity&lt;&gt;(service.findAllByDate(requestDTO), HttpStatus.OK);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

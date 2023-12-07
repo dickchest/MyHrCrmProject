@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContractConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service.utills</a> &gt; <span class="el_source">ContractConverter.java</span></div><h1>ContractConverter.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service.utills;
+
+import com.myhrcrmproject.domain.Contract;
+import com.myhrcrmproject.dto.contractDTO.ContractRequestDTO;
+import com.myhrcrmproject.dto.contractDTO.ContractResponseDTO;
+import com.myhrcrmproject.dto.contractDTO.ContractShortResponseDTO;
+import com.myhrcrmproject.repository.CandidateRepository;
+import com.myhrcrmproject.repository.ClientRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L15">@AllArgsConstructor</span>
+public class ContractConverter {
+    private final CandidateConverter candidateConverter;
+    private final EmployeeConverter employeeConverter;
+    private final CandidateRepository candidateRepository;
+    private final ClientConverter clientConverter;
+    private final ClientRepository clientRepository;
+
+    public ContractResponseDTO toDTO(Contract entity) {
+<span class="fc" id="L24">        return ContractResponseDTO.builder()</span>
+<span class="fc" id="L25">                .id(entity.getId())</span>
+<span class="fc" id="L26">                .startDate(entity.getStartDate())</span>
+<span class="fc" id="L27">                .endDate(entity.getEndDate())</span>
+<span class="fc" id="L28">                .salary(entity.getSalary())</span>
+<span class="fc" id="L29">                .contractType(entity.getContractType())</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">                .candidate(entity.getCandidate() != null ?</span>
+<span class="fc" id="L31">                        candidateConverter.toShortDTO(entity.getCandidate()) : null)</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">                .employee(entity.getEmployee() != null ?</span>
+<span class="fc" id="L33">                        employeeConverter.toShortDTO(entity.getEmployee()) : null)</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">                .client(entity.getClient() != null ?</span>
+<span class="fc" id="L35">                        clientConverter.toShortDTO(entity.getClient()) : null)</span>
+<span class="fc" id="L36">                .build();</span>
+    }
+
+    public Contract fromDTO(Contract entity, ContractRequestDTO request) {
+<span class="fc" id="L40">        Optional.ofNullable(request.getStartDate()).ifPresent(entity::setStartDate);</span>
+<span class="fc" id="L41">        Optional.ofNullable(request.getEndDate()).ifPresent(entity::setEndDate);</span>
+<span class="fc" id="L42">        Optional.ofNullable(request.getSalary()).ifPresent(entity::setSalary);</span>
+<span class="fc" id="L43">        Optional.ofNullable(request.getContractType()).ifPresent(entity::setContractType);</span>
+<span class="fc" id="L44">        Helper.setEntityById(</span>
+<span class="fc" id="L45">                request::getClientId, entity::setClient, clientRepository, &quot;Client&quot;);</span>
+<span class="fc" id="L46">        Helper.setEntityById(</span>
+<span class="fc" id="L47">                request::getCandidateId, entity::setCandidate, candidateRepository, &quot;Candidate&quot;);</span>
+<span class="fc" id="L48">        return entity;</span>
+    }
+
+    public Contract newEntity() {
+<span class="fc" id="L52">        return new Contract();</span>
+    }
+
+    public ContractShortResponseDTO toShortDTO(Contract entity) {
+<span class="fc" id="L56">        return ContractShortResponseDTO.builder()</span>
+<span class="fc" id="L57">                .id(entity.getId())</span>
+<span class="fc" id="L58">                .startDate(entity.getStartDate())</span>
+<span class="fc" id="L59">                .endDate(entity.getEndDate())</span>
+<span class="fc" id="L60">                .salary(entity.getSalary())</span>
+<span class="fc" id="L61">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

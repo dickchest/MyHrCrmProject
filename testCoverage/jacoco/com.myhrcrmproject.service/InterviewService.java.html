@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InterviewService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service</a> &gt; <span class="el_source">InterviewService.java</span></div><h1>InterviewService.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service;
+
+import com.myhrcrmproject.domain.Employee;
+import com.myhrcrmproject.domain.Interview;
+import com.myhrcrmproject.dto.interviewDTO.InterviewDateRequestDTO;
+import com.myhrcrmproject.dto.interviewDTO.InterviewRequestDTO;
+import com.myhrcrmproject.dto.interviewDTO.InterviewResponseDTO;
+import com.myhrcrmproject.dto.interviewDTO.InterviewShortResponseDTO;
+import com.myhrcrmproject.repository.EmployeeRepository;
+import com.myhrcrmproject.repository.InterviewRepository;
+import com.myhrcrmproject.service.utills.Helper;
+import com.myhrcrmproject.service.utills.InterviewConverter;
+import com.myhrcrmproject.service.validation.NotFoundException;
+import com.myhrcrmproject.domain.enums.InterviewStatus;
+import com.myhrcrmproject.service.auth.SecurityHelper;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.NotAcceptableStatusException;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+/**
+ * Service class that handles CRUD (Create, Read, Update, Delete) operations for interview entities.
+ *
+ * &lt;p&gt;This service provides methods to perform operations on interview entities, such as retrieving,
+ * creating, updating, and deleting interview records. It also includes additional methods for finding
+ * interview records based on different criteria.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
+@Service
+<span class="fc" id="L37">@AllArgsConstructor</span>
+public class InterviewService implements CommonService&lt;InterviewRequestDTO, InterviewResponseDTO&gt; {
+    private final InterviewRepository repository;
+    private final InterviewConverter converter;
+    private final EmployeeRepository employeeRepository;
+    private final SecurityHelper securityHelper;
+
+    /**
+     * Retrieves a list of all interview records.
+     *
+     * @return A list of response DTOs representing all interview records.
+     */
+    public List&lt;InterviewResponseDTO&gt; findAll() {
+<span class="fc" id="L50">        return repository.findAll().stream()</span>
+<span class="fc" id="L51">                .map(converter::toDTO)</span>
+<span class="fc" id="L52">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Retrieves an interview record by its unique identifier.
+     *
+     * @param id The identifier of the interview record to retrieve.
+     * @return The response DTO representing the retrieved interview record.
+     * @throws NotFoundException if the interview record with the specified id is not found.
+     */
+    public InterviewResponseDTO findById(Integer id) {
+<span class="fc" id="L63">        Interview entity = repository.findById(id)</span>
+<span class="fc" id="L64">                .orElseThrow(() -&gt; new NotFoundException(&quot;Interview with id &quot; + id + &quot; not found!&quot;));</span>
+        // check if user has access to this entity
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (!securityHelper.isAuthUserEqualsEmployee(entity.getEmployee())) {</span>
+<span class="fc" id="L67">            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</span>
+        }
+
+<span class="fc" id="L70">        return converter.toDTO(entity);</span>
+    }
+
+    /**
+     * Creates a new interview record based on the provided data.
+     *
+     * @param requestDTO The request DTO containing data for the new interview record.
+     * @return The response DTO representing the newly created interview record.
+     */
+    public InterviewResponseDTO create(InterviewRequestDTO requestDTO) {
+<span class="fc" id="L80">        Interview entity = converter.fromDTO(converter.newEntity(), requestDTO);</span>
+
+        // extra methods
+        // set status
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        if (Optional.ofNullable(requestDTO.getStatus()).isEmpty()) {</span>
+<span class="fc" id="L85">            entity.setStatus(InterviewStatus.SCHEDULED);</span>
+        }
+<span class="fc" id="L87">        entity.setCreateDate(LocalDateTime.now());</span>
+<span class="fc" id="L88">        entity.setUpdateDate(LocalDateTime.now());</span>
+<span class="fc" id="L89">        repository.save(entity);</span>
+<span class="fc" id="L90">        return converter.toDTO(entity);</span>
+    }
+
+    /**
+     * Updates an existing interview record with new data.
+     *
+     * @param id         The identifier of the interview record to update.
+     * @param requestDTO The request DTO containing updated data for the interview record.
+     * @return The response DTO representing the updated interview record.
+     * @throws NotFoundException if the interview record with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to update this entity.
+     */
+    public InterviewResponseDTO update(Integer id, InterviewRequestDTO requestDTO) {
+<span class="fc" id="L103">        Interview existingEntity = repository.findById(id)</span>
+<span class="fc" id="L104">                .orElseThrow(() -&gt; new NotFoundException(&quot;Interview with id: &quot; + id + &quot; not found!&quot;));</span>
+
+        // filled in existing fields with new dates
+<span class="fc" id="L107">        converter.fromDTO(existingEntity, requestDTO);</span>
+        // do extra procedures
+<span class="fc" id="L109">        existingEntity.setUpdateDate(LocalDateTime.now());</span>
+
+<span class="fc" id="L111">        repository.save(existingEntity);</span>
+
+<span class="fc" id="L113">        return converter.toDTO(existingEntity);</span>
+    }
+
+    /**
+     * Deletes an interview record by its unique identifier.
+     *
+     * @param id The identifier of the interview record to delete.
+     * @throws NotFoundException if the interview record with the specified id is not found.
+     */
+    public void delete(Integer id) {
+<span class="fc" id="L123">        Interview entity = repository.findById(id)</span>
+<span class="fc" id="L124">                .orElseThrow(() -&gt; new NotFoundException(&quot;Interview with id: &quot; + id + &quot; not found!&quot;));</span>
+<span class="fc" id="L125">        repository.delete(entity);</span>
+<span class="fc" id="L126">    }</span>
+
+    /**
+     * Retrieves a list of interview records based on the status.
+     *
+     * @param id The identifier of the interview status.
+     * @return A list of response DTOs representing interview records with the specified status.
+     */
+    public List&lt;InterviewShortResponseDTO&gt; findAllByStatusId(Integer id) {
+<span class="fc" id="L135">        return Helper.findAllByEnumId(</span>
+                id,
+                InterviewStatus.class,
+<span class="fc" id="L138">                repository::findByStatus,</span>
+<span class="fc" id="L139">                converter::toShortDTO</span>
+        );
+    }
+
+    /**
+     * Retrieves a list of interview records associated with a specific employee.
+     *
+     * @param id The identifier of the employee to filter by.
+     * @return A list of response DTOs representing interview records associated with the specified employee.
+     * @throws NotFoundException if the employee with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
+    public List&lt;InterviewShortResponseDTO&gt; findAllByEmployeeId(Integer id) {
+<span class="fc" id="L152">        Employee employee = employeeRepository.findById(id)</span>
+<span class="fc" id="L153">                .orElseThrow(() -&gt; new NotFoundException(&quot;Entity with id &quot; + id + &quot; not found!&quot;));</span>
+
+        // check if user has access to this entity
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {</span>
+<span class="fc" id="L157">            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</span>
+        }
+
+<span class="fc" id="L160">        return repository.findByEmployee(employee).stream()</span>
+<span class="fc" id="L161">                .map(converter::toShortDTO)</span>
+<span class="fc" id="L162">                .toList();</span>
+    }
+
+    /**
+     * Retrieves a list of interview records based on a specific date and associated with a specific employee.
+     *
+     * @param requestDTO The request DTO containing the date.
+     * @param id         The identifier of the employee to filter by.
+     * @return A list of response DTOs representing interview records with the specified date and associated with the specified employee.
+     * @throws NotFoundException if the employee with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
+    public List&lt;InterviewShortResponseDTO&gt; findAllByDateAndEmployeeId(InterviewDateRequestDTO requestDTO, Integer id) {
+<span class="fc" id="L175">        Employee employee = employeeRepository.findById(id)</span>
+<span class="fc" id="L176">                .orElseThrow(() -&gt; new NotFoundException(&quot;Entity with id &quot; + id + &quot; not found!&quot;));</span>
+
+        // check if user has access to this entity
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {</span>
+<span class="fc" id="L180">            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</span>
+        }
+
+<span class="fc" id="L183">        LocalDate date = requestDTO.getDate();</span>
+<span class="fc" id="L184">        List&lt;Interview&gt; list = repository.findByDateAndEmployee(date, employee);</span>
+<span class="fc" id="L185">        return list.stream()</span>
+<span class="fc" id="L186">                .map(converter::toShortDTO)</span>
+<span class="fc" id="L187">                .toList();</span>
+    }
+
+    /**
+     * Retrieves a list of interview records based on a specific date.
+     *
+     * @param requestDTO The request DTO containing the date.
+     * @return A list of response DTOs representing interview records with the specified date.
+     */
+    public List&lt;InterviewShortResponseDTO&gt; findAllByDate(InterviewDateRequestDTO requestDTO) {
+<span class="fc" id="L197">        LocalDate date = requestDTO.getDate();</span>
+<span class="fc" id="L198">        List&lt;Interview&gt; list = repository.findByDate(date);</span>
+<span class="fc" id="L199">        return list.stream()</span>
+<span class="fc" id="L200">                .map(converter::toShortDTO)</span>
+<span class="fc" id="L201">                .toList();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

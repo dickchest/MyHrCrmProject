@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.controller</a> &gt; <span class="el_source">GlobalExceptionHandler.java</span></div><h1>GlobalExceptionHandler.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.controller;
+
+import com.myhrcrmproject.service.validation.AlreadyExistsException;
+import com.myhrcrmproject.service.validation.InvalidJwtException;
+import com.myhrcrmproject.service.validation.NotFoundException;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.NotAcceptableStatusException;
+
+import java.sql.SQLIntegrityConstraintViolationException;
+/**
+ * Global exception handler for handling various exceptions that may occur
+ * during the execution of RESTful APIs in the HR CRM system.
+ *
+ * &lt;p&gt;This class is annotated with {@code @ControllerAdvice}, indicating that
+ * it assists all controllers in the application. It includes methods annotated
+ * with {@code @ExceptionHandler} to handle specific exceptions and return
+ * appropriate responses with HTTP status codes.
+ *
+ * &lt;p&gt;The supported exceptions include:
+ * &lt;ul&gt;
+ *     &lt;li&gt;{@code NullPointerException}: Returns a 500 Internal Server Error.&lt;/li&gt;
+ *     &lt;li&gt;{@code SQLIntegrityConstraintViolationException}: Returns a 500 Internal Server Error.&lt;/li&gt;
+ *     &lt;li&gt;{@code ConstraintViolationException}: Returns a 400 Bad Request.&lt;/li&gt;
+ *     &lt;li&gt;{@code AlreadyExistsException}: Returns a 400 Bad Request.&lt;/li&gt;
+ *     &lt;li&gt;{@code DataIntegrityViolationException}: Returns a 400 Bad Request with a custom message.&lt;/li&gt;
+ *     &lt;li&gt;{@code NotFoundException}: Returns a 404 Not Found.&lt;/li&gt;
+ *     &lt;li&gt;{@code InvalidJwtException}: Returns a 451 Unavailable For Legal Reasons.&lt;/li&gt;
+ *     &lt;li&gt;{@code NotAcceptableStatusException}: Returns a 403 Forbidden.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
+@ControllerAdvice
+<span class="fc" id="L40">public class GlobalExceptionHandler {</span>
+
+    /**
+     * Handles {@code NullPointerException} and returns a 500 Internal Server Error.
+     *
+     * @param e The exception to handle.
+     * @return A {@code ResponseEntity} with an error message and HTTP status code 500.
+     */
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity&lt;String&gt; handlerNullPointerException(NullPointerException e) {
+<span class="nc" id="L50">        return new ResponseEntity&lt;&gt;(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);</span>
+    }
+
+    /**
+     * Handles {@code SQLIntegrityConstraintViolationException} and returns a 500 Internal Server Error.
+     *
+     * @param e The exception to handle.
+     * @return A {@code ResponseEntity} with an error message and HTTP status code 500.
+     */
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity&lt;String&gt; handlerSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
+<span class="nc" id="L61">        return new ResponseEntity&lt;&gt;(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);</span>
+    }
+
+    /**
+     * Handles {@code ConstraintViolationException} and returns a 400 Bad Request.
+     *
+     * @param e The exception to handle.
+     * @return A {@code ResponseEntity} with an error message and HTTP status code 400.
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity&lt;String&gt; handlerConstraintViolationException(ConstraintViolationException e) {
+<span class="fc" id="L72">        return new ResponseEntity&lt;&gt;(e.getMessage(), HttpStatus.BAD_REQUEST);</span>
+    }
+
+    /**
+     * Handles {@code AlreadyExistsException} and returns a 400 Bad Request.
+     *
+     * @param e The exception to handle.
+     * @return A {@code ResponseEntity} with an error message and HTTP status code 400.
+     */
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity&lt;String&gt; handlerAlreadyExistsException(AlreadyExistsException e) {
+<span class="fc" id="L83">        return new ResponseEntity&lt;&gt;(e.getMessage(), HttpStatus.BAD_REQUEST);</span>
+    }
+
+    /**
+     * Handles {@code DataIntegrityViolationException} and returns a 400 Bad Request with a custom message.
+     *
+     * @param e The exception to handle.
+     * @return A {@code ResponseEntity} with a custom error message and HTTP status code 400.
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity&lt;String&gt; handlerDataIntegrityViolationException(DataIntegrityViolationException e) {
+<span class="nc" id="L94">        return new ResponseEntity&lt;&gt;(&quot;Entry already exists: &quot; + e.getMessage(), HttpStatus.BAD_REQUEST);</span>
+    }
+
+    /**
+     * Handles {@code NotFoundException} and returns a 404 Not Found.
+     *
+     * @param e The exception to handle.
+     * @return A {@code ResponseEntity} with an error message and HTTP status code 404.
+     */
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity&lt;String&gt; handlerNotFoundException(NotFoundException e) {
+<span class="fc" id="L105">        return new ResponseEntity&lt;&gt;(e.getMessage(), HttpStatus.NOT_FOUND);</span>
+    }
+
+    /**
+     * Handles {@code InvalidJwtException} and returns a 451 Unavailable For Legal Reasons.
+     *
+     * @param e The exception to handle.
+     * @return A {@code ResponseEntity} with an error message and HTTP status code 451.
+     */
+    @ExceptionHandler(InvalidJwtException.class)
+    public ResponseEntity&lt;String&gt; handlerInvalidJwtException(InvalidJwtException e) {
+<span class="nc" id="L116">        return new ResponseEntity&lt;&gt;(e.getMessage(), HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);</span>
+    }
+
+    /**
+     * Handles {@code NotAcceptableStatusException} and returns a 403 Forbidden.
+     *
+     * @param e The exception to handle.
+     * @return A {@code ResponseEntity} with an error message and HTTP status code 403.
+     */
+    @ExceptionHandler(NotAcceptableStatusException.class)
+    public ResponseEntity&lt;String&gt; handlerNotAcceptableStatusException(NotAcceptableStatusException e) {
+<span class="fc" id="L127">        return new ResponseEntity&lt;&gt;(e.getMessage(), HttpStatus.FORBIDDEN);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

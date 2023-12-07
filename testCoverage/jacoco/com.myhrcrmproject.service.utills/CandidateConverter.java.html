@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CandidateConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service.utills</a> &gt; <span class="el_source">CandidateConverter.java</span></div><h1>CandidateConverter.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service.utills;
+
+import com.myhrcrmproject.domain.AddressDetails;
+import com.myhrcrmproject.domain.Candidate;
+import com.myhrcrmproject.domain.ContactDetails;
+import com.myhrcrmproject.domain.Vacancy;
+import com.myhrcrmproject.repository.VacancyRepository;
+import com.myhrcrmproject.service.validation.NotFoundException;
+import com.myhrcrmproject.domain.enums.CandidateStatus;
+import com.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
+import com.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
+import com.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
+import com.myhrcrmproject.dto.vacancyDTO.VacancyShortResponseDTO;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+public class CandidateConverter {
+
+    private final VacancyRepository vacancyRepository;
+    private final InterviewConverter interviewConverter;
+    private final ContactDetailsConverter contactDetailsConverter;
+    private final AddressDetailsConverter addressDetailsConverter;
+
+<span class="fc" id="L28">    public CandidateConverter(VacancyRepository vacancyRepository, @Lazy InterviewConverter interviewConverter, ContactDetailsConverter contactDetailsConverter, AddressDetailsConverter addressDetailsConverter) {</span>
+<span class="fc" id="L29">        this.vacancyRepository = vacancyRepository;</span>
+<span class="fc" id="L30">        this.interviewConverter = interviewConverter;</span>
+<span class="fc" id="L31">        this.contactDetailsConverter = contactDetailsConverter;</span>
+<span class="fc" id="L32">        this.addressDetailsConverter = addressDetailsConverter;</span>
+<span class="fc" id="L33">    }</span>
+
+    public CandidateResponseDTO toDTO(Candidate entity) {
+<span class="fc" id="L36">        CandidateResponseDTO dto = new CandidateResponseDTO();</span>
+
+<span class="fc" id="L38">        dto.setId(entity.getId());</span>
+<span class="fc" id="L39">        dto.setFirstName(entity.getFirstName());</span>
+<span class="fc" id="L40">        dto.setLastName(entity.getLastName());</span>
+<span class="fc" id="L41">        dto.setDateOfBirth(entity.getDateOfBirth());</span>
+<span class="fc" id="L42">        dto.setStatus(entity.getStatus());</span>
+
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (entity.getVacancy() != null) {</span>
+<span class="fc" id="L45">            VacancyShortResponseDTO vacanciesShortResponseDTO = new VacancyShortResponseDTO(</span>
+<span class="fc" id="L46">                    entity.getVacancy().getId(),</span>
+<span class="fc" id="L47">                    entity.getVacancy().getJobTitle(),</span>
+<span class="fc" id="L48">                    entity.getVacancy().getSalary()</span>
+            );
+<span class="fc" id="L50">            dto.setVacancy(vacanciesShortResponseDTO);</span>
+        }
+
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (entity.getContactDetails() != null) {</span>
+<span class="fc" id="L54">            dto.setContactDetails(contactDetailsConverter.toDTO(entity.getContactDetails()));</span>
+        }
+
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (entity.getAddressDetails() != null) {</span>
+<span class="fc" id="L58">            dto.setAddressDetails(addressDetailsConverter.toDTO(entity.getAddressDetails()));</span>
+        }
+
+<span class="fc" id="L61">        Optional.ofNullable(entity.getInterviewList()).ifPresent(</span>
+<span class="fc" id="L62">                (list) -&gt; list.stream()</span>
+<span class="fc" id="L63">                        .map(interviewConverter::toShortDTO)</span>
+<span class="fc" id="L64">                        .collect(Collectors.toList()));</span>
+<span class="fc" id="L65">        return dto;</span>
+    }
+
+
+    public Candidate fromDTO(Candidate entity, CandidateRequestDTO request) {
+<span class="fc" id="L70">        Optional.ofNullable(request.getFirstName()).ifPresent(entity::setFirstName);</span>
+<span class="fc" id="L71">        Optional.ofNullable(request.getLastName()).ifPresent(entity::setLastName);</span>
+<span class="fc" id="L72">        Optional.ofNullable(request.getDateOfBirth()).ifPresent(entity::setDateOfBirth);</span>
+
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (request.getContactDetails() != null) {</span>
+<span class="fc" id="L75">            ContactDetails contactDetailsEntity = entity.getContactDetails();</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">            if (contactDetailsEntity == null) {</span>
+<span class="fc" id="L77">                contactDetailsEntity = new ContactDetails();</span>
+            }
+<span class="fc" id="L79">            entity.setContactDetails(contactDetailsConverter.fromDTO(</span>
+                    contactDetailsEntity,
+<span class="fc" id="L81">                    request.getContactDetails()));</span>
+        }
+
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        if (request.getAddressDetails() != null) {</span>
+<span class="fc" id="L85">            AddressDetails addressDetailsEntity = entity.getAddressDetails();</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">            if (addressDetailsEntity == null) {</span>
+<span class="fc" id="L87">                addressDetailsEntity = new AddressDetails();</span>
+            }
+<span class="fc" id="L89">            entity.setAddressDetails(addressDetailsConverter.fromDTO(</span>
+                    addressDetailsEntity,
+<span class="fc" id="L91">                    request.getAddressDetails()));</span>
+        }
+
+        // if candidate just have been applied for vacancy set status IN_PROGRESS
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (request.getVacancyId() != null) {</span>
+<span class="fc" id="L96">            Vacancy vacancy = vacancyRepository.findById(request.getVacancyId())</span>
+<span class="fc" id="L97">                    .orElseThrow(() -&gt; new NotFoundException</span>
+<span class="fc" id="L98">                            (&quot;Vacancy with id &quot; + request.getVacancyId() + &quot; not found&quot;));</span>
+<span class="fc" id="L99">            entity.setVacancy(vacancy);</span>
+<span class="fc" id="L100">            entity.setStatus(CandidateStatus.IN_PROCESS);</span>
+        }
+
+        // if status was provided, set status
+<span class="fc" id="L104">        Optional.ofNullable(request.getStatus()).</span>
+<span class="fc" id="L105">                ifPresent(entity::setStatus);</span>
+<span class="fc" id="L106">        return entity;</span>
+    }
+
+
+    public Candidate newEntity() {
+
+<span class="fc" id="L112">        return new Candidate();</span>
+    }
+
+    public CandidateShortResponseDTO toShortDTO(Candidate entity) {
+<span class="fc" id="L116">        return CandidateShortResponseDTO.builder()</span>
+<span class="fc" id="L117">                .id(entity.getId())</span>
+<span class="fc" id="L118">                .firstName(entity.getFirstName())</span>
+<span class="fc" id="L119">                .lastName(entity.getLastName())</span>
+<span class="fc" id="L120">                .email(entity.getContactDetails().getEmail())</span>
+<span class="fc" id="L121">                .phone(entity.getContactDetails().getMobilePhone())</span>
+<span class="fc" id="L122">                .status(entity.getStatus())</span>
+<span class="fc" id="L123">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

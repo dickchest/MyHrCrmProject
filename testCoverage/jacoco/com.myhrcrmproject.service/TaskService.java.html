@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TaskService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service</a> &gt; <span class="el_source">TaskService.java</span></div><h1>TaskService.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service;
+
+import com.myhrcrmproject.domain.Candidate;
+import com.myhrcrmproject.domain.Employee;
+import com.myhrcrmproject.domain.Task;
+import com.myhrcrmproject.domain.Vacancy;
+import com.myhrcrmproject.domain.enums.TaskStatus;
+import com.myhrcrmproject.dto.taskDTO.TaskDateRequestDTO;
+import com.myhrcrmproject.dto.taskDTO.TaskRequestDTO;
+import com.myhrcrmproject.dto.taskDTO.TaskResponseDTO;
+import com.myhrcrmproject.dto.taskDTO.TaskShortResponseDTO;
+import com.myhrcrmproject.repository.CandidateRepository;
+import com.myhrcrmproject.repository.EmployeeRepository;
+import com.myhrcrmproject.repository.TaskRepository;
+import com.myhrcrmproject.repository.VacancyRepository;
+import com.myhrcrmproject.service.auth.SecurityHelper;
+import com.myhrcrmproject.service.utills.Helper;
+import com.myhrcrmproject.service.utills.TaskConverter;
+import com.myhrcrmproject.service.validation.NotFoundException;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.NotAcceptableStatusException;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+/**
+ * Service class that handles CRUD (Create, Read, Update, Delete) operations for task entities.
+ *
+ * &lt;p&gt;This service provides methods to perform operations on task entities, such as retrieving,
+ * creating, updating, and deleting task records. It also includes additional methods for finding
+ * task records based on different criteria.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
+@Service
+<span class="fc" id="L40">@AllArgsConstructor</span>
+public class TaskService implements CommonService&lt;TaskRequestDTO, TaskResponseDTO&gt; {
+    private final TaskRepository repository;
+    private final TaskConverter converter;
+    private final EmployeeRepository employeeRepository;
+    private final CandidateRepository candidateRepository;
+    private final VacancyRepository vacancyRepository;
+    private final SecurityHelper securityHelper;
+
+    /**
+     * Retrieves a list of all task records.
+     *
+     * @return A list of response DTOs representing all task records.
+     */
+    public List&lt;TaskResponseDTO&gt; findAll() {
+<span class="fc" id="L55">        return repository.findAll().stream()</span>
+<span class="fc" id="L56">                .map(converter::toDTO)</span>
+<span class="fc" id="L57">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Retrieves a task record by its unique identifier.
+     *
+     * @param id The identifier of the task record to retrieve.
+     * @return The response DTO representing the retrieved task record.
+     * @throws NotFoundException if the task record with the specified id is not found.
+     */
+    public TaskResponseDTO findById(Integer id) {
+<span class="fc" id="L68">        Task entity = repository.findById(id)</span>
+<span class="fc" id="L69">                .orElseThrow(() -&gt; new NotFoundException(&quot;Task with id &quot; + id + &quot; not found!&quot;));</span>
+
+        // check if user has access to this entity
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (!securityHelper.isAuthUserEqualsEmployee(entity.getEmployee())) {</span>
+<span class="fc" id="L73">            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</span>
+        }
+
+<span class="fc" id="L76">        return converter.toDTO(entity);</span>
+    }
+
+    /**
+     * Creates a new task record based on the provided data.
+     *
+     * @param requestDTO The request DTO containing data for the new task record.
+     * @return The response DTO representing the newly created task record.
+     */
+    public TaskResponseDTO create(TaskRequestDTO requestDTO) {
+
+<span class="fc" id="L87">        Task entity = converter.fromDTO(converter.newEntity(), requestDTO);</span>
+
+        // extra methods
+        // set current auth user as employee
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (entity.getEmployee() == null) {</span>
+<span class="fc" id="L92">            Optional&lt;Employee&gt; employee = securityHelper.getCurrentAuthEmployee();</span>
+<span class="fc" id="L93">            employee.ifPresent(entity::setEmployee);</span>
+        }
+<span class="fc" id="L95">        entity.setCreateDate(LocalDateTime.now());</span>
+<span class="fc" id="L96">        entity.setUpdateDate(LocalDateTime.now());</span>
+
+<span class="fc" id="L98">        return converter.toDTO(repository.save(entity));</span>
+    }
+
+    /**
+     * Updates an existing task record with new data.
+     *
+     * @param id         The identifier of the task record to update.
+     * @param requestDTO The request DTO containing updated data for the task record.
+     * @return The response DTO representing the updated task record.
+     * @throws NotFoundException if the task record with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
+    public TaskResponseDTO update(Integer id, TaskRequestDTO requestDTO) {
+<span class="fc" id="L111">        Task existingEntity = repository.findById(id)</span>
+<span class="fc" id="L112">                .orElseThrow(() -&gt; new NotFoundException(&quot;Task with id: &quot; + id + &quot; not found!&quot;));</span>
+
+        // check if user has access to this entity
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (!securityHelper.isAuthUserEqualsEmployee(existingEntity.getEmployee())) {</span>
+<span class="fc" id="L116">            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</span>
+        }
+
+        // filled in existing fields with new dates
+<span class="fc" id="L120">        converter.fromDTO(existingEntity, requestDTO);</span>
+        // do extra procedures
+        // ....
+<span class="fc" id="L123">        existingEntity.setUpdateDate(LocalDateTime.now());</span>
+
+<span class="fc" id="L125">        repository.save(existingEntity);</span>
+
+<span class="fc" id="L127">        return converter.toDTO(existingEntity);</span>
+    }
+
+    /**
+     * Deletes a task record by its unique identifier.
+     *
+     * @param id The identifier of the task record to delete.
+     * @throws NotFoundException if the task record with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
+    public void delete(Integer id) {
+<span class="fc" id="L138">        Task entity = repository.findById(id)</span>
+<span class="fc" id="L139">                .orElseThrow(() -&gt; new NotFoundException(&quot;Task with id: &quot; + id + &quot; not found!&quot;));</span>
+
+        // check if user has access to this entity
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (!securityHelper.isAuthUserEqualsEmployee(entity.getEmployee())) {</span>
+<span class="fc" id="L143">            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</span>
+        }
+<span class="fc" id="L145">        repository.delete(entity);</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Retrieves a list of task records based on the task status.
+     *
+     * @param id The identifier of the task status.
+     * @return A list of response DTOs representing task records with the specified status.
+     */
+    public List&lt;TaskResponseDTO&gt; findAllByTaskStatusId(Integer id) {
+<span class="fc" id="L155">        return Helper.findAllByEnumId(</span>
+                id,
+                TaskStatus.class,
+<span class="fc" id="L158">                repository::findAllByStatus,</span>
+<span class="fc" id="L159">                converter::toDTO</span>
+        );
+    }
+
+    /**
+     * Retrieves a list of task records associated with a specific employee.
+     *
+     * @param id The identifier of the employee to filter by.
+     * @return A list of response DTOs representing task records associated with the specified employee.
+     * @throws NotFoundException if the employee with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
+    public List&lt;TaskResponseDTO&gt; findAllByEmployeeId(Integer id) {
+<span class="fc" id="L172">        Employee employee = employeeRepository.findById(id)</span>
+<span class="fc" id="L173">                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id &quot; + id + &quot; not found!&quot;));</span>
+
+        // check if user has access to this entity
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {</span>
+<span class="fc" id="L177">            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</span>
+        }
+
+<span class="fc" id="L180">        return repository.findAllByEmployee(employee).stream()</span>
+<span class="fc" id="L181">                .map(converter::toDTO)</span>
+<span class="fc" id="L182">                .toList();</span>
+    }
+
+    /**
+     * Retrieves a list of task records associated with a specific candidate.
+     *
+     * @param id The identifier of the candidate to filter by.
+     * @return A list of response DTOs representing task records associated with the specified candidate.
+     */
+    public List&lt;TaskResponseDTO&gt; findAllByCandidateId(Integer id) {
+<span class="fc" id="L192">        return Helper.findAllByEntityId(</span>
+                id, candidateRepository,
+<span class="fc" id="L194">                repository::findAllByCandidate,</span>
+<span class="fc" id="L195">                converter::toDTO</span>
+        );
+    }
+
+    /**
+     * Retrieves a list of task records associated with a specific vacancy.
+     *
+     * @param id The identifier of the vacancy to filter by.
+     * @return A list of response DTOs representing task records associated with the specified vacancy.
+     */
+    public List&lt;TaskResponseDTO&gt; findAllByVacancyId(Integer id) {
+<span class="fc" id="L206">        return Helper.findAllByEntityId(</span>
+                id,
+                vacancyRepository,
+<span class="fc" id="L209">                repository::findAllByVacancy,</span>
+<span class="fc" id="L210">                converter::toDTO</span>
+        );
+    }
+
+    /**
+     * Retrieves a list of task records based on the start date.
+     *
+     * @param requestDTO The request DTO containing the start date.
+     * @return A list of response DTOs representing task records with the specified start date.
+     */
+    public List&lt;TaskResponseDTO&gt; findAllByStartDate(TaskDateRequestDTO requestDTO) {
+<span class="fc" id="L221">        LocalDate date = requestDTO.getDate();</span>
+<span class="fc" id="L222">        List&lt;Task&gt; list = repository.findAllByStartDate(date);</span>
+<span class="fc" id="L223">        return list.stream()</span>
+<span class="fc" id="L224">                .map(converter::toDTO)</span>
+<span class="fc" id="L225">                .toList();</span>
+    }
+
+    /**
+     * Retrieves a list of short task records based on the date and employee id.
+     *
+     * @param id The identifier of the employee to filter by.
+     * @param requestDTO The request DTO containing the date.
+     * @return A list of short response DTOs representing task records with the specified date and associated with the employee.
+     * @throws NotFoundException if the employee with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
+    public List&lt;TaskShortResponseDTO&gt; findAllByDateAndEmployeeId(Integer id, TaskDateRequestDTO requestDTO) {
+<span class="fc" id="L238">        Employee employee = employeeRepository.findById(id)</span>
+<span class="fc" id="L239">                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id &quot; + id + &quot; not found!&quot;));</span>
+
+        // check if user has access to this entity
+<span class="fc bfc" id="L242" title="All 2 branches covered.">        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {</span>
+<span class="fc" id="L243">            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</span>
+        }
+<span class="fc" id="L245">        LocalDate date = requestDTO.getDate();</span>
+<span class="fc" id="L246">        List&lt;Task&gt; list = repository.findAllByStartDateAndEmployee(date, employee);</span>
+<span class="fc" id="L247">        return list.stream()</span>
+<span class="fc" id="L248">                .map(converter::toShortDTO)</span>
+<span class="fc" id="L249">                .toList();</span>
+    }
+
+    /**
+     * Retrieves a list of short task records based on the candidate id and employee id.
+     *
+     * @param candidateId The identifier of the candidate to filter by.
+     * @param employeeId The identifier of the employee to filter by.
+     * @return A list of short response DTOs representing task records associated with the specified candidate and employee.
+     * @throws NotFoundException if the employee or candidate with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
+    public List&lt;TaskShortResponseDTO&gt; findAllByCandidateIdAndEmployeeId(Integer candidateId, Integer employeeId) {
+<span class="fc" id="L262">        Employee employee = employeeRepository.findById(employeeId)</span>
+<span class="fc" id="L263">                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id &quot; + employeeId + &quot; not found!&quot;));</span>
+
+        // check if user has access to this entity
+<span class="fc bfc" id="L266" title="All 2 branches covered.">        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {</span>
+<span class="fc" id="L267">            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</span>
+        }
+
+<span class="fc" id="L270">        Candidate candidate = candidateRepository.findById(candidateId)</span>
+<span class="fc" id="L271">                .orElseThrow(() -&gt; new NotFoundException(&quot;Candidate with id &quot; + candidateId + &quot; not found!&quot;));</span>
+<span class="fc" id="L272">        List&lt;Task&gt; list = repository.findAllByCandidateAndEmployee(candidate, employee);</span>
+<span class="fc" id="L273">        return list.stream()</span>
+<span class="fc" id="L274">                .map(converter::toShortDTO)</span>
+<span class="fc" id="L275">                .toList();</span>
+    }
+
+    /**
+     * Retrieves a list of short task records based on the status id and employee id.
+     *
+     * @param statusId The identifier of the task status.
+     * @param employeeId The identifier of the employee to filter by.
+     * @return A list of short response DTOs representing task records with the specified status and associated with the employee.
+     * @throws NotFoundException if the employee with the specified id is not found or if no enum is found with the given id.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
+    public List&lt;TaskShortResponseDTO&gt; findAllByStatusIdAndEmployeeId(Integer statusId, Integer employeeId) {
+<span class="fc" id="L288">        Employee employee = employeeRepository.findById(employeeId)</span>
+<span class="fc" id="L289">                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id &quot; + employeeId + &quot; not found!&quot;));</span>
+
+        // check if user has access to this entity
+<span class="fc bfc" id="L292" title="All 2 branches covered.">        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {</span>
+<span class="fc" id="L293">            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</span>
+        }
+        TaskStatus status;
+
+        try {
+<span class="fc" id="L298">            status = TaskStatus.values()[statusId];</span>
+<span class="fc" id="L299">        } catch (ArrayIndexOutOfBoundsException e) {</span>
+<span class="fc" id="L300">            throw new NotFoundException(&quot;No enum found with id: &quot; + statusId);</span>
+<span class="fc" id="L301">        }</span>
+
+<span class="fc" id="L303">        List&lt;Task&gt; list = repository.findAllByStatusAndEmployee(status, employee);</span>
+<span class="fc" id="L304">        return list.stream()</span>
+<span class="fc" id="L305">                .map(converter::toShortDTO)</span>
+<span class="fc" id="L306">                .toList();</span>
+    }
+
+    /**
+     * Retrieves a list of short task records based on the vacancy id and employee id.
+     *
+     * @param vacancyId The identifier of the vacancy to filter by.
+     * @param employeeId The identifier of the employee to filter by.
+     * @return A list of short response DTOs representing task records associated with the specified vacancy and employee.
+     * @throws NotFoundException if the employee or vacancy with the specified id is not found.
+     * @throws NotAcceptableStatusException if the authenticated user does not have permission to access this entity.
+     */
+    public List&lt;TaskShortResponseDTO&gt; findAllByVacancyIdAndEmployeeId(Integer vacancyId, Integer employeeId) {
+<span class="fc" id="L319">        Employee employee = employeeRepository.findById(employeeId)</span>
+<span class="fc" id="L320">                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id &quot; + employeeId + &quot; not found!&quot;));</span>
+
+        // check if user has access to this entity
+<span class="fc bfc" id="L323" title="All 2 branches covered.">        if (!securityHelper.isAuthUserEqualsEmployee(employee)) {</span>
+<span class="fc" id="L324">            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</span>
+        }
+
+<span class="fc" id="L327">        Vacancy vacancy = vacancyRepository.findById(vacancyId)</span>
+<span class="fc" id="L328">                .orElseThrow(() -&gt; new NotFoundException(&quot;Vacancy with id &quot; + vacancyId + &quot; not found!&quot;));</span>
+<span class="fc" id="L329">        List&lt;Task&gt; list = repository.findAllByVacancyAndEmployee(vacancy, employee);</span>
+<span class="fc" id="L330">        return list.stream()</span>
+<span class="fc" id="L331">                .map(converter::toShortDTO)</span>
+<span class="fc" id="L332">                .toList();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

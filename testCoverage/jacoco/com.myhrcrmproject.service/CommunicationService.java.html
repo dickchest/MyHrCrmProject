@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommunicationService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service</a> &gt; <span class="el_source">CommunicationService.java</span></div><h1>CommunicationService.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service;
+
+import com.myhrcrmproject.domain.Communication;
+import com.myhrcrmproject.domain.Employee;
+import com.myhrcrmproject.domain.enums.CommunicationType;
+import com.myhrcrmproject.dto.communicationDTO.CommunicationRequestDTO;
+import com.myhrcrmproject.dto.communicationDTO.CommunicationResponseDTO;
+import com.myhrcrmproject.repository.*;
+import com.myhrcrmproject.service.auth.SecurityHelper;
+import com.myhrcrmproject.service.utills.CommunicationConverter;
+import com.myhrcrmproject.service.utills.Helper;
+import com.myhrcrmproject.service.validation.NotFoundException;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+/**
+ * Service class that handles CRUD (Create, Read, Update, Delete) operations for communication entities.
+ *
+ * &lt;p&gt;This service provides methods to perform operations on communication entities, such as retrieving,
+ * creating, updating, and deleting communication records. It also includes additional methods for finding
+ * communication records based on different criteria.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
+@Service
+<span class="fc" id="L32">@AllArgsConstructor</span>
+public class CommunicationService implements CommonService&lt;CommunicationRequestDTO, CommunicationResponseDTO&gt; {
+    private final CommunicationRepository repository;
+    private final CommunicationConverter converter;
+    private final EmployeeRepository employeeRepository;
+    private final ClientRepository clientRepository;
+    private final CandidateRepository candidateRepository;
+    private final VacancyRepository vacancyRepository;
+    private final SecurityHelper securityHelper;
+
+    /**
+     * Retrieves a list of all communication records.
+     *
+     * @return A list of response DTOs representing all communication records.
+     */
+    public List&lt;CommunicationResponseDTO&gt; findAll() {
+<span class="fc" id="L48">        return repository.findAll().stream()</span>
+<span class="fc" id="L49">                .map(converter::toDTO)</span>
+<span class="fc" id="L50">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Retrieves a communication record by its unique identifier.
+     *
+     * @param id The identifier of the communication record to retrieve.
+     * @return The response DTO representing the retrieved communication record.
+     * @throws NotFoundException if the communication record with the specified id is not found.
+     */
+    public CommunicationResponseDTO findById(Integer id) {
+<span class="fc" id="L61">        Communication entity = repository.findById(id)</span>
+<span class="fc" id="L62">                .orElseThrow(() -&gt; new NotFoundException(&quot;Communication with id: &quot; + id + &quot; not found!&quot;));</span>
+<span class="fc" id="L63">        return converter.toDTO(entity);</span>
+    }
+
+    /**
+     * Creates a new communication record based on the provided data.
+     *
+     * @param requestDTO The request DTO containing data for the new communication record.
+     * @return The response DTO representing the newly created communication record.
+     */
+    public CommunicationResponseDTO create(CommunicationRequestDTO requestDTO) {
+
+<span class="fc" id="L74">        Communication entity = converter.fromDTO(converter.newEntity(), requestDTO);</span>
+
+        // if date&amp;time haven't been adjusted, set current date&amp;time
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (requestDTO.getCommunicationDateTime() == null) {</span>
+<span class="fc" id="L78">            entity.setCommunicationDateTime(LocalDateTime.now());</span>
+        }
+
+        // автоматически заносился employee кто меняет эту запись
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (requestDTO.getEmployeeId() == null) {</span>
+<span class="fc" id="L83">            Optional&lt;Employee&gt; optionalEmployee = securityHelper.getCurrentAuthEmployee();</span>
+<span class="fc" id="L84">            optionalEmployee.ifPresent(entity::setEmployee);</span>
+        }
+
+<span class="fc" id="L87">        entity.setCreateDate(LocalDateTime.now());</span>
+<span class="fc" id="L88">        entity.setUpdateDate(LocalDateTime.now());</span>
+
+<span class="fc" id="L90">        return converter.toDTO(repository.save(entity));</span>
+    }
+
+    /**
+     * Updates an existing communication record with new data.
+     *
+     * @param id         The identifier of the communication record to update.
+     * @param requestDTO The request DTO containing updated data for the communication record.
+     * @return The response DTO representing the updated communication record.
+     * @throws NotFoundException if the communication record with the specified id is not found.
+     */
+    public CommunicationResponseDTO update(Integer id, CommunicationRequestDTO requestDTO) {
+<span class="fc" id="L102">        Communication existingEntity = repository.findById(id)</span>
+<span class="fc" id="L103">                .orElseThrow(() -&gt; new NotFoundException(&quot;Communication with id: &quot; + id + &quot; not found!&quot;));</span>
+
+        // filled in existing fields with new dates
+<span class="fc" id="L106">        converter.fromDTO(existingEntity, requestDTO);</span>
+        // do extra procedures
+        // ....
+<span class="fc" id="L109">        existingEntity.setUpdateDate(LocalDateTime.now());</span>
+
+<span class="fc" id="L111">        repository.save(existingEntity);</span>
+
+<span class="fc" id="L113">        return converter.toDTO(existingEntity);</span>
+    }
+
+    /**
+     * Deletes a communication record by its unique identifier.
+     *
+     * @param id The identifier of the communication record to delete.
+     * @throws NotFoundException if the communication record with the specified id is not found.
+     */
+    public void delete(Integer id) {
+<span class="fc" id="L123">        Communication entity = repository.findById(id)</span>
+<span class="fc" id="L124">                .orElseThrow(() -&gt; new NotFoundException(&quot;Communication with id: &quot; + id + &quot; not found!&quot;));</span>
+<span class="fc" id="L125">        repository.delete(entity);</span>
+<span class="fc" id="L126">    }</span>
+
+    /**
+     * Retrieves a list of communication records based on the type of communication.
+     *
+     * @param id The identifier of the communication type.
+     * @return A list of response DTOs representing communication records of the specified type.
+     */
+    public List&lt;CommunicationResponseDTO&gt; findAllByCommunicationTypeId(Integer id) {
+<span class="fc" id="L135">        return Helper.findAllByEnumId(</span>
+                id,
+                CommunicationType.class,
+<span class="fc" id="L138">                repository::findAllByCommunicationType,</span>
+<span class="fc" id="L139">                converter::toDTO</span>
+        );
+    }
+
+    /**
+     * Retrieves a list of communications associated with a specific employee.
+     *
+     * @param id The identifier of the employee to filter by.
+     * @return A list of {@code CommunicationResponseDTO} representing communications associated with the specified employee.
+     */
+    // find All by Employee id
+    public List&lt;CommunicationResponseDTO&gt; findAllByEmployeeId(Integer id) {
+<span class="fc" id="L151">        return Helper.findAllByEntityId(</span>
+                id,
+                employeeRepository,
+<span class="fc" id="L154">                repository::findByEmployee,</span>
+<span class="fc" id="L155">                converter::toDTO</span>
+        );
+    }
+
+    /**
+     * Retrieves a list of communications associated with a specific client.
+     *
+     * @param id The identifier of the client to filter by.
+     * @return A list of {@code CommunicationResponseDTO} representing communications associated with the specified client.
+     */
+    public List&lt;CommunicationResponseDTO&gt; findAllByClientId(Integer id) {
+<span class="fc" id="L166">        return Helper.findAllByEntityId(</span>
+                id,
+                clientRepository,
+<span class="fc" id="L169">                repository::findByClient,</span>
+<span class="fc" id="L170">                converter::toDTO</span>
+        );
+    }
+
+    /**
+     * Retrieves a list of communications associated with a specific candidate.
+     *
+     * @param id The identifier of the candidate to filter by.
+     * @return A list of {@code CommunicationResponseDTO} representing communications associated with the specified candidate.
+     */
+    public List&lt;CommunicationResponseDTO&gt; findAllByCandidateId(Integer id) {
+<span class="fc" id="L181">        return Helper.findAllByEntityId(</span>
+                id,
+                candidateRepository,
+<span class="fc" id="L184">                repository::findByCandidate,</span>
+<span class="fc" id="L185">                converter::toDTO</span>
+        );
+    }
+
+    /**
+     * Retrieves a list of communications associated with a specific vacancy.
+     *
+     * @param id The identifier of the vacancy to filter by.
+     * @return A list of {@code CandidateShortResponseDTO} representing communications associated with the specified vacancy.
+     */
+    public List&lt;CommunicationResponseDTO&gt; findAllByVacancyId(Integer id) {
+<span class="fc" id="L196">        return Helper.findAllByEntityId(</span>
+                id,
+                vacancyRepository,
+<span class="fc" id="L199">                repository::findByVacancy,</span>
+<span class="fc" id="L200">                converter::toDTO</span>
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

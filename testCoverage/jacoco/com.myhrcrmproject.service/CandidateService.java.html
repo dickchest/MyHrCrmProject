@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CandidateService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service</a> &gt; <span class="el_source">CandidateService.java</span></div><h1>CandidateService.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service;
+
+import com.myhrcrmproject.domain.Candidate;
+import com.myhrcrmproject.domain.ContactDetails;
+import com.myhrcrmproject.repository.CandidateRepository;
+import com.myhrcrmproject.repository.ContactDetailsRepository;
+import com.myhrcrmproject.repository.VacancyRepository;
+import com.myhrcrmproject.service.utills.CandidateConverter;
+import com.myhrcrmproject.service.utills.Helper;
+import com.myhrcrmproject.service.validation.AlreadyExistsException;
+import com.myhrcrmproject.service.validation.NotFoundException;
+import com.myhrcrmproject.domain.enums.CandidateStatus;
+import com.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
+import com.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
+import com.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
+import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+/**
+ * Service class for managing candidate-related operations in the HR CRM system.
+ *
+ * &lt;p&gt;This service provides functionality for creating, updating, retrieving, and deleting candidate records.
+ * It interacts with the {@code CandidateRepository} for data access and the {@code CandidateConverter} for
+ * converting between entity and DTO objects.
+ *
+ * &lt;p&gt;Additionally, the service includes methods for finding candidates by their status and by the associated
+ * vacancy. The {@code entityAfterCreateProcedures} method is a helper function for setting default values during
+ * candidate creation.
+ *
+ * &lt;p&gt;The class is annotated with {@code @Service} to indicate its role as a Spring service bean.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
+@Service
+<span class="fc" id="L43">@AllArgsConstructor</span>
+public class CandidateService implements CommonService&lt;CandidateRequestDTO, CandidateResponseDTO&gt; {
+    private final CandidateRepository repository;
+    private final CandidateConverter converter;
+    private final VacancyRepository vacancyRepository;
+    private final ContactDetailsRepository contactDetailsRepository;
+
+<span class="fc" id="L50">    private static final Logger LOGGER = LoggerFactory.getLogger(CandidateService.class);</span>
+
+    /**
+     * Retrieves a list of all candidates in the system.
+     *
+     * @return A list of {@code CandidateResponseDTO} representing all candidates.
+     */
+    public List&lt;CandidateResponseDTO&gt; findAll() {
+<span class="fc" id="L58">        return repository.findAll().stream()</span>
+<span class="fc" id="L59">                .map(converter::toDTO)</span>
+<span class="fc" id="L60">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Retrieves a candidate by their unique identifier.
+     *
+     * @param id The identifier of the candidate to retrieve.
+     * @return The {@code CandidateResponseDTO} representing the retrieved candidate.
+     * @throws NotFoundException if the candidate with the specified ID is not found.
+     */
+    public CandidateResponseDTO findById(Integer id) {
+//        LOGGER.info(&quot;Запрошен кандидат с идентификатором {}.&quot;, id);
+<span class="fc" id="L72">        Candidate entity = repository.findById(id)</span>
+<span class="fc" id="L73">                .orElseThrow(() -&gt; new NotFoundException(&quot;Candidate with id: &quot; + id + &quot; not found!&quot;));</span>
+<span class="fc" id="L74">        return converter.toDTO(entity);</span>
+    }
+
+    /**
+     * Creates a new candidate record based on the provided data.
+     *
+     * @param requestDTO The {@code CandidateRequestDTO} containing data for the new candidate.
+     * @return The {@code CandidateResponseDTO} representing the newly created candidate.
+     * @throws AlreadyExistsException if the specified email already exists.
+     */
+    public CandidateResponseDTO create(CandidateRequestDTO requestDTO) {
+
+        // check if email already exists
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (requestDTO.getContactDetails() != null) {</span>
+<span class="fc" id="L88">            Optional&lt;String&gt; email = Optional.ofNullable(requestDTO.getContactDetails().getEmail());</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">            if (email.isPresent()) {</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">                if (contactDetailsRepository.findByEmail(email.get()).isPresent()) {</span>
+<span class="nc" id="L91">                    throw new AlreadyExistsException(&quot;Email &quot; + email.get() + &quot; already exists&quot;);</span>
+                }
+            }
+        }
+
+<span class="fc" id="L96">        Candidate entity = converter.fromDTO(converter.newEntity(), requestDTO);</span>
+
+<span class="fc" id="L98">        entityAfterCreateProcedures(entity);</span>
+<span class="fc" id="L99">        return converter.toDTO(repository.save(entity));</span>
+    }
+
+    /**
+     * Deletes a candidate by their unique identifier.
+     *
+     * @param id The identifier of the candidate to delete.
+     * @throws NotFoundException if the candidate with the specified ID is not found.
+     */
+    public void delete(Integer id) {
+<span class="fc" id="L109">        Candidate entity = repository.findById(id)</span>
+<span class="fc" id="L110">                .orElseThrow(() -&gt; new NotFoundException(&quot;Candidate with id: &quot; + id + &quot; not found!&quot;));</span>
+<span class="fc" id="L111">        repository.delete(entity);</span>
+<span class="fc" id="L112">    }</span>
+
+    /**
+     * Updates an existing candidate record with new data.
+     *
+     * @param id         The identifier of the candidate to update.
+     * @param requestDTO The {@code CandidateRequestDTO} containing updated data for the candidate.
+     * @return The {@code CandidateResponseDTO} representing the updated candidate.
+     * @throws NotFoundException if the candidate with the specified ID is not found.
+     */
+    public CandidateResponseDTO update(Integer id, CandidateRequestDTO requestDTO) {
+<span class="fc" id="L123">        Candidate existingEntity = repository.findById(id)</span>
+<span class="fc" id="L124">                .orElseThrow(() -&gt; new NotFoundException(&quot;Candidate with id: &quot; + id + &quot; not found!&quot;));</span>
+
+<span class="fc" id="L126">        converter.fromDTO(existingEntity, requestDTO);</span>
+
+        // filled in existing fields with new dates
+<span class="fc" id="L129">        existingEntity.setUpdateDate(LocalDateTime.now());</span>
+
+<span class="fc" id="L131">        return converter.toDTO(repository.save(existingEntity));</span>
+    }
+
+    // Extra method for create and update
+    private void entityAfterCreateProcedures(Candidate candidate) {
+        // add date
+<span class="fc" id="L137">        candidate.setCreateDate(LocalDateTime.now());</span>
+<span class="fc" id="L138">        candidate.setUpdateDate(LocalDateTime.now());</span>
+
+        // set status
+<span class="fc" id="L141">        candidate.setStatus(CandidateStatus.ACTIVE);</span>
+<span class="fc" id="L142">    }</span>
+
+    /**
+     * Retrieves a list of candidates with a specific status.
+     *
+     * @param id The identifier of the status to filter by.
+     * @return A list of {@code CandidateShortResponseDTO} representing candidates with the specified status.
+     */
+    public List&lt;CandidateShortResponseDTO&gt; findAllByStatusId(Integer id) {
+<span class="fc" id="L151">        return Helper.findAllByEnumId(</span>
+                id,
+                CandidateStatus.class,
+<span class="fc" id="L154">                repository::findByStatus,</span>
+<span class="fc" id="L155">                converter::toShortDTO</span>
+        );
+    }
+
+    /**
+     * Retrieves a list of candidates associated with a specific vacancy.
+     *
+     * @param id The identifier of the vacancy to filter by.
+     * @return A list of {@code CandidateShortResponseDTO} representing candidates associated with the specified vacancy.
+     */
+    public List&lt;CandidateShortResponseDTO&gt; findAllByVacancyId(Integer id) {
+<span class="fc" id="L166">        return Helper.findAllByEntityId(</span>
+                id,
+                vacancyRepository,
+<span class="fc" id="L169">                repository::findByVacancy,</span>
+<span class="fc" id="L170">                converter::toShortDTO</span>
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

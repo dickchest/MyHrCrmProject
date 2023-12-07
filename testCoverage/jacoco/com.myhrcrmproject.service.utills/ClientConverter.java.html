@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClientConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service.utills</a> &gt; <span class="el_source">ClientConverter.java</span></div><h1>ClientConverter.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service.utills;
+
+import com.myhrcrmproject.domain.Client;
+import com.myhrcrmproject.dto.clientDTO.ClientRequestDTO;
+import com.myhrcrmproject.dto.clientDTO.ClientResponseDTO;
+import com.myhrcrmproject.dto.clientDTO.ClientShortResponseDTO;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L13">@AllArgsConstructor</span>
+public class ClientConverter {
+
+    public ClientResponseDTO toDTO(Client entity) {
+<span class="fc" id="L17">        return ClientResponseDTO.builder()</span>
+<span class="fc" id="L18">                .id(entity.getId())</span>
+<span class="fc" id="L19">                .companyName(entity.getCompanyName())</span>
+<span class="fc" id="L20">                .description(entity.getDescription())</span>
+<span class="fc" id="L21">                .build();</span>
+    }
+
+    public Client fromDTO(Client entity, ClientRequestDTO request) {
+<span class="fc" id="L25">        Optional.ofNullable(request.getCompanyName()).ifPresent(entity::setCompanyName);</span>
+<span class="fc" id="L26">        Optional.ofNullable(request.getDescription()).ifPresent(entity::setDescription);</span>
+<span class="fc" id="L27">        return entity;</span>
+    }
+
+    public Client newEntity() {
+<span class="fc" id="L31">        return new Client();</span>
+    }
+
+    public ClientShortResponseDTO toShortDTO(Client entity) {
+<span class="fc" id="L35">        return ClientShortResponseDTO.builder()</span>
+<span class="fc" id="L36">                .id(entity.getId())</span>
+<span class="fc" id="L37">                .companyName(entity.getCompanyName())</span>
+<span class="fc" id="L38">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

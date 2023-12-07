@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CompensationService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service</a> &gt; <span class="el_source">CompensationService.java</span></div><h1>CompensationService.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service;
+
+import com.myhrcrmproject.domain.Compensation;
+import com.myhrcrmproject.repository.CandidateRepository;
+import com.myhrcrmproject.repository.CompensationRepository;
+import com.myhrcrmproject.repository.ContractRepository;
+import com.myhrcrmproject.service.utills.CompensationConverter;
+import com.myhrcrmproject.service.utills.Helper;
+import com.myhrcrmproject.service.validation.NotFoundException;
+import com.myhrcrmproject.dto.compensationDTO.CompensationRequestDTO;
+import com.myhrcrmproject.dto.compensationDTO.CompensationResponseDTO;
+import com.myhrcrmproject.dto.compensationDTO.CompensationShortResponseDTO;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Service class that handles CRUD (Create, Read, Update, Delete) operations for compensation entities.
+ *
+ * &lt;p&gt;This service provides methods to perform operations on compensation entities, such as retrieving,
+ * creating, updating, and deleting communication records. It also includes additional methods for finding
+ * compensation records based on different criteria.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
+@Service
+<span class="fc" id="L31">@AllArgsConstructor</span>
+public class CompensationService implements CommonService&lt;CompensationRequestDTO, CompensationResponseDTO&gt; {
+    private final CompensationRepository repository;
+    private final CompensationConverter converter;
+    private final CandidateRepository candidateRepository;
+    private final ContractRepository contractRepository;
+
+    /**
+     * Retrieves a list of all compensation records.
+     *
+     * @return A list of response DTOs representing all compensation records.
+     */
+    public List&lt;CompensationResponseDTO&gt; findAll() {
+<span class="fc" id="L44">        return repository.findAll().stream()</span>
+<span class="fc" id="L45">                .map(converter::toDTO)</span>
+<span class="fc" id="L46">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Retrieves a compensation record by its unique identifier.
+     *
+     * @param id The identifier of the compensation record to retrieve.
+     * @return The response DTO representing the retrieved compensation record.
+     * @throws NotFoundException if the compensation record with the specified id is not found.
+     */
+    public CompensationResponseDTO findById(Integer id) {
+<span class="fc" id="L57">        Compensation entity = repository.findById(id)</span>
+<span class="fc" id="L58">                .orElseThrow(() -&gt; new NotFoundException(&quot;Compensation with id &quot; + id + &quot; not found!&quot;));</span>
+<span class="fc" id="L59">        return converter.toDTO(entity);</span>
+    }
+
+    /**
+     * Creates a new compensation record based on the provided data.
+     *
+     * @param requestDTO The request DTO containing data for the new compensation record.
+     * @return The response DTO representing the newly created compensation record.
+     */
+    public CompensationResponseDTO create(CompensationRequestDTO requestDTO) {
+<span class="fc" id="L69">        Compensation entity = converter.fromDTO(converter.newEntity(), requestDTO);</span>
+
+        // extra methods
+<span class="fc" id="L72">        entity.setCreateDate(LocalDateTime.now());</span>
+<span class="fc" id="L73">        entity.setUpdateDate(LocalDateTime.now());</span>
+<span class="fc" id="L74">        repository.save(entity);</span>
+<span class="fc" id="L75">        return converter.toDTO(entity);</span>
+    }
+
+    /**
+     * Updates an existing compensation record with new data.
+     *
+     * @param id         The identifier of the compensation record to update.
+     * @param requestDTO The request DTO containing updated data for the compensation record.
+     * @return The response DTO representing the updated compensation record.
+     * @throws NotFoundException if the compensation record with the specified id is not found.
+     */
+    public CompensationResponseDTO update(Integer id, CompensationRequestDTO requestDTO) {
+<span class="fc" id="L87">        Compensation existingEntity = repository.findById(id)</span>
+<span class="fc" id="L88">                .orElseThrow(() -&gt; new NotFoundException(&quot;Compensation with id: &quot; + id + &quot; not found!&quot;));</span>
+
+        // filled in existing fields with new dates
+<span class="fc" id="L91">        converter.fromDTO(existingEntity, requestDTO);</span>
+        // do extra procedures
+<span class="fc" id="L93">        existingEntity.setUpdateDate(LocalDateTime.now());</span>
+
+<span class="fc" id="L95">        repository.save(existingEntity);</span>
+
+<span class="fc" id="L97">        return converter.toDTO(existingEntity);</span>
+    }
+
+    /**
+     * Deletes a compensation record by its unique identifier.
+     *
+     * @param id The identifier of the compensation record to delete.
+     * @throws NotFoundException if the compensation record with the specified id is not found.
+     */
+    public void delete(Integer id) {
+<span class="fc" id="L107">        Compensation entity = repository.findById(id)</span>
+<span class="pc" id="L108">                .orElseThrow(() -&gt; new NotFoundException(&quot;Compensation with id: &quot; + id + &quot; not found!&quot;));</span>
+<span class="fc" id="L109">        repository.delete(entity);</span>
+<span class="fc" id="L110">    }</span>
+
+    /**
+     * Retrieves a list of compensation records based on the candidate's unique identifier.
+     *
+     * @param id The identifier of the candidate.
+     * @return A list of {@code CommunicationShortResponseDTO}  representing compensation records associated with the candidate.
+     */
+    public List&lt;CompensationShortResponseDTO&gt; findAllByCandidateId(Integer id) {
+<span class="fc" id="L119">        return Helper.findAllByEntityId(</span>
+                id,
+                candidateRepository,
+<span class="fc" id="L122">                repository::findByCandidate,</span>
+<span class="fc" id="L123">                converter::toShortDTO</span>
+        );
+    }
+
+    /**
+     * Retrieves a list of compensation records based on the contract's unique identifier.
+     *
+     * @param id The identifier of the contract.
+     * @return A list of {@code CompensationShortResponseDTO} representing compensation records associated with the contract.
+     */
+    public List&lt;CompensationShortResponseDTO&gt; findAllByContractId(Integer id) {
+<span class="fc" id="L134">        return Helper.findAllByEntityId(</span>
+                id,
+                contractRepository,
+<span class="fc" id="L137">                repository::findByContract,</span>
+<span class="fc" id="L138">                converter::toShortDTO</span>
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

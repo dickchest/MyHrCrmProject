@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmployeeConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service.utills</a> &gt; <span class="el_source">EmployeeConverter.java</span></div><h1>EmployeeConverter.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service.utills;
+
+import com.myhrcrmproject.domain.ContactDetails;
+import com.myhrcrmproject.domain.Employee;
+import com.myhrcrmproject.dto.employeeDTO.EmployeeRequestDTO;
+import com.myhrcrmproject.dto.employeeDTO.EmployeeResponseDTO;
+import com.myhrcrmproject.dto.employeeDTO.EmployeeShortResponseDTO;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L14">@AllArgsConstructor</span>
+public class EmployeeConverter {
+    ContactDetailsConverter contactDetailsConverter;
+
+    public EmployeeResponseDTO toDTO(Employee entity) {
+<span class="fc" id="L19">        return EmployeeResponseDTO.builder()</span>
+<span class="fc" id="L20">                .id(entity.getId())</span>
+<span class="fc" id="L21">                .firstName(entity.getFirstName())</span>
+<span class="fc" id="L22">                .lastName(entity.getLastName())</span>
+<span class="fc" id="L23">                .position(entity.getPosition())</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">                .contactDetails(entity.getContactDetails() != null ?</span>
+<span class="fc" id="L25">                        contactDetailsConverter.toDTO(entity.getContactDetails()) : null)</span>
+<span class="fc" id="L26">                .build();</span>
+    }
+
+    public Employee fromDTO(Employee entity, EmployeeRequestDTO request) {
+<span class="fc" id="L30">        Optional.ofNullable(request.getFirstName()).ifPresent(entity::setFirstName);</span>
+<span class="fc" id="L31">        Optional.ofNullable(request.getLastName()).ifPresent(entity::setLastName);</span>
+<span class="fc" id="L32">        Optional.ofNullable(request.getPosition()).ifPresent(entity::setPosition);</span>
+
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (request.getContactDetails() != null) {</span>
+<span class="fc" id="L35">            ContactDetails contactDetailsEntity = entity.getContactDetails();</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">            if (contactDetailsEntity == null) {</span>
+<span class="fc" id="L37">                contactDetailsEntity = new ContactDetails();</span>
+            }
+<span class="fc" id="L39">            entity.setContactDetails(contactDetailsConverter.fromDTO(</span>
+                    contactDetailsEntity,
+<span class="fc" id="L41">                    request.getContactDetails()));</span>
+        }
+<span class="fc" id="L43">        return entity;</span>
+    }
+
+    public Employee newEntity() {
+<span class="fc" id="L47">        return new Employee();</span>
+    }
+
+    public EmployeeShortResponseDTO toShortDTO(Employee entity) {
+<span class="fc" id="L51">        return EmployeeShortResponseDTO.builder()</span>
+<span class="fc" id="L52">                .id(entity.getId())</span>
+<span class="fc" id="L53">                .firstName(entity.getFirstName())</span>
+<span class="fc" id="L54">                .lastName(entity.getLastName())</span>
+<span class="fc" id="L55">                .position(entity.getPosition())</span>
+<span class="fc" id="L56">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

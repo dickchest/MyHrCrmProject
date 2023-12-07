@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDetailsConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service.utills</a> &gt; <span class="el_source">UserDetailsConverter.java</span></div><h1>UserDetailsConverter.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service.utills;
+
+import com.myhrcrmproject.domain.UserDetails;
+import com.myhrcrmproject.dto.userDetailsDTO.UserDetailsRequestDTO;
+import com.myhrcrmproject.dto.userDetailsDTO.UserDetailsResponseDTO;
+import com.myhrcrmproject.dto.userDetailsDTO.UserDetailsShortResponseDTO;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class UserDetailsConverter {
+    private final EmployeeConverter employeeConverter;
+    private PasswordEncoder passwordEncoder;
+
+<span class="fc" id="L18">    public UserDetailsConverter(EmployeeConverter employeeConverter, @Lazy PasswordEncoder passwordEncoder) {</span>
+<span class="fc" id="L19">        this.employeeConverter = employeeConverter;</span>
+<span class="fc" id="L20">        this.passwordEncoder = passwordEncoder;</span>
+<span class="fc" id="L21">    }</span>
+
+
+    public UserDetailsResponseDTO toDTO(UserDetails entity) {
+<span class="fc" id="L25">        return UserDetailsResponseDTO.builder()</span>
+<span class="fc" id="L26">                .id(entity.getId())</span>
+<span class="fc" id="L27">                .userName(entity.getUserName())</span>
+<span class="fc" id="L28">                .roleName(entity.getRole().getName())</span>
+<span class="fc" id="L29">                .employee(employeeConverter.toShortDTO(entity.getEmployee()))</span>
+<span class="fc" id="L30">                .createdDate(entity.getCreatedDate())</span>
+<span class="fc" id="L31">                .updatedDate(entity.getUpdatedDate())</span>
+<span class="fc" id="L32">                .build();</span>
+    }
+
+    public UserDetails fromDTO(UserDetails entity, UserDetailsRequestDTO request) {
+<span class="fc" id="L36">        Optional.ofNullable(request.getUserName()).ifPresent(entity::setUserName);</span>
+<span class="fc" id="L37">        Optional.ofNullable(request.getPassword()).ifPresent(</span>
+<span class="fc" id="L38">                password -&gt; entity.setPassword(</span>
+<span class="fc" id="L39">                        passwordEncoder.encode(password)</span>
+                )
+        );
+
+<span class="fc" id="L43">        return entity;</span>
+    }
+
+    public UserDetails newEntity() {
+<span class="fc" id="L47">        return new UserDetails();</span>
+    }
+
+    public UserDetailsShortResponseDTO toShortDTO(UserDetails entity) {
+<span class="fc" id="L51">        return UserDetailsShortResponseDTO.builder()</span>
+<span class="fc" id="L52">                .id(entity.getId())</span>
+<span class="fc" id="L53">                .userName(entity.getUserName())</span>
+<span class="fc" id="L54">                .roleName(entity.getRole().getName())</span>
+<span class="fc" id="L55">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

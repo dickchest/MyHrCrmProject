@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Helper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service.utills</a> &gt; <span class="el_source">Helper.java</span></div><h1>Helper.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service.utills;
+
+import com.myhrcrmproject.service.validation.NotFoundException;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+<span class="fc" id="L11">public class Helper {</span>
+
+    public static &lt;T&gt; void setEntityById(
+            Supplier&lt;Integer&gt; getFromRequestFunction,
+            Consumer&lt;T&gt; setToEntityFunction,
+            JpaRepository&lt;T, Integer&gt; repository,
+            String entityName
+    ) {
+
+<span class="fc" id="L20">        Integer id = getFromRequestFunction.get();</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">        if (id != null) {</span>
+<span class="fc" id="L22">            setToEntityFunction.accept(</span>
+<span class="fc" id="L23">                    repository.findById(id)</span>
+<span class="fc" id="L24">                            .orElseThrow(</span>
+<span class="fc" id="L25">                                    () -&gt; new NotFoundException(entityName + &quot; with id &quot; + id + &quot; not found&quot;)</span>
+                            )
+            );
+        }
+<span class="fc" id="L29">    }</span>
+
+    public static &lt;E, T, R&gt; List&lt;R&gt; findAllByEntityId(
+            Integer id,
+            JpaRepository&lt;T, Integer&gt; repository, // репозиторий сущности которую ищем по id
+            Function&lt;T, List&lt;E&gt;&gt; taskMappingFunction, // метод поиска сущности по репозиторию
+            Function&lt;E, R&gt; dtoMappingFunction // конвертор из сущности в ДТО
+    ) {
+<span class="fc" id="L37">        T entity = repository.findById(id)</span>
+<span class="fc" id="L38">                .orElseThrow(() -&gt; new NotFoundException(&quot;Entity with id &quot; + id + &quot; not found!&quot;));</span>
+<span class="fc" id="L39">        List&lt;E&gt; list = taskMappingFunction.apply(entity);</span>
+<span class="fc" id="L40">        return list.stream()</span>
+<span class="fc" id="L41">                .map(dtoMappingFunction::apply)</span>
+<span class="fc" id="L42">                .toList();</span>
+    }
+
+    public static &lt;T extends Enum&lt;T&gt;, E, R&gt; List&lt;R&gt; findAllByEnumId(
+            Integer id,
+            Class&lt;T&gt; enumType,
+            Function&lt;T, List&lt;E&gt;&gt; taskMappingFunction,
+            Function&lt;E, R&gt; dtoMappingFunction) {
+
+        T enumValue;
+<span class="fc" id="L52">        T[] enumConstants = enumType.getEnumConstants();</span>
+<span class="pc bpc" id="L53" title="3 of 6 branches missed.">        if (enumConstants != null &amp;&amp; id &gt;= 0 &amp;&amp; id &lt; enumConstants.length) {</span>
+<span class="fc" id="L54">            enumValue = enumConstants[id];</span>
+        } else {
+<span class="nc" id="L56">            throw new NotFoundException(&quot;No enum found with id: &quot; + id);</span>
+        }
+
+<span class="fc" id="L59">        List&lt;E&gt; list = taskMappingFunction.apply(enumValue);</span>
+
+<span class="fc" id="L61">        return list.stream()</span>
+<span class="fc" id="L62">                .map(dtoMappingFunction::apply)</span>
+<span class="fc" id="L63">                .toList();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

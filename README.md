@@ -21,7 +21,8 @@ All project information you may find at [this link](https://drive.google.com/dri
 
 ## Project Related Links
 - [Project Information](projectDocs)
-- [HR CRM Application Java Docs](javadoc/index.html)
+- [HR CRM Application Java Docs](https://rawcdn.githack.com/dickchest/MyHrCrmProject/ac61a7ced7f95c128caf408bf9b374c83dbbdad4/javadoc/index.html)
+- [Test Coverage Report from JaCoCo]()
 
 ## Technologies:
 `Spring Boot`: Used for application development and streamlined setup and deployment. 

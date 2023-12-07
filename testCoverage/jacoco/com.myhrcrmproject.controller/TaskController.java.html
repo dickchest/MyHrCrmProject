@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TaskController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.controller</a> &gt; <span class="el_source">TaskController.java</span></div><h1>TaskController.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.controller;
+
+import com.myhrcrmproject.domain.annotations.IsManager;
+import com.myhrcrmproject.dto.taskDTO.TaskDateRequestDTO;
+import com.myhrcrmproject.dto.taskDTO.TaskRequestDTO;
+import com.myhrcrmproject.dto.taskDTO.TaskResponseDTO;
+import com.myhrcrmproject.dto.taskDTO.TaskShortResponseDTO;
+import com.myhrcrmproject.service.TaskService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+/**
+ * Controller class for managing task-related operations in the HR CRM system.
+ *
+ * &lt;p&gt;This class defines RESTful APIs for various task actions, including
+ * retrieving all tasks, finding tasks by ID, creating new tasks, updating
+ * existing tasks, and deleting tasks.
+ *
+ * &lt;p&gt;Additionally, it provides endpoints to retrieve tasks based on different
+ * criteria such as task status ID, employee ID, candidate ID, vacancy ID, start date, etc.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
+@RestController
+@RequestMapping(&quot;api/tasks&quot;)
+<span class="fc" id="L34">@AllArgsConstructor</span>
+@Getter
+@Tag(
+        name = &quot;Task Controller&quot;,
+        description = &quot;APIs for managing tasks&quot;
+)
+public class TaskController {
+<span class="fc" id="L41">    private final TaskService service;</span>
+
+    /**
+     * Endpoint to retrieve a list of all tasks Requires manager role.
+     *
+     * @return A {@code ResponseEntity} with a list of {@code TaskResponseDTO} representing all tasks.
+     */
+    @IsManager
+    @GetMapping
+    @Operation(
+            summary = &quot;Get all tasks&quot;,
+            description = &quot;Retrieve a list of all tasks. Requires manager role.&quot;
+    )
+    public ResponseEntity&lt;List&lt;TaskResponseDTO&gt;&gt; findAll() {
+<span class="fc" id="L55">        return new ResponseEntity&lt;&gt;(getService().findAll(), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Endpoint to retrieve a task by its ID.
+     *
+     * @param id The ID of the task to retrieve.
+     * @return A {@code ResponseEntity} with the {@code TaskResponseDTO} representing the retrieved task.
+     */
+    @GetMapping(&quot;/{id}&quot;)
+    @Operation(
+            summary = &quot;Get task by ID&quot;,
+            description = &quot;Retrieve a task by their ID.&quot;
+    )
+    public ResponseEntity&lt;TaskResponseDTO&gt; findById(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the task&quot;, example = &quot;1&quot;)
+            Integer id) {
+<span class="fc" id="L73">        return new ResponseEntity&lt;&gt;(getService().findById(id), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Endpoint to create a new task.
+     *
+     * @param requestDTO The request body containing task details.
+     * @return A {@code ResponseEntity} with the {@code TaskResponseDTO} representing the newly created task.
+     */
+    @PostMapping
+    @Operation(
+            summary = &quot;Create a new task&quot;,
+            description = &quot;Create a new task with the provided details.&quot;
+    )
+    public ResponseEntity&lt;TaskResponseDTO&gt; createNew(
+            @RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = &quot;Request body containing task details&quot;)
+            TaskRequestDTO requestDTO) {
+<span class="fc" id="L92">        return new ResponseEntity&lt;&gt;(getService().create(requestDTO), HttpStatus.CREATED);</span>
+    }
+
+    /**
+     * Endpoint to update an existing task.
+     *
+     * @param id         The ID of the task to update.
+     * @param requestDTO The request body containing updated task details.
+     * @return A {@code ResponseEntity} with the {@code TaskResponseDTO} representing the updated task.
+     */
+    @PutMapping(&quot;/{id}&quot;)
+    @Operation(
+            summary = &quot;Update a task&quot;,
+            description = &quot;Update an existing task with the provided details.&quot;
+    )
+    public ResponseEntity&lt;TaskResponseDTO&gt; update(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the task&quot;, example = &quot;1&quot;)
+            Integer id,
+            @RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = &quot;Request body containing updated task details&quot;)
+            TaskRequestDTO requestDTO) {
+<span class="fc" id="L115">        return new ResponseEntity&lt;&gt;(getService().update(id, requestDTO), HttpStatus.ACCEPTED);</span>
+    }
+
+    /**
+     * Endpoint to delete a task.
+     *
+     * @param id The ID of the task to delete.
+     */
+    @DeleteMapping(&quot;/{id}&quot;)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(
+            summary = &quot;Delete a task&quot;,
+            description = &quot;Delete a task by their ID.&quot;
+    )
+    public void delete(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the task to delete&quot;, example = &quot;1&quot;)
+            Integer id) {
+<span class="fc" id="L133">        getService().delete(id);</span>
+<span class="fc" id="L134">    }</span>
+
+    /**
+     * Retrieves a list of tasks by task status ID. Requires manager role.
+     *
+     * @param id The ID of the status.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
+    @IsManager
+    @GetMapping(&quot;/findAllByTaskStatusId/{id}&quot;)
+    @Operation(
+            summary = &quot;Get tasks by status ID&quot;,
+            description = &quot;Retrieve a list of tasks by status ID. Requires manager role.&quot;
+    )
+    public ResponseEntity&lt;List&lt;TaskResponseDTO&gt;&gt; findAllByTaskStatusId(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the status&quot;, example = &quot;1&quot;)
+            Integer id) {
+<span class="fc" id="L152">        return new ResponseEntity&lt;&gt;(service.findAllByTaskStatusId(id), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Retrieves a list of tasks by employee ID.
+     *
+     * @param id The ID of the employee.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
+    @GetMapping(&quot;/findAllByEmployee/{id}&quot;)
+    @Operation(
+            summary = &quot;Get tasks by employee ID&quot;,
+            description = &quot;Retrieve a list of tasks by employee ID.&quot;
+    )
+    public ResponseEntity&lt;List&lt;TaskResponseDTO&gt;&gt; findAllByEmployeeId(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the employee&quot;, example = &quot;1&quot;)
+            Integer id) {
+<span class="fc" id="L170">        return new ResponseEntity&lt;&gt;(service.findAllByEmployeeId(id), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Retrieves a list of tasks by candidate ID. Requires manager role.
+     *
+     * @param id The ID of the candidate.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
+    @IsManager
+    @GetMapping(&quot;/findAllByCandidate/{id}&quot;)
+    @Operation(
+            summary = &quot;Get tasks by candidate ID&quot;,
+            description = &quot;Retrieve a list of tasks by candidate ID. Requires manager role.&quot;
+    )
+    public ResponseEntity&lt;List&lt;TaskResponseDTO&gt;&gt; findAllByCandidateId(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the candidate&quot;, example = &quot;1&quot;)
+            Integer id) {
+<span class="fc" id="L189">        return new ResponseEntity&lt;&gt;(service.findAllByCandidateId(id), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Retrieves a list of tasks by vacancy ID. Requires manager role.
+     *
+     * @param id The ID of the vacancy.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
+    @IsManager
+    @GetMapping(&quot;/findAllByVacancy/{id}&quot;)
+    @Operation(
+            summary = &quot;Get tasks by vacancy ID&quot;,
+            description = &quot;Retrieve a list of tasks by vacancy ID. Requires manager role.&quot;
+    )
+    public ResponseEntity&lt;List&lt;TaskResponseDTO&gt;&gt; findAllByVacancyId(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the vacancy&quot;, example = &quot;1&quot;)
+            Integer id) {
+<span class="fc" id="L208">        return new ResponseEntity&lt;&gt;(service.findAllByVacancyId(id), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Retrieves a list of tasks by start date. Requires manager role.
+     *
+     * @param requestDTO The request body containing start date.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
+    @IsManager
+    @PutMapping(&quot;/findAllByStartDate&quot;)
+    @Operation(
+            summary = &quot;Get tasks by start date&quot;,
+            description = &quot;Retrieve a list of tasks by start date. Requires manager role.&quot;
+    )
+    public ResponseEntity&lt;List&lt;TaskResponseDTO&gt;&gt; findAllByStartDate(
+            @RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = &quot;Request body containing start date&quot;)
+            TaskDateRequestDTO requestDTO) {
+<span class="fc" id="L228">        return new ResponseEntity&lt;&gt;(service.findAllByStartDate(requestDTO), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Retrieves a list of tasks by start date and employee ID.
+     *
+     * @param id         The ID of the employee.
+     * @param requestDTO The request body containing start date.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
+    @PutMapping(&quot;/findAllByStartDateAndEmployee/{id}&quot;)
+    @Operation(
+            summary = &quot;Get tasks by start date and employee ID&quot;,
+            description = &quot;Retrieve a list of tasks by start date and employee ID.&quot;
+    )
+    public ResponseEntity&lt;List&lt;TaskShortResponseDTO&gt;&gt; findAllByStartDateAndEmployeeId(
+            @PathVariable(&quot;id&quot;)
+            @Parameter(description = &quot;ID of the employee&quot;, example = &quot;1&quot;)
+            Integer id,
+            @RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = &quot;Request body containing start date&quot;)
+            TaskDateRequestDTO requestDTO) {
+<span class="fc" id="L251">        return new ResponseEntity&lt;&gt;(service.findAllByDateAndEmployeeId(id, requestDTO), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Retrieves a list of tasks by candidate ID and employee ID.
+     *
+     * @param candidateId The ID of the candidate.
+     * @param employeeId  The ID of the employee.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
+    @GetMapping(&quot;/findAllByCandidateAndEmployee/{candidateId}/{employeeId}&quot;)
+    @Operation(
+            summary = &quot;Get tasks by candidate ID and employee ID&quot;,
+            description = &quot;Retrieve a list of tasks by candidate ID and employee ID.&quot;
+    )
+    public ResponseEntity&lt;List&lt;TaskShortResponseDTO&gt;&gt; findAllByCandidateIdAndEmployeeId(
+            @PathVariable(&quot;candidateId&quot;)
+            @Parameter(description = &quot;ID of the candidate&quot;, example = &quot;1&quot;)
+            Integer candidateId,
+            @PathVariable(&quot;employeeId&quot;)
+            @Parameter(description = &quot;ID of the employee&quot;, example = &quot;1&quot;)
+            Integer employeeId) {
+<span class="fc" id="L273">        return new ResponseEntity&lt;&gt;(service.findAllByCandidateIdAndEmployeeId(candidateId, employeeId), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Retrieves a list of tasks by status ID and employee ID.
+     *
+     * @param statusId   The ID of task status.
+     * @param employeeId The ID of the employee.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
+    @GetMapping(&quot;/findAllByStatusAndEmployee/{statusId}/{employeeId}&quot;)
+    @Operation(
+            summary = &quot;Get tasks by status ID and employee ID&quot;,
+            description = &quot;Retrieve a list of tasks by status ID and employee ID.&quot;
+    )
+    public ResponseEntity&lt;List&lt;TaskShortResponseDTO&gt;&gt; findAllByStatusIdAndEmployeeId(
+            @PathVariable(&quot;statusId&quot;)
+            @Parameter(description = &quot;ID of task status&quot;, example = &quot;1&quot;)
+            Integer statusId,
+            @PathVariable(&quot;employeeId&quot;)
+            @Parameter(description = &quot;ID of the employee&quot;, example = &quot;1&quot;)
+            Integer employeeId) {
+<span class="fc" id="L295">        return new ResponseEntity&lt;&gt;(service.findAllByStatusIdAndEmployeeId(statusId, employeeId), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Retrieves a list of tasks by vacancy ID and employee ID.
+     *
+     * @param vacancyId  The ID of the vacancy.
+     * @param employeeId The ID of the employee.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
+    @GetMapping(&quot;/findAllByVacancyAndEmployee/{vacancyId}/{employeeId}&quot;)
+    @Operation(
+            summary = &quot;Get tasks by vacancy ID and employee ID&quot;,
+            description = &quot;Retrieve a list of tasks by vacancy ID and employee ID.&quot;
+    )
+    public ResponseEntity&lt;List&lt;TaskShortResponseDTO&gt;&gt; findAllByVacancyIdAndEmployeeId(
+            @PathVariable(&quot;vacancyId&quot;)
+            @Parameter(description = &quot;ID of the vacancy&quot;, example = &quot;1&quot;)
+            Integer vacancyId,
+            @PathVariable(&quot;employeeId&quot;)
+            @Parameter(description = &quot;ID of the employee&quot;, example = &quot;1&quot;)
+            Integer employeeId) {
+<span class="fc" id="L317">        return new ResponseEntity&lt;&gt;(service.findAllByVacancyIdAndEmployeeId(vacancyId, employeeId), HttpStatus.OK);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

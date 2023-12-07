@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmployeeService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service</a> &gt; <span class="el_source">EmployeeService.java</span></div><h1>EmployeeService.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service;
+
+import com.myhrcrmproject.domain.Employee;
+import com.myhrcrmproject.repository.EmployeeRepository;
+import com.myhrcrmproject.service.utills.EmployeeConverter;
+import com.myhrcrmproject.service.validation.NotFoundException;
+import com.myhrcrmproject.dto.employeeDTO.EmployeeRequestDTO;
+import com.myhrcrmproject.dto.employeeDTO.EmployeeResponseDTO;
+import com.myhrcrmproject.service.auth.SecurityHelper;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.NotAcceptableStatusException;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Service class that handles CRUD (Create, Read, Update, Delete) operations for employee entities.
+ *
+ * &lt;p&gt;This service provides methods to perform operations on employee entities, such as retrieving,
+ * creating, updating, and deleting employee records.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
+@Service
+<span class="fc" id="L27">@AllArgsConstructor</span>
+public class EmployeeService implements CommonService&lt;EmployeeRequestDTO, EmployeeResponseDTO&gt; {
+    private final EmployeeRepository repository;
+    private final EmployeeConverter converter;
+    private final SecurityHelper securityHelper;
+
+    /**
+     * Retrieves a list of all employee records.
+     *
+     * @return A list of response DTOs representing all employee records.
+     */
+    @Override
+    public List&lt;EmployeeResponseDTO&gt; findAll() {
+<span class="fc" id="L40">        return repository.findAll().stream()</span>
+<span class="fc" id="L41">                .map(converter::toDTO)</span>
+<span class="fc" id="L42">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Retrieves an employee record by its unique identifier.
+     *
+     * @param id The identifier of the employee record to retrieve.
+     * @return The response DTO representing the retrieved employee record.
+     * @throws NotFoundException if the employee record with the specified id is not found.
+     */
+    @Override
+    public EmployeeResponseDTO findById(Integer id) {
+<span class="fc" id="L54">        Employee entity = repository.findById(id)</span>
+<span class="fc" id="L55">                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id &quot; + id + &quot; not found!&quot;));</span>
+
+<span class="fc" id="L57">        return converter.toDTO(entity);</span>
+    }
+
+    /**
+     * Creates a new employee record based on the provided data.
+     *
+     * @param requestDTO The request DTO containing data for the new employee record.
+     * @return The response DTO representing the newly created employee record.
+     */
+    @Override
+    public EmployeeResponseDTO create(EmployeeRequestDTO requestDTO) {
+<span class="fc" id="L68">        Employee entity = converter.fromDTO(converter.newEntity(), requestDTO);</span>
+
+<span class="fc" id="L70">        return converter.toDTO(repository.save(entity));</span>
+    }
+
+    /**
+     * Updates an existing employee record with new data.
+     *
+     * @param id         The identifier of the employee record to update.
+     * @param requestDTO The request DTO containing updated data for the employee record.
+     * @return The response DTO representing the updated employee record.
+     * @throws NotFoundException if the employee record with the specified id is not found.
+     */
+    @Override
+    public EmployeeResponseDTO update(Integer id, EmployeeRequestDTO requestDTO) {
+<span class="fc" id="L83">        Employee existingEntity = repository.findById(id)</span>
+<span class="fc" id="L84">                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id: &quot; + id + &quot; not found!&quot;));</span>
+
+        // check if user has access to this entity
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (!securityHelper.isAuthUserEqualsEmployee(existingEntity)) {</span>
+<span class="fc" id="L88">            throw new NotAcceptableStatusException(&quot;You have not permission to access this entity&quot;);</span>
+        }
+
+        // filled in existing fields with new dates
+<span class="fc" id="L92">        converter.fromDTO(existingEntity, requestDTO);</span>
+<span class="fc" id="L93">        repository.save(existingEntity);</span>
+
+<span class="fc" id="L95">        return converter.toDTO(existingEntity);</span>
+    }
+
+    /**
+     * Deletes an employee record by its unique identifier.
+     *
+     * @param id The identifier of the employee record to delete.
+     * @throws NotFoundException if the employee record with the specified id is not found.
+     */
+    @Override
+    public void delete(Integer id) {
+<span class="fc" id="L106">        Employee entity = repository.findById(id)</span>
+<span class="pc" id="L107">                .orElseThrow(() -&gt; new NotFoundException(&quot;Employee with id: &quot; + id + &quot; not found!&quot;));</span>
+<span class="fc" id="L108">        repository.delete(entity);</span>
+<span class="fc" id="L109">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

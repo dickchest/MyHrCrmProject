@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AddressDetailsConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyHrCrmProject</a> &gt; <a href="index.source.html" class="el_package">com.myhrcrmproject.service.utills</a> &gt; <span class="el_source">AddressDetailsConverter.java</span></div><h1>AddressDetailsConverter.java</h1><pre class="source lang-java linenums">package com.myhrcrmproject.service.utills;
+
+import com.myhrcrmproject.domain.AddressDetails;
+import com.myhrcrmproject.dto.addressDetailsDTO.AddressDetailsDTO;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L11">@AllArgsConstructor</span>
+public class AddressDetailsConverter {
+    public AddressDetailsDTO toDTO(AddressDetails entity) {
+<span class="fc" id="L14">        return AddressDetailsDTO.builder()</span>
+<span class="fc" id="L15">                .street(entity.getStreet())</span>
+<span class="fc" id="L16">                .city(entity.getCity())</span>
+<span class="fc" id="L17">                .state(entity.getState())</span>
+<span class="fc" id="L18">                .zip(entity.getZip())</span>
+<span class="fc" id="L19">                .country(entity.getCountry())</span>
+<span class="fc" id="L20">                .build();</span>
+    }
+
+    public AddressDetails fromDTO(AddressDetails entity, AddressDetailsDTO request) {
+<span class="fc" id="L24">        Optional.ofNullable(request.getStreet()).ifPresent(entity::setStreet);</span>
+<span class="fc" id="L25">        Optional.ofNullable(request.getCity()).ifPresent(entity::setCity);</span>
+<span class="fc" id="L26">        Optional.ofNullable(request.getState()).ifPresent(entity::setState);</span>
+<span class="fc" id="L27">        Optional.ofNullable(request.getZip()).ifPresent(entity::setZip);</span>
+<span class="fc" id="L28">        Optional.ofNullable(request.getCountry()).ifPresent(entity::setCountry);</span>
+<span class="fc" id="L29">        return entity;</span>
+    }
+
+    public AddressDetails newEntity() {
+<span class="fc" id="L33">        return new AddressDetails();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
