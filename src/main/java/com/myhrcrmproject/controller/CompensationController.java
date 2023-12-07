@@ -15,7 +15,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * Controller class for managing compensation-related operations in the HR CRM system.
+ *
+ * <p>This class provides RESTful endpoints for retrieving, creating, updating,
+ * and deleting compensation records. It interacts with the {@code CompensationService}
+ * for handling business logic and data access.
+ *
+ * <p>Additionally, it includes endpoints for finding compensations by their ID,
+ * retrieving a list of all compensations, creating a new compensation, updating an
+ * existing compensation, and deleting a compensation. There are also endpoints for
+ * finding compensations by type ID, employee ID, client ID, candidate ID, and vacancy ID.
+ *
+ * <p>The class is annotated with {@code @RestController} to indicate its role
+ * as a Spring REST controller and is mapped to the "/api/compensations" endpoint.
+ *
+ * <p>Author: Denys Chaykovskyy
+ *
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("api/compensations")
 @AllArgsConstructor
@@ -24,6 +42,11 @@ import java.util.List;
 public class CompensationController {
     private final CompensationService service;
 
+    /**
+     * Endpoint to retrieve a list of all compensations.
+     *
+     * @return A {@code ResponseEntity} with a list of {@code CompensationResponseDTO} representing all compensations.
+     */
     @GetMapping
     @Operation(
             summary = "Get all compensations",
@@ -33,6 +56,12 @@ public class CompensationController {
         return new ResponseEntity<>(getService().findAll(), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to retrieve a compensation by its ID.
+     *
+     * @param id The ID of the compensation to retrieve.
+     * @return A {@code ResponseEntity} with the {@code CompensationResponseDTO} representing the retrieved compensation.
+     */
     @GetMapping("/{id}")
     @Operation(
             summary = "Get compensation by ID",
@@ -45,6 +74,12 @@ public class CompensationController {
         return new ResponseEntity<>(getService().findById(id), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to create a new compensation.
+     *
+     * @param requestDTO The request body containing compensation details.
+     * @return A {@code ResponseEntity} with the {@code CompensationResponseDTO} representing the newly created compensation.
+     */
     @PostMapping
     @Operation(
             summary = "Create a new compensation",
@@ -58,6 +93,13 @@ public class CompensationController {
         return new ResponseEntity<>(getService().create(requestDTO), HttpStatus.CREATED);
     }
 
+    /**
+     * Endpoint to update an existing compensation.
+     *
+     * @param id         The ID of the compensation to update.
+     * @param requestDTO The request body containing updated compensation details.
+     * @return A {@code ResponseEntity} with the {@code CompensationResponseDTO} representing the updated compensation.
+     */
     @PutMapping("/{id}")
     @Operation(
             summary = "Update a compensation",
@@ -74,6 +116,11 @@ public class CompensationController {
         return new ResponseEntity<>(getService().update(id, requestDTO), HttpStatus.ACCEPTED);
     }
 
+    /**
+     * Endpoint to delete a compensation.
+     *
+     * @param id The ID of the compensation to delete.
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @IsManager
@@ -88,6 +135,12 @@ public class CompensationController {
         getService().delete(id);
     }
 
+    /**
+     * Endpoint to retrieve a list of compensations by candidate ID.
+     *
+     * @param id The ID of the candidate.
+     * @return A {@code ResponseEntity} with a list of {@code CompensationResponseDTO} representing compensations by candiddate ID.
+     */
     @GetMapping("/findAllByCandidate/{id}")
     @Operation(
             summary = "Get compensations by candidate ID",
@@ -100,6 +153,12 @@ public class CompensationController {
         return new ResponseEntity<>(service.findAllByCandidateId(id), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to retrieve a list of compensations by contract ID.
+     *
+     * @param id The ID of the contract.
+     * @return A {@code ResponseEntity} with a list of {@code CompensationResponseDTO} representing compensations by contract ID.
+     */
     @GetMapping("/findAllByContract/{id}")
     @Operation(
             summary = "Get compensations by contract ID",

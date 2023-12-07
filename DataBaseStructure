@@ -1,0 +1,177 @@
++-----------------------+
+| Tables_in_mycrmhr     |
++-----------------------+
+| address_details       |
+| candidate             |
+| client                |
+| communication         |
+| compensation          |
+| contact_details       |
+| contract              |
+| databasechangelog     |
+| databasechangeloglock |
+| employee              |
+| interview             |
+| roles                 |
+| task                  |
+| user_details          |
+| vacancy               |
++-----------------------+
+
+address_details
++---------+--------------+------+-----+---------+----------------+
+| Field   | Type         | Null | Key | Default | Extra          |
++---------+--------------+------+-----+---------+----------------+
+| id      | int          | NO   | PRI | NULL    | auto_increment |
+| street  | varchar(255) | YES  |     | NULL    |                |
+| city    | varchar(255) | YES  |     | NULL    |                |
+| country | varchar(255) | YES  |     | NULL    |                |
+| state   | varchar(255) | YES  |     | NULL    |                |
+| zip     | varchar(255) | YES  |     | NULL    |                |
++---------+--------------+------+-----+---------+----------------+
+
+candidate
++--------------------+--------------------------------------------------------------------+------+-----+---------+----------------+
+| Field              | Type                                                               | Null | Key | Default | Extra          |
++--------------------+--------------------------------------------------------------------+------+-----+---------+----------------+
+| id                 | int                                                                | NO   | PRI | NULL    | auto_increment |
+| first_name         | varchar(20)                                                        | YES  |     | NULL    |                |
+| last_name          | varchar(50)                                                        | YES  |     | NULL    |                |
+| date_of_birth      | date                                                               | YES  |     | NULL    |                |
+| address_id         | int                                                                | YES  | MUL | NULL    |                |
+| contact_details_id | int                                                                | YES  | UNI | NULL    |                |
+| vacancy_id         | int                                                                | YES  | MUL | NULL    |                |
+| status             | enum('ACTIVE','BLACK_LISTED','IN_PROCESS','NOT_ACTIVE','REJECTED') | NO   |     | NULL    |                |
+| create_date        | datetime(6)                                                        | YES  |     | NULL    |                |
+| update_date        | datetime(6)                                                        | YES  |     | NULL    |                |
++--------------------+--------------------------------------------------------------------+------+-----+---------+----------------+
+
+client
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| id           | int          | NO   | PRI | NULL    | auto_increment |
+| company_name | varchar(255) | YES  |     | NULL    |                |
+| description  | varchar(255) | YES  |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+
+communication
++-------------------------+----------------------------------------------------------+------+-----+---------+----------------+
+| Field                   | Type                                                     | Null | Key | Default | Extra          |
++-------------------------+----------------------------------------------------------+------+-----+---------+----------------+
+| id                      | int                                                      | NO   | PRI | NULL    | auto_increment |
+| communication_date_time | datetime(6)                                              | YES  |     | NULL    |                |
+| communication_type      | enum('EMAIL','PHONE','CHAT','SOCIAL_MEDIA','MAIL','FAX') | NO   |     | NULL    |                |
+| client_id               | int                                                      | YES  | MUL | NULL    |                |
+| candidate_id            | int                                                      | YES  | MUL | NULL    |                |
+| vacancy_id              | int                                                      | YES  | MUL | NULL    |                |
+| responsible_employee_id | int                                                      | YES  | MUL | NULL    |                |
+| create_date             | datetime(6)                                              | YES  |     | NULL    |                |
+| update_date             | datetime(6)                                              | YES  |     | NULL    |                |
++-------------------------+----------------------------------------------------------+------+-----+---------+----------------+
+
+compensation
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| id           | int          | NO   | PRI | NULL    | auto_increment |
+| candidate_id | int          | YES  | MUL | NULL    |                |
+| salary       | double       | YES  |     | NULL    |                |
+| payment_date | date         | YES  |     | NULL    |                |
+| comments     | varchar(255) | YES  |     | NULL    |                |
+| contract_id  | int          | YES  | MUL | NULL    |                |
+| create_date  | datetime(6)  | YES  |     | NULL    |                |
+| update_date  | datetime(6)  | YES  |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+
+contact_details
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| id           | int          | NO   | PRI | NULL    | auto_increment |
+| email        | varchar(255) | YES  | UNI | NULL    |                |
+| home_phone   | varchar(255) | YES  |     | NULL    |                |
+| mobile_phone | varchar(255) | YES  |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+
+contract
++-------------------------+------------------------------------------------------------------------------+------+-----+---------+----------------+
+| Field                   | Type                                                                         | Null | Key | Default | Extra          |
++-------------------------+------------------------------------------------------------------------------+------+-----+---------+----------------+
+| id                      | int                                                                          | NO   | PRI | NULL    | auto_increment |
+| start_date              | date                                                                         | YES  |     | NULL    |                |
+| end_date                | date                                                                         | YES  |     | NULL    |                |
+| salary                  | double                                                                       | YES  |     | NULL    |                |
+| contract_type           | enum('FULL_TIME','PART_TIME','INTERNSHIP','SEASONAL','CONTRACT_FOR_SERVICE') | NO   |     | NULL    |                |
+| candidate_id            | int                                                                          | YES  | MUL | NULL    |                |
+| responsible_employee_id | int                                                                          | YES  | MUL | NULL    |                |
+| client_id               | int                                                                          | YES  | MUL | NULL    |                |
+| create_date             | datetime(6)                                                                  | YES  |     | NULL    |                |
+| update_date             | datetime(6)                                                                  | YES  |     | NULL    |                |
++-------------------------+------------------------------------------------------------------------------+------+-----+---------+----------------+
+
+employee
++--------------------+--------------+------+-----+---------+----------------+
+| Field              | Type         | Null | Key | Default | Extra          |
++--------------------+--------------+------+-----+---------+----------------+
+| id                 | int          | NO   | PRI | NULL    | auto_increment |
+| first_name         | varchar(20)  | YES  |     | NULL    |                |
+| last_name          | varchar(50)  | YES  |     | NULL    |                |
+| position           | varchar(255) | YES  |     | NULL    |                |
+| contact_details_id | int          | YES  | UNI | NULL    |                |
++--------------------+--------------+------+-----+---------+----------------+
+
+interview
++--------------+---------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| Field        | Type                                                                                                    | Null | Key | Default | Extra          |
++--------------+---------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| id           | int                                                                                                     | NO   | PRI | NULL    | auto_increment |
+| date         | date                                                                                                    | YES  |     | NULL    |                |
+| time         | time(6)                                                                                                 | NO   |     | NULL    |                |
+| location     | varchar(255)                                                                                            | YES  |     | NULL    |                |
+| comments     | varchar(255)                                                                                            | YES  |     | NULL    |                |
+| candidate_id | int                                                                                                     | YES  | MUL | NULL    |                |
+| employee_id  | int                                                                                                     | YES  | MUL | NULL    |                |
+| status       | enum('ACCEPTED','CANCELED','COMPLETED','NO_SHOW','PENDING_REVIEW','REJECTED','RESCHEDULED','SCHEDULED') | NO   |     | NULL    |                |
+| create_date  | datetime(6)                                                                                             | YES  |     | NULL    |                |
+| update_date  | datetime(6)                                                                                             | YES  |     | NULL    |                |
++--------------+---------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
+
+roles
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| id    | int          | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(255) | YES  |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+
+
+task
++-------------------------+------------------------------------------------+------+-----+---------+----------------+
+| Field                   | Type                                           | Null | Key | Default | Extra          |
++-------------------------+------------------------------------------------+------+-----+---------+----------------+
+| id                      | int                                            | NO   | PRI | NULL    | auto_increment |
+| title                   | varchar(255)                                   | YES  |     | NULL    |                |
+| description             | varchar(255)                                   | YES  |     | NULL    |                |
+| start_date              | date                                           | YES  |     | NULL    |                |
+| end_date                | date                                           | YES  |     | NULL    |                |
+| status                  | enum('DONE','IN_PROCESS','OPENED','POSTPONED') | NO   |     | NULL    |                |
+| responsible_employee_id | int                                            | YES  | MUL | NULL    |                |
+| candidate_id            | int                                            | YES  | MUL | NULL    |                |
+| vacancy_id              | int                                            | YES  | MUL | NULL    |                |
+| create_date             | datetime(6)                                    | YES  |     | NULL    |                |
+| update_date             | datetime(6)                                    | YES  |     | NULL    |                |
++-------------------------+------------------------------------------------+------+-----+---------+----------------+
+
+vacancy
++-------------------------+-----------------------+------+-----+---------+----------------+
+| Field                   | Type                  | Null | Key | Default | Extra          |
++-------------------------+-----------------------+------+-----+---------+----------------+
+| id                      | int                   | NO   | PRI | NULL    | auto_increment |
+| job_title               | varchar(255)          | YES  |     | NULL    |                |
+| description             | varchar(255)          | YES  |     | NULL    |                |
+| salary                  | double                | YES  |     | NULL    |                |
+| start_date              | date                  | YES  |     | NULL    |                |
+| end_date                | date                  | YES  |     | NULL    |                |
+| status                  | enum('CLOSED','OPEN') | NO   |     | NULL    |                |
+| responsible_employee_id | int                   | YES  | MUL | NULL    |                |
++-------------------------+-----------------------+------+-----+---------+----------------+

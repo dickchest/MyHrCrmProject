@@ -15,8 +15,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-
+/**
+ * Controller class for managing employee-related operations in the HR CRM system.
+ *
+ * <p>This class provides RESTful endpoints for retrieving, creating, updating,
+ * and deleting employee records. It interacts with the {@code EmployeeService}
+ * for handling business logic and data access.
+ *
+ * <p>Additionally, it includes endpoints for finding employees by their ID,
+ * retrieving a list of all employees, creating a new employee (with administrator role required),
+ * updating an existing employee, and deleting an employee (with manager role required).
+ *
+ * <p>The class is annotated with {@code @RestController} to indicate its role
+ * as a Spring REST controller and is mapped to the "/api/employees" endpoint.
+ *
+ * <p>Author: Denys Chaykovskyy
+ *
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("api/employees")
 @AllArgsConstructor
@@ -28,6 +44,11 @@ import java.util.List;
 public class EmployeeController {
     private final EmployeeService service;
 
+    /**
+     * Endpoint to retrieve a list of all communications.
+     *
+     * @return A {@code ResponseEntity} with a list of {@code CommunicationResponseDTO} representing all communications.
+     */
     @GetMapping
     @Operation(
             summary = "Get all employees",
@@ -37,6 +58,12 @@ public class EmployeeController {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to retrieve a communication by its ID.
+     *
+     * @param id The ID of the communication to retrieve.
+     * @return A {@code ResponseEntity} with the {@code CommunicationResponseDTO} representing the retrieved communication.
+     */
     @GetMapping("/{id}")
     @Operation(
             summary = "Get employee by ID",
@@ -49,6 +76,12 @@ public class EmployeeController {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to create a new communication.
+     *
+     * @param requestDTO The request body containing communication details.
+     * @return A {@code ResponseEntity} with the {@code CommunicationResponseDTO} representing the newly created communication.
+     */
     @IsAdministrator
     @PostMapping
     @Operation(
@@ -63,6 +96,13 @@ public class EmployeeController {
         return new ResponseEntity<>(service.create(requestDTO), HttpStatus.CREATED);
     }
 
+    /**
+     * Endpoint to update an existing communication.
+     *
+     * @param id         The ID of the communication to update.
+     * @param requestDTO The request body containing updated communication details.
+     * @return A {@code ResponseEntity} with the {@code CommunicationResponseDTO} representing the updated communication.
+     */
     @PutMapping("/{id}")
     @Operation(
             summary = "Update a employee",
@@ -79,6 +119,11 @@ public class EmployeeController {
         return new ResponseEntity<>(service.update(id, requestDTO), HttpStatus.ACCEPTED);
     }
 
+    /**
+     * Endpoint to delete a communication. Requires manager role.
+     *
+     * @param id The ID of the communication to delete.
+     */
     @IsManager
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -92,5 +137,4 @@ public class EmployeeController {
             Integer id) {
         service.delete(id);
     }
-
 }

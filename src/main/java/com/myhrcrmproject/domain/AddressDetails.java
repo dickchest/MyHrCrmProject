@@ -1,5 +1,11 @@
 package com.myhrcrmproject.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.*;
+
 /**
  * Entity class representing address details.
  *
@@ -17,13 +23,6 @@ package com.myhrcrmproject.domain;
  * @version 1.0
  * @since 2023-12-01
  */
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.*;
-
 @Entity
 @Getter
 @Setter

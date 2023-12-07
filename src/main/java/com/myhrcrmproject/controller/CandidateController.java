@@ -15,7 +15,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * Controller class for managing candidate-related operations in the HR CRM system.
+ *
+ * <p>This class provides RESTful endpoints for retrieving, creating, updating,
+ * and deleting candidate records. It interacts with the {@code CandidateService}
+ * for handling business logic and data access.
+ *
+ * <p>Additionally, it includes endpoints for finding candidates by their status
+ * and by the associated vacancy. The {@code IsManager} annotation is used to
+ * secure the delete operation, requiring the manager role.
+ *
+ * <p>The class is annotated with {@code @RestController} to indicate its role as
+ * a Spring REST controller and is mapped to the "/api/candidates" endpoint.
+ *
+ * <p>Author: Denys Chaykovskyy
+ *
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("api/candidates")
 @AllArgsConstructor
@@ -24,6 +41,11 @@ import java.util.List;
 public class CandidateController {
     private final CandidateService service;
 
+    /**
+     * Endpoint to retrieve a list of all candidates.
+     *
+     * @return A {@code ResponseEntity} with a list of {@code CandidateResponseDTO} representing all candidates.
+     */
     @GetMapping
     @Operation(
             summary = "Get all candidates",
@@ -33,6 +55,12 @@ public class CandidateController {
         return new ResponseEntity<>(getService().findAll(), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to retrieve a candidate by their ID.
+     *
+     * @param id The ID of the candidate to retrieve.
+     * @return A {@code ResponseEntity} with the {@code CandidateResponseDTO} representing the retrieved candidate.
+     */
     @GetMapping("/{id}")
     @Operation(
             summary = "Get candidate by ID",
@@ -45,6 +73,12 @@ public class CandidateController {
         return new ResponseEntity<>(getService().findById(id), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to create a new candidate.
+     *
+     * @param requestDTO The request body containing candidate details.
+     * @return A {@code ResponseEntity} with the {@code CandidateResponseDTO} representing the newly created candidate.
+     */
     @PostMapping
     @Operation(
             summary = "Create a new candidate",
@@ -58,6 +92,13 @@ public class CandidateController {
         return new ResponseEntity<>(getService().create(requestDTO), HttpStatus.CREATED);
     }
 
+    /**
+     * Endpoint to update an existing candidate.
+     *
+     * @param id         The ID of the candidate to update.
+     * @param requestDTO The request body containing updated candidate details.
+     * @return A {@code ResponseEntity} with the {@code CandidateResponseDTO} representing the updated candidate.
+     */
     @PutMapping("/{id}")
     @Operation(
             summary = "Update a candidate",
@@ -74,6 +115,11 @@ public class CandidateController {
         return new ResponseEntity<>(getService().update(id, requestDTO), HttpStatus.ACCEPTED);
     }
 
+    /**
+     * Endpoint to delete a candidate. Requires the manager role.
+     *
+     * @param id The ID of the candidate to delete.
+     */
     @IsManager
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -89,6 +135,12 @@ public class CandidateController {
     }
 
 
+    /**
+     * Endpoint to retrieve a list of candidates by status ID.
+     *
+     * @param statusID The ID of the status to filter by.
+     * @return A {@code ResponseEntity} with a list of {@code CandidateShortResponseDTO} representing candidates with the specified status.
+     */
     @GetMapping("/findAllByStatus/{id}")
     @Operation(
             summary = "Get candidates by status ID",
@@ -101,6 +153,12 @@ public class CandidateController {
         return new ResponseEntity<>(service.findAllByStatusId(statusID), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to retrieve a list of candidates by vacancy ID.
+     *
+     * @param id The ID of the vacancy to filter by.
+     * @return A {@code ResponseEntity} with a list of {@code CandidateShortResponseDTO} representing candidates associated with the specified vacancy.
+     */
     @GetMapping("/findAllByVacancy/{id}")
     @Operation(
             summary = "Get candidates by vacancy ID",
