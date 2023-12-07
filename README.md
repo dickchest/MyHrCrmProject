@@ -82,8 +82,3 @@ The application will implement security measures to restrict access to authorize
 
 ## Database stucture
 ![erd](ERD crm_hr.png)
-
-
-=======
-# MyHrCrmProject
->>>>>>> origin/master
