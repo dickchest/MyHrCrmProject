@@ -1,7 +1,10 @@
 package com.myhrcrmproject.service;
 
 import com.myhrcrmproject.domain.Candidate;
-import com.myhrcrmproject.domain.ContactDetails;
+import com.myhrcrmproject.domain.enums.CandidateStatus;
+import com.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
+import com.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
+import com.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
 import com.myhrcrmproject.repository.CandidateRepository;
 import com.myhrcrmproject.repository.ContactDetailsRepository;
 import com.myhrcrmproject.repository.VacancyRepository;
@@ -9,13 +12,7 @@ import com.myhrcrmproject.service.utills.CandidateConverter;
 import com.myhrcrmproject.service.utills.Helper;
 import com.myhrcrmproject.service.validation.AlreadyExistsException;
 import com.myhrcrmproject.service.validation.NotFoundException;
-import com.myhrcrmproject.domain.enums.CandidateStatus;
-import com.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
-import com.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
-import com.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -47,8 +44,6 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
     private final VacancyRepository vacancyRepository;
     private final ContactDetailsRepository contactDetailsRepository;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CandidateService.class);
-
     /**
      * Retrieves a list of all candidates in the system.
      *
@@ -68,7 +63,6 @@ public class CandidateService implements CommonService<CandidateRequestDTO, Cand
      * @throws NotFoundException if the candidate with the specified ID is not found.
      */
     public CandidateResponseDTO findById(Integer id) {
-//        LOGGER.info("Запрошен кандидат с идентификатором {}.", id);
         Candidate entity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Candidate with id: " + id + " not found!"));
         return converter.toDTO(entity);

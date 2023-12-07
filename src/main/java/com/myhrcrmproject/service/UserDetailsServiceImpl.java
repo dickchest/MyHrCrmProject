@@ -17,8 +17,6 @@ import com.myhrcrmproject.service.utills.UserDetailsConverter;
 import com.myhrcrmproject.service.validation.AlreadyExistsException;
 import com.myhrcrmproject.service.validation.NotFoundException;
 import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +44,6 @@ public class UserDetailsServiceImpl implements CommonService<UserDetailsRequestD
     private final EmployeeRepository employeeRepository;
     private final RoleRepository roleRepository;
     private final ContactDetailsRepository contactDetailsRepository;
-    private static final Logger LOGGER = LogManager.getLogger(UserDetailsServiceImpl.class);
 
     /**
      * Retrieves a list of all user details records.
@@ -69,7 +66,7 @@ public class UserDetailsServiceImpl implements CommonService<UserDetailsRequestD
      */
     @Override
     public UserDetailsResponseDTO findById(Integer id) {
-//        LOGGER.log(Level.INFO, String.format("Вызван метод findById с параметром %d", id));
+
         UserDetails entity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with id: " + id + " not found!"));
         return converter.toDTO(entity);

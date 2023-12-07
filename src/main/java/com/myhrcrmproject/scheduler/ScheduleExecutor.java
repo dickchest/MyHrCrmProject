@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 @EnableScheduling
 public class ScheduleExecutor {
 
-    private Logger logger = LoggerFactory.getLogger(ScheduleExecutor.class);
+    private final Logger logger = LoggerFactory.getLogger(ScheduleExecutor.class);
 
-    @Scheduled(fixedDelayString = "PT20M")
+    @Scheduled(fixedDelayString = "PT60M")
     public void fixedDelayTask(){
-        logger.info("Fixed delay task");
+        logger.info("One hour passed");
     }
 }
