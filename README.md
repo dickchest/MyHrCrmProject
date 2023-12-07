@@ -81,7 +81,7 @@ The application will implement security measures to restrict access to authorize
 - [Accessing data with MySQL](https://spring.io/guides/gs/accessing-data-mysql/)
 
 ## Database stucture
-![erd](crm_hr.png)
+![erd](ERD crm_hr.png)
 
 
 =======
