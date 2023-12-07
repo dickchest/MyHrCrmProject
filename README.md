@@ -22,7 +22,7 @@ All project information you may find at [this link](https://drive.google.com/dri
 ## Project Related Links
 - [Project Information](projectDocs)
 - [HR CRM Application Java Docs](https://rawcdn.githack.com/dickchest/MyHrCrmProject/ac61a7ced7f95c128caf408bf9b374c83dbbdad4/javadoc/index.html)
-- [Api Documentation from Swagger](projectDocs/api-documentation.pdf)
+- [Api Documentation from Swagger](https://drive.google.com/open?id=1YUwEqs0Vv871NkqqBBGePFzAeP-TN10t&usp=drive_fs)
 - [Test Coverage Report from JaCoCo](https://raw.githack.com/dickchest/MyHrCrmProject/87fed4211170249dcfe3e5e89c1eb05c4506a2eb/testCoverage/jacoco/index.html)
 
 ## Technologies:
