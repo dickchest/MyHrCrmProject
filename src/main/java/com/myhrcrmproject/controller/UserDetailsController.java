@@ -15,7 +15,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * Controller class for managing user details-related operations in the HR CRM system.
+ *
+ * <p>This class defines RESTful APIs for various user details actions, including
+ * retrieving all user details, finding user details by ID, updating user details,
+ * deleting user details, and setting user roles. It requires an admin role for access.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("api/users")
 @AllArgsConstructor
@@ -28,6 +37,11 @@ import java.util.List;
 public class UserDetailsController {
     private final UserDetailsServiceImpl service;
 
+    /**
+     * Endpoint to retrieve a list of all user details.
+     *
+     * @return A {@code ResponseEntity} with a list of {@code UserDetailsResponseDTO} representing all user details.
+     */
     @GetMapping
     @Operation(
             summary = "Get all user details",
@@ -38,6 +52,12 @@ public class UserDetailsController {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to retrieve a user detail by its ID.
+     *
+     * @param id The ID of the user detail to retrieve.
+     * @return A {@code ResponseEntity} with the {@code UserDetailsResponseDTO} representing the retrieved user detail.
+     */
     @GetMapping("/{id}")
     @Operation(
             summary = "Get user detail by ID",
@@ -50,9 +70,16 @@ public class UserDetailsController {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to update an existing user detail.
+     *
+     * @param id         The ID of the user detail to update.
+     * @param requestDTO The request body containing updated user detail.
+     * @return A {@code ResponseEntity} with the {@code UserDetailsResponseDTO} representing the updated user detail.
+     */
     @PutMapping("/{id}")
     @Operation(
-            summary = "Update an user detail",
+            summary = "Update a user detail",
             description = "Update an existing user detail with the provided details. Requires admin role."
     )
     public ResponseEntity<UserDetailsResponseDTO> update(
@@ -67,6 +94,11 @@ public class UserDetailsController {
         return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
     }
 
+    /**
+     * Endpoint to delete a user detail.
+     *
+     * @param id The ID of the user detail to delete.
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(
@@ -80,6 +112,13 @@ public class UserDetailsController {
         service.delete(id);
     }
 
+    /**
+     * Updates an user detail's role. Requires admin role.
+     *
+     * @param id      The ID of the user detail to update.
+     * @param request The role to set for the user detail.
+     * @return A {@code ResponseEntity} with the updated user detail details and HTTP status code 202 (Accepted).
+     */
     @PutMapping("/setRole") // запрос: api/users/setRole?id=2&role=manager
     @Operation(
             summary = "Update an user details role",

@@ -5,6 +5,7 @@ Welcome to the documentation for the "My HR CRM Project". This document provides
 ## Table of Contents
 
 - [Introduction](#introduction)
+- [Project Related Links](#project-related-links)
 - [Technologies](#technologies)
 - [Getting Started](#getting-started)
 - [Features](#features)
@@ -16,7 +17,11 @@ Welcome to the documentation for the "My HR CRM Project". This document provides
 ## Introduction
 
 "My CRM Project" is a Customer Relationship Management (CRM) application designed to streamline and manage customer interactions, candidate data, vacancies, and more. It aims to provide a user-friendly interface for managing various aspects of customer relationships and recruitment processes.<br />
-All project information you may find at [this link](https://drive.google.com/drive/folders/10BLBtSwlvJMaWUfJpxciwA4f1JdzcLAx) and [here](projectDocs).
+All project information you may find at [this link](https://drive.google.com/drive/folders/10BLBtSwlvJMaWUfJpxciwA4f1JdzcLAx).
+
+## Project Related Links
+- [Project Information](projectDocs)
+- [HR CRM Application Java Docs](javadoc/index.html)
 
 ## Technologies:
 `Spring Boot`: Used for application development and streamlined setup and deployment. 

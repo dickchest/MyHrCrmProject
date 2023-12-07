@@ -16,7 +16,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * Controller class for managing task-related operations in the HR CRM system.
+ *
+ * <p>This class defines RESTful APIs for various task actions, including
+ * retrieving all tasks, finding tasks by ID, creating new tasks, updating
+ * existing tasks, and deleting tasks.
+ *
+ * <p>Additionally, it provides endpoints to retrieve tasks based on different
+ * criteria such as task status ID, employee ID, candidate ID, vacancy ID, start date, etc.
+ *
+ * @author Denys Chaykovskyy
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("api/tasks")
 @AllArgsConstructor
@@ -28,6 +40,11 @@ import java.util.List;
 public class TaskController {
     private final TaskService service;
 
+    /**
+     * Endpoint to retrieve a list of all tasks Requires manager role.
+     *
+     * @return A {@code ResponseEntity} with a list of {@code TaskResponseDTO} representing all tasks.
+     */
     @IsManager
     @GetMapping
     @Operation(
@@ -38,6 +55,12 @@ public class TaskController {
         return new ResponseEntity<>(getService().findAll(), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to retrieve a task by its ID.
+     *
+     * @param id The ID of the task to retrieve.
+     * @return A {@code ResponseEntity} with the {@code TaskResponseDTO} representing the retrieved task.
+     */
     @GetMapping("/{id}")
     @Operation(
             summary = "Get task by ID",
@@ -50,6 +73,12 @@ public class TaskController {
         return new ResponseEntity<>(getService().findById(id), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to create a new task.
+     *
+     * @param requestDTO The request body containing task details.
+     * @return A {@code ResponseEntity} with the {@code TaskResponseDTO} representing the newly created task.
+     */
     @PostMapping
     @Operation(
             summary = "Create a new task",
@@ -63,6 +92,13 @@ public class TaskController {
         return new ResponseEntity<>(getService().create(requestDTO), HttpStatus.CREATED);
     }
 
+    /**
+     * Endpoint to update an existing task.
+     *
+     * @param id         The ID of the task to update.
+     * @param requestDTO The request body containing updated task details.
+     * @return A {@code ResponseEntity} with the {@code TaskResponseDTO} representing the updated task.
+     */
     @PutMapping("/{id}")
     @Operation(
             summary = "Update a task",
@@ -79,6 +115,11 @@ public class TaskController {
         return new ResponseEntity<>(getService().update(id, requestDTO), HttpStatus.ACCEPTED);
     }
 
+    /**
+     * Endpoint to delete a task.
+     *
+     * @param id The ID of the task to delete.
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(
@@ -92,6 +133,12 @@ public class TaskController {
         getService().delete(id);
     }
 
+    /**
+     * Retrieves a list of tasks by task status ID. Requires manager role.
+     *
+     * @param id The ID of the status.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
     @IsManager
     @GetMapping("/findAllByTaskStatusId/{id}")
     @Operation(
@@ -105,6 +152,12 @@ public class TaskController {
         return new ResponseEntity<>(service.findAllByTaskStatusId(id), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a list of tasks by employee ID.
+     *
+     * @param id The ID of the employee.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
     @GetMapping("/findAllByEmployee/{id}")
     @Operation(
             summary = "Get tasks by employee ID",
@@ -117,6 +170,12 @@ public class TaskController {
         return new ResponseEntity<>(service.findAllByEmployeeId(id), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a list of tasks by candidate ID. Requires manager role.
+     *
+     * @param id The ID of the candidate.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
     @IsManager
     @GetMapping("/findAllByCandidate/{id}")
     @Operation(
@@ -130,6 +189,12 @@ public class TaskController {
         return new ResponseEntity<>(service.findAllByCandidateId(id), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a list of tasks by vacancy ID. Requires manager role.
+     *
+     * @param id The ID of the vacancy.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
     @IsManager
     @GetMapping("/findAllByVacancy/{id}")
     @Operation(
@@ -143,6 +208,12 @@ public class TaskController {
         return new ResponseEntity<>(service.findAllByVacancyId(id), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a list of tasks by start date. Requires manager role.
+     *
+     * @param requestDTO The request body containing start date.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
     @IsManager
     @PutMapping("/findAllByStartDate")
     @Operation(
@@ -157,6 +228,13 @@ public class TaskController {
         return new ResponseEntity<>(service.findAllByStartDate(requestDTO), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a list of tasks by start date and employee ID.
+     *
+     * @param id         The ID of the employee.
+     * @param requestDTO The request body containing start date.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
     @PutMapping("/findAllByStartDateAndEmployee/{id}")
     @Operation(
             summary = "Get tasks by start date and employee ID",
@@ -173,6 +251,13 @@ public class TaskController {
         return new ResponseEntity<>(service.findAllByDateAndEmployeeId(id, requestDTO), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a list of tasks by candidate ID and employee ID.
+     *
+     * @param candidateId The ID of the candidate.
+     * @param employeeId  The ID of the employee.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
     @GetMapping("/findAllByCandidateAndEmployee/{candidateId}/{employeeId}")
     @Operation(
             summary = "Get tasks by candidate ID and employee ID",
@@ -188,6 +273,13 @@ public class TaskController {
         return new ResponseEntity<>(service.findAllByCandidateIdAndEmployeeId(candidateId, employeeId), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a list of tasks by status ID and employee ID.
+     *
+     * @param statusId   The ID of task status.
+     * @param employeeId The ID of the employee.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
     @GetMapping("/findAllByStatusAndEmployee/{statusId}/{employeeId}")
     @Operation(
             summary = "Get tasks by status ID and employee ID",
@@ -203,6 +295,13 @@ public class TaskController {
         return new ResponseEntity<>(service.findAllByStatusIdAndEmployeeId(statusId, employeeId), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a list of tasks by vacancy ID and employee ID.
+     *
+     * @param vacancyId  The ID of the vacancy.
+     * @param employeeId The ID of the employee.
+     * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
+     */
     @GetMapping("/findAllByVacancyAndEmployee/{vacancyId}/{employeeId}")
     @Operation(
             summary = "Get tasks by vacancy ID and employee ID",

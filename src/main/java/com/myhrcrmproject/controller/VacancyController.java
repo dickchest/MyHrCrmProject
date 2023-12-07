@@ -15,7 +15,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * Controller class for managing vacancy-related operations in the HR CRM system.
+ *
+ * <p>This class defines RESTful APIs for various vacancy actions, including
+ * retrieving all vacancies, finding a vacancy by ID, creating a new vacancy,
+ * updating an existing vacancy, deleting a vacancy, and retrieving vacancies
+ * by status or employee ID. It requires a manager role for certain operations.
+ *
+ * <p>Author: [Your Name]
+ *
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("api/vacancies")
 @AllArgsConstructor
@@ -27,6 +38,11 @@ import java.util.List;
 public class VacancyController {
     private final VacancyService service;
 
+    /**
+     * Retrieves a list of all vacancies.
+     *
+     * @return A {@code ResponseEntity} with the list of vacancies and HTTP status code 200 (OK).
+     */
     @GetMapping
     @Operation(
             summary = "Get all vacancies",
@@ -36,6 +52,12 @@ public class VacancyController {
         return new ResponseEntity<>(getService().findAll(), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a vacancy by its ID.
+     *
+     * @param id The ID of the vacancy to retrieve.
+     * @return A {@code ResponseEntity} with the vacancy details and HTTP status code 200 (OK).
+     */
     @GetMapping("/{id}")
     @Operation(
             summary = "Get vacancy by ID",
@@ -48,6 +70,12 @@ public class VacancyController {
         return new ResponseEntity<>(getService().findById(id), HttpStatus.OK);
     }
 
+    /**
+     * Creates a new vacancy. Requires manager role.
+     *
+     * @param requestDTO The request body containing vacancy details.
+     * @return A {@code ResponseEntity} with the created vacancy details and HTTP status code 201 (Created).
+     */
     @IsManager
     @PostMapping
     @Operation(
@@ -62,6 +90,13 @@ public class VacancyController {
         return new ResponseEntity<>(getService().create(requestDTO), HttpStatus.CREATED);
     }
 
+    /**
+     * Updates an existing vacancy. Requires manager role.
+     *
+     * @param id         The ID of the vacancy to update.
+     * @param requestDTO The request body containing updated vacancy details.
+     * @return A {@code ResponseEntity} with the updated vacancy details and HTTP status code 202 (Accepted).
+     */
     @IsManager
     @PutMapping("/{id}")
     @Operation(
@@ -79,6 +114,11 @@ public class VacancyController {
         return new ResponseEntity<>(getService().update(id, requestDTO), HttpStatus.ACCEPTED);
     }
 
+    /**
+     * Deletes a vacancy by its ID.
+     *
+     * @param id The ID of the vacancy to delete.
+     */
     @IsManager
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -93,7 +133,12 @@ public class VacancyController {
         getService().delete(id);
     }
 
-
+    /**
+     * Retrieves a list of vacancies by status ID. Requires manager role.
+     *
+     * @param statusId The ID of the status.
+     * @return A {@code ResponseEntity} with the list of vacancies and HTTP status code 200 (OK).
+     */
     @GetMapping("/findAllByStatus/{id}")
     @Operation(
             summary = "Get vacancies by status ID",
@@ -106,6 +151,12 @@ public class VacancyController {
         return new ResponseEntity<>(service.findAllByStatusId(statusId), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a list of vacancies by employee ID.
+     *
+     * @param id The ID of the employee.
+     * @return A {@code ResponseEntity} with the list of vacancies and HTTP status code 200 (OK).
+     */
     @GetMapping("/findAllByEmployee/{id}")
     @Operation(
             summary = "Get vacancies by employee ID",

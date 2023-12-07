@@ -30,8 +30,7 @@ import java.util.List;
  * <p>The class is annotated with {@code @RestController} to indicate its role
  * as a Spring REST controller and is mapped to the "/api/compensations" endpoint.
  *
- * <p>Author: Denys Chaykovskyy
- *
+ * @author Denys Chaykovskyy
  * @version 1.0
  */
 @RestController
