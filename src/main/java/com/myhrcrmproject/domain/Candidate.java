@@ -45,7 +45,7 @@ public class Candidate {
     @JoinColumn(name = "vacancy_id")
     private Vacancy vacancy;
 
-    @OneToMany(mappedBy = "candidate", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Interview> interviewList;
 
     @Enumerated(EnumType.STRING)

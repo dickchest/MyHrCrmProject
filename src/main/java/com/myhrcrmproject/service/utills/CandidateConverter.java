@@ -4,18 +4,17 @@ import com.myhrcrmproject.domain.AddressDetails;
 import com.myhrcrmproject.domain.Candidate;
 import com.myhrcrmproject.domain.ContactDetails;
 import com.myhrcrmproject.domain.Vacancy;
-import com.myhrcrmproject.repository.VacancyRepository;
-import com.myhrcrmproject.service.validation.NotFoundException;
 import com.myhrcrmproject.domain.enums.CandidateStatus;
 import com.myhrcrmproject.dto.candidateDTO.CandidateRequestDTO;
 import com.myhrcrmproject.dto.candidateDTO.CandidateResponseDTO;
 import com.myhrcrmproject.dto.candidateDTO.CandidateShortResponseDTO;
 import com.myhrcrmproject.dto.vacancyDTO.VacancyShortResponseDTO;
+import com.myhrcrmproject.repository.VacancyRepository;
+import com.myhrcrmproject.service.validation.NotFoundException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CandidateConverter {
@@ -58,10 +57,14 @@ public class CandidateConverter {
             dto.setAddressDetails(addressDetailsConverter.toDTO(entity.getAddressDetails()));
         }
 
-        Optional.ofNullable(entity.getInterviewList()).ifPresent(
-                (list) -> list.stream()
-                        .map(interviewConverter::toShortDTO)
-                        .collect(Collectors.toList()));
+        if (entity.getInterviewList() != null) {
+            dto.setInterviewsList(
+                    entity.getInterviewList().stream()
+                            .map(interviewConverter::toShortDTO)
+                            .toList()
+            );
+        }
+
         return dto;
     }
 

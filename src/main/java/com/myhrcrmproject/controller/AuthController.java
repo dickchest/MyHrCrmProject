@@ -10,6 +10,7 @@ import com.myhrcrmproject.dto.userDetailsDTO.UserDetailsRequestDTO;
 import com.myhrcrmproject.dto.userDetailsDTO.UserDetailsResponseDTO;
 import com.myhrcrmproject.service.UserDetailsServiceImpl;
 import com.myhrcrmproject.service.auth.JwtTokenProvider;
+import com.myhrcrmproject.service.auth.SecurityHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 /**
  * Controller class for handling authentication and user registration endpoints.
  *
@@ -52,6 +54,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
     private final UserDetailsServiceImpl service;
+    private final SecurityHelper securityHelper;
 
 
     /**
@@ -80,7 +83,8 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.createToken(authRequest.getUserName());
-        return ResponseEntity.ok(new AuthResponse(jwt));
+        Integer employeeId = securityHelper.getCurrentAuthEmployee().get().getId();
+        return ResponseEntity.ok(new AuthResponse(jwt, employeeId));
     }
 
     /**

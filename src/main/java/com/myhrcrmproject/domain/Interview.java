@@ -36,7 +36,7 @@ public class Interview {
     private String comments;
 
     @NotNull(message = "Candidate should not be blank")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "candidate_id")
     private Candidate candidate;
 
