@@ -62,6 +62,7 @@ public class InterviewService implements CommonService<InterviewRequestDTO, Inte
     public InterviewResponseDTO findById(Integer id) {
         Interview entity = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Interview with id " + id + " not found!"));
+
         // check if user has access to this entity
         if (!securityHelper.isAuthUserEqualsEmployee(entity.getEmployee())) {
             throw new NotAcceptableStatusException("You have not permission to access this entity");

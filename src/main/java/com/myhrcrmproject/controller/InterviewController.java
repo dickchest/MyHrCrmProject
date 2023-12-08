@@ -150,14 +150,14 @@ public class InterviewController {
     }
 
     /**
-     * Endpoint to retrieve a list of interviews by employee ID.
+     * Endpoint to retrieve a list of interviews by employee ID. Users has access only to his own entities.
      *
      * @param id The ID of the employee.
      * @return A {@code ResponseEntity} with a list of {@code InterviewResponseDTO} representing interviews by employee ID.
      */
     @GetMapping("/findAllByEmployee/{id}")
     @Operation(
-            summary = "Get interviews by employee ID",
+            summary = "Get interviews by employee ID. Users has access only to his own entities.",
             description = "Retrieve a list of interviews by employee ID."
     )
     public ResponseEntity<List<InterviewShortResponseDTO>> findAllByEmployeeId(
@@ -168,7 +168,8 @@ public class InterviewController {
     }
 
     /**
-     * Retrieves a list of interviews by date and employee ID.
+     * Retrieves a list of interviews by date and employee ID. User has access only to his own entities.
+     * Users has access only to his own entities.
      *
      * @param id         The ID of the employee.
      * @param requestDTO The request body containing the date.
@@ -176,7 +177,7 @@ public class InterviewController {
      */
     @PutMapping("/findAllByDateAndEmployee/{id}")
     @Operation(
-            summary = "Get interviews by date and employee ID",
+            summary = "Get interviews by date and employee ID. Users has access only to his own entities.",
             description = "Retrieve a list of interviews by date and employee ID."
     )
     public ResponseEntity<List<InterviewShortResponseDTO>> findAllByEmployeeId(

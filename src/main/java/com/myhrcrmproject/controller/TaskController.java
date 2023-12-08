@@ -56,14 +56,14 @@ public class TaskController {
     }
 
     /**
-     * Endpoint to retrieve a task by its ID.
+     * Endpoint to retrieve a task by its ID. Users has access only to his own entities.
      *
      * @param id The ID of the task to retrieve.
      * @return A {@code ResponseEntity} with the {@code TaskResponseDTO} representing the retrieved task.
      */
     @GetMapping("/{id}")
     @Operation(
-            summary = "Get task by ID",
+            summary = "Get task by ID. Users has access only to his own entities.",
             description = "Retrieve a task by their ID."
     )
     public ResponseEntity<TaskResponseDTO> findById(
@@ -93,7 +93,7 @@ public class TaskController {
     }
 
     /**
-     * Endpoint to update an existing task.
+     * Endpoint to update an existing task. Users has access only to his own entities.
      *
      * @param id         The ID of the task to update.
      * @param requestDTO The request body containing updated task details.
@@ -101,7 +101,7 @@ public class TaskController {
      */
     @PutMapping("/{id}")
     @Operation(
-            summary = "Update a task",
+            summary = "Update a task. Users has access only to his own entities.",
             description = "Update an existing task with the provided details."
     )
     public ResponseEntity<TaskResponseDTO> update(
@@ -116,14 +116,14 @@ public class TaskController {
     }
 
     /**
-     * Endpoint to delete a task.
+     * Endpoint to delete a task. Users has access only to his own entities.
      *
      * @param id The ID of the task to delete.
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(
-            summary = "Delete a task",
+            summary = "Delete a task. Users has access only to his own entities.",
             description = "Delete a task by their ID."
     )
     public void delete(
@@ -153,14 +153,14 @@ public class TaskController {
     }
 
     /**
-     * Retrieves a list of tasks by employee ID.
+     * Retrieves a list of tasks by employee ID. Users has access only to his own entities.
      *
      * @param id The ID of the employee.
      * @return A {@code ResponseEntity} with the list of tasks and HTTP status code 200 (OK).
      */
     @GetMapping("/findAllByEmployee/{id}")
     @Operation(
-            summary = "Get tasks by employee ID",
+            summary = "Get tasks by employee ID. Users has access only to his own entities.",
             description = "Retrieve a list of tasks by employee ID."
     )
     public ResponseEntity<List<TaskResponseDTO>> findAllByEmployeeId(
@@ -229,7 +229,7 @@ public class TaskController {
     }
 
     /**
-     * Retrieves a list of tasks by start date and employee ID.
+     * Retrieves a list of tasks by start date and employee ID. Users has access only to his own entities.
      *
      * @param id         The ID of the employee.
      * @param requestDTO The request body containing start date.
@@ -237,7 +237,7 @@ public class TaskController {
      */
     @PutMapping("/findAllByStartDateAndEmployee/{id}")
     @Operation(
-            summary = "Get tasks by start date and employee ID",
+            summary = "Get tasks by start date and employee ID. Users has access only to his own entities.",
             description = "Retrieve a list of tasks by start date and employee ID."
     )
     public ResponseEntity<List<TaskShortResponseDTO>> findAllByStartDateAndEmployeeId(
@@ -252,7 +252,7 @@ public class TaskController {
     }
 
     /**
-     * Retrieves a list of tasks by candidate ID and employee ID.
+     * Retrieves a list of tasks by candidate ID and employee ID. Users has access only to his own entities.
      *
      * @param candidateId The ID of the candidate.
      * @param employeeId  The ID of the employee.
@@ -260,7 +260,7 @@ public class TaskController {
      */
     @GetMapping("/findAllByCandidateAndEmployee/{candidateId}/{employeeId}")
     @Operation(
-            summary = "Get tasks by candidate ID and employee ID",
+            summary = "Get tasks by candidate ID and employee ID. Users has access only to his own entities.",
             description = "Retrieve a list of tasks by candidate ID and employee ID."
     )
     public ResponseEntity<List<TaskShortResponseDTO>> findAllByCandidateIdAndEmployeeId(
@@ -274,7 +274,7 @@ public class TaskController {
     }
 
     /**
-     * Retrieves a list of tasks by status ID and employee ID.
+     * Retrieves a list of tasks by status ID and employee ID. Users has access only to his own entities.
      *
      * @param statusId   The ID of task status.
      * @param employeeId The ID of the employee.
@@ -282,7 +282,7 @@ public class TaskController {
      */
     @GetMapping("/findAllByStatusAndEmployee/{statusId}/{employeeId}")
     @Operation(
-            summary = "Get tasks by status ID and employee ID",
+            summary = "Get tasks by status ID and employee ID. Users has access only to his own entities.",
             description = "Retrieve a list of tasks by status ID and employee ID."
     )
     public ResponseEntity<List<TaskShortResponseDTO>> findAllByStatusIdAndEmployeeId(
@@ -296,7 +296,7 @@ public class TaskController {
     }
 
     /**
-     * Retrieves a list of tasks by vacancy ID and employee ID.
+     * Retrieves a list of tasks by vacancy ID and employee ID. Users has access only to his own entities.
      *
      * @param vacancyId  The ID of the vacancy.
      * @param employeeId The ID of the employee.
@@ -304,7 +304,7 @@ public class TaskController {
      */
     @GetMapping("/findAllByVacancyAndEmployee/{vacancyId}/{employeeId}")
     @Operation(
-            summary = "Get tasks by vacancy ID and employee ID",
+            summary = "Get tasks by vacancy ID and employee ID. Users has access only to his own entities.",
             description = "Retrieve a list of tasks by vacancy ID and employee ID."
     )
     public ResponseEntity<List<TaskShortResponseDTO>> findAllByVacancyIdAndEmployeeId(

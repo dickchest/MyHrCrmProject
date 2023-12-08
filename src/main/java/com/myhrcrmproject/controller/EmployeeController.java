@@ -96,7 +96,7 @@ public class EmployeeController {
     }
 
     /**
-     * Endpoint to update an existing communication.
+     * Endpoint to update an existing communication. Users has access only to his own entities.
      *
      * @param id         The ID of the communication to update.
      * @param requestDTO The request body containing updated communication details.
@@ -104,7 +104,7 @@ public class EmployeeController {
      */
     @PutMapping("/{id}")
     @Operation(
-            summary = "Update a employee",
+            summary = "Update a employee. Users has access only to his own entities.",
             description = "Update an existing employee with the provided details."
     )
     public ResponseEntity<EmployeeResponseDTO> update(
