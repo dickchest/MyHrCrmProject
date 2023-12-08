@@ -64,11 +64,11 @@ public class InterviewConverter {
                 .time(entity.getTime())
                 .status(entity.getStatus())
                 .comments(entity.getComments())
-                .candidate(
-                        entity.getCandidate() != null ?
-                                candidateConverter.toShortDTO(entity.getCandidate()) :
-                                null
-                )
+//                .candidate(
+//                        entity.getCandidate() != null ?
+//                                candidateConverter.toShortDTO(entity.getCandidate()) :
+//                                null
+//                )
                 .build();
     }
 }

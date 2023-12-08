@@ -32,7 +32,7 @@ public class InterviewShortResponseDTO {
 
     @Schema(description = "Comments to the interview", example = "Scheduled interview for Peter Song")
     private String comments;
-
-    @Schema(description = "Details of the associated candidate")
-    private CandidateShortResponseDTO candidate;
+//
+//    @Schema(description = "Details of the associated candidate")
+//    private CandidateShortResponseDTO candidate;
 }
