@@ -223,4 +223,19 @@ public class ContractController {
     public ResponseEntity<List<ContractResponseDTO>> findAllActiveContracts() {
         return new ResponseEntity<>(service.findAllActiveContracts(), HttpStatus.OK);
     }
+
+    /**
+     * Endpoint to retrieve a list of all contracts nearing completion.
+     * Expiration date set to 1 month.
+     *
+     * @return A {@code ResponseEntity} with a list of {@code ContractResponseDTO} representing all active contracts.
+     */
+    @GetMapping("/findAllEndingContracts")
+    @Operation(
+            summary = "Get all contracts nearing completion",
+            description = "Retrieve a list of all active contracts nearing completion."
+    )
+    public ResponseEntity<List<ContractResponseDTO>> findAllEndingContracts() {
+        return new ResponseEntity<>(service.findAllEndingContracts(), HttpStatus.OK);
+    }
 }

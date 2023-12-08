@@ -200,5 +200,20 @@ public class ContractService implements CommonService<ContractRequestDTO, Contra
                 .toList();
     }
 
-    //todo: добавить методы для поиска заканчивающихся контрактов
+    /**
+     * Retrieves a list of all contracts nearing completion.
+     * Expiration date set to 1 month.
+     *
+     * @return A list of {@code CommunicationResponseDTO} representing all active contract records.
+     */
+    public List<ContractResponseDTO> findAllEndingContracts() {
+        LocalDate date = LocalDate.now();
+        List<Contract> list = repository.findByStartDateBeforeAndEndDateAfter(
+                date.plusDays(1),
+                date.minusDays(1).plusMonths(1)
+        );
+        return list.stream()
+                .map(converter::toDTO)
+                .toList();
+    }
 }
